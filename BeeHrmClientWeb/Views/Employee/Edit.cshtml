@@ -1,0 +1,863 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeEditViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section PageHeader{
+
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <a href="/admin/userDetail/@Model.Code" class="btn btn-success"> <i class="fa fa-eye"></i>  View Profile</a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Update Employee Informaiton - <strong>@Model.Name </strong> [@Model.Code]</a>
+                </h2>
+            </div>
+        </div>
+    </div>
+
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section styles{
+    @*<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+}
+@section scripts{
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    @*<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>*@
+    @*<script src="~/Content/nepali.datepicker.v2/nepali.datepicker.v2.min.js"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            /*
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+            */
+            //$("#createdDate").nepaliDatePicker();
+            //$("#empDob").nepaliDatePicker();
+            //$("#annDate").nepaliDatePicker();
+            //$("#retireDate").nepaliDatePicker();
+            //$("#citIssueDate").nepaliDatePicker();
+            //$("#nomDob").nepaliDatePicker();
+            //$("#nomCitIssueDate").nepaliDatePicker();
+            //$("#PfEffectiveDate").nepaliDatePicker();
+            //$("#GratuityEffectiveDate").nepaliDatePicker();
+
+            //$('.date').nepaliDatePicker({
+            //    npdMonth: true,
+            //    npdYear: true,
+            //    npdYearCount: 10 // Options | Number of years to show
+            //});
+        });
+
+        $(document).ready(function () {
+            $('.date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+    </script>
+}
+@if (Request.QueryString["status"] != null && Request.QueryString["status"].ToString() == "done")
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> The employee has been edited.
+    </div>
+}
+
+@if (Request.QueryString["status"] != null && Request.QueryString["status"].ToString() == "failed")
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-close" aria-hidden="true"></i>  Oops! There was some problem and the Employee cannot be edited.
+        @if (Session["Error"] != null)
+        {
+            <p>@Session["Error"].ToString()</p>
+            Session.Remove("Error");
+        }
+    </div>
+}
+
+    @*<form action="/employee/edit/@Model.Code" method="post" enctype="multipart/form-data">*@
+
+    @using (Html.BeginForm("edit", "employee", new { id = @Model.Code }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+
+
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="name">
+                                <label for="Name">Employee Code : @Model.Code</label>
+                            </label>
+                            <input type="hidden" value="@Model.Code" name="Code" />
+                        </div>
+                        <div class="form-group">
+                            <label for="name">
+                                <label for="Employee_Code">Employee Name *</label>
+                            </label>
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @placeholder = "Employee Name", required = "required" } })
+                        </div>
+                        <div class="form-group">
+                            <label for="name">
+                                <label for="UserName">UserName - @Model.Username</label>
+                            </label>
+                            <input type="hidden" name="Username" value="@Model.Username" />
+                        </div>
+                        <div class="form-group">
+                            <label for="createdDate">Joined Date</label>
+                            <input type='text' class="form-control date" placeholder="Enter Joined Date" value="@Model.AppointedDateNP" name="AppointedDateNP" id="createdDate" />
+                        </div>
+                        <div class="form-group">
+                            <div class="text-center" style="padding: 10px;">
+                                @{
+                                    if (@Model.PhotoName != "")
+                                    {
+                                        <img class="img-thumbnail" alt="Profile Photo of @Model.Name" src="~/Uploads/@Model.Code/@Model.PhotoName" style="width: 140px; height: 140px;">
+                                    }
+                                    else
+                                    {
+                                        <img class="img-thumbnail" alt="Profile Photo of @Model.Name" src="~/Uploads/profile.jpg" style="width: 140px; height: 140px;">
+                                    }
+                                }
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="name">
+                                        <label for="Photo">Photo</label>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="" name="EmpImage" type="file" id="photo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label> Gender</label>
+                            <div class="radio mt0">
+                                <label class="col-md-3">
+                                    <input id="Gender" name="Gender" type="radio" required="required" value="Male" @(Model.Gender == "Male" ? "checked" : "")> Male
+                                </label>
+                                <label class="col-md-3">
+                                    <input id="EmpGender" name="Gender" type="radio" required="required" value="Female" @(Model.Gender == "Female" ? "checked" : "")> Female
+                                </label>
+
+                                <label class="col-md-3">
+                                    <input id="EmpGender" name="Gender" type="radio" required="required" value="Others" @(Model.Gender == "Others" ? "checked" : "")>  Others
+                                </label>
+                            </div>
+                        </div><br />
+                        <div class="form-group">
+                            <label> Employee Status</label>
+                            <div class="radio mt0">
+                                <label class="col-md-3">
+                                    <input id="MaritalStatus" name="Status" type="radio" required="required" value="true" @(Model.Status.ToLower() == "true" ? "checked" : "")> Active
+                                </label>
+                                <label class="col-md-3">
+                                    <input id="EmpStatus" name="Status" type="radio" required="required" value="false" @(Model.Status.ToLower() == "false" ? "checked" : "")> Inactive
+                                </label>
+                            </div>
+                        </div><br />
+                        <div class="form-group ">
+                            <label> Marital Status @Model.MaritalStatus</label>
+                            <div class="radio mt0">
+                                <label class="col-md-3">
+                                    <input id="MaritalStatus" name="MaritalStatus" required="required" type="radio" value="Married" @(Model.MaritalStatus == "Married" ? "checked" : "")> Married
+                                </label>
+                                <label>
+                                    <input id="MaritalStatus" name="MaritalStatus" required="required" type="radio" value="UnMarried" @(Model.MaritalStatus == "UnMarried" ? "checked" : "")> UnMarried
+                                </label>
+                                <label class="col-md-3">
+                                    <input id="MaritalStatus" name="MaritalStatus" required="required" type="radio" value="Divorced" @(Model.MaritalStatus == "Divorce" ? "checked" : "")> Divorce
+                                </label>
+                            </div>
+                            <div class="form-group ">
+                                <label>Incapacitated</label>
+                                <div class="radio mt0">
+                                    <label class="col-md-3">
+                                        <input name="IsIncapacitated" type="radio" required="required" value="true" @(Model.IsIncapacitated.ToLower() == "true" ? "checked" : "")> Yes
+                                    </label>
+                                    <label class="col-md-3">
+                                        <input name="IsIncapacitated" type="radio" required="required" value="false" @(Model.IsIncapacitated.ToLower() == "false" ? "checked" : "")> No
+                                    </label>
+                                </div>
+                            </div><br />
+                            <div class="form-group ">
+                                <label>Department Head</label>
+                                <br>
+                                <div class="radio mt0">
+                                    <label class="col-md-3">
+                                        <input name="IsDepartmentHead" type="radio" required="required" value="true" @(Model.IsDepartmentHead.ToLower() == "true" ? "checked" : "")> Yes
+                                    </label>
+                                    <label class="col-md-3">
+                                        <input name="IsDepartmentHead" type="radio" required="required" value="false" @(Model.IsDepartmentHead.ToLower() == "false" ? "checked" : "")> No
+                                    </label>
+                                </div>
+                            </div><br />
+                            <div class="form-group ">
+                                <label>Office Head</label>
+                                <br>
+                                <div class="radio mt0">
+                                    <label class="col-md-3">
+                                        <input name="IsOfficeHead" type="radio" required="required" value="true" @(Model.IsOfficeHead.ToLower() == "true" ? "checked" : "")> Yes
+                                    </label>
+                                    <label class="col-md-3">
+                                        <input name="IsOfficeHead" type="radio" required="required" value="false" @(Model.IsOfficeHead.ToLower() == "false" ? "checked" : "")> No
+                                    </label>
+                                </div>
+                            </div><br />
+                            <div class="form-group ">
+                                <label>Attendance Ignore</label>
+                                <br>
+                                <div class="radio mt0">
+                                    <label class="col-md-3">
+                                        <input name="AttenfanceIgnore" type="radio" required="required" value="true" @(Model.AttenfanceIgnore.ToLower() == "true" ? "checked" : "")> Yes
+                                    </label>
+                                    <label class="col-md-3">
+                                        <input name="AttenfanceIgnore" type="radio" required="required" value="false" @(Model.AttenfanceIgnore.ToLower() == "false" ? "checked" : "")> No
+                                    </label>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group ">
+                                <label>Payroll</label>
+                                <br>
+                                <div class="radio mt0">
+                                    <label class="col-md-3">
+                                        <input name="Payroll" type="radio" required="required" value="true" @(Model.Payroll.ToLower() == "true" ? "checked" : "")> Yes
+                                    </label>
+                                    <label class="col-md-3">
+                                        <input name="Payroll" type="radio" required="required" value="false" @(Model.Payroll.ToLower() == "false" ? "checked" : "")> No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="box box-top-border">
+                    <div class="box-body">
+
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Name">Email</label>
+                                    </label>
+                                    @*<input class="form-control" id="Email" name="Email" required placeholder="Enter employee Email" type="text" value="@Model.Email">*@
+                                    @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    <span class="field-validation-valid"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Password">Password</label>
+                                    </label>
+                                    <input class="form-control" id="Password" name="Password" placeholder="New Password" type="Password" value="">
+                                    <em>Igonre this filed if you dont want to chage the password.</em>
+                                    <span class="field-validation-valid"></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="Name">Customer ID</label>
+                                    @Html.EditorFor(m => m.CustomerId, new { htmlAttributes = new { @class = "form-control" , @required="required"} })
+                                    @Html.ValidationMessageFor(model => model.CustomerId, "", new { @class = "text-danger" })
+                                    <span class="field-validation-valid"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Name">Business Group</label>
+                                    </label>
+                                    @Html.DropDownListFor(m => m.EmpBgId, Model.ddlBusinessGroupList, new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.EmpBgId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Password">Employee Group</label>
+                                    </label>
+                                    @Html.DropDownListFor(m => m.EmpTypeId, Model.EmployeeGroup, new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.EmpTypeId, "", new { @class = "text-danger" })
+                                    @*<span class="help-block"><span class="field-validation-valid" data-valmsg-for="EmpTypeId" data-valmsg-replace="true"></span></span>*@
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Password">Shift</label>
+                                    </label>
+                                    @Html.DropDownListFor(m => m.EmpShiftId, Model.dllShiftList, new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.EmpShiftId, "", new { @class = "text-danger" })
+                                    <span class="help-block"><span class="field-validation-valid" data-valmsg-for="EmpShiftId" data-valmsg-replace="true"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Name">Role</label>
+                                    </label>
+                                    @Html.DropDownListFor(m => m.EmpBgId, Model.ddlBusinessGroupList, new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.EmpBgId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Password">Current Grade Number</label>
+                                    </label>
+                                    <input class="form-control" required="required" id="Email" name="CurrentGrade" value="@Model.CurrentGrade" placeholder="Current Grade Number" type="text">
+                                    @Html.ValidationMessageFor(model => model.CurrentGrade, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Password">Tax Rule</label>
+                                    </label>
+                                    @Html.DropDownListFor(m => m.EmpTaxSetupId, Model.dllTaxRuleList, new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(model => model.EmpTaxSetupId, "", new { @class = "text-danger" })
+                                    <span class="help-block"><span class="field-validation-valid" data-valmsg-for="EmpTaxSetupId" data-valmsg-replace="true"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="AdvNo">
+                                        <label for="AdvNo">Appointment Advertisement Number</label>
+                                    </label>
+                                    <input class="form-control" id="Email" name="AdvNumber" value="@Model.AdvNumber" placeholder="Enter Advertisement Number" type="text">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="hiringMethod">
+                                        <label for="hiringMethod">Hiring Method</label>
+                                    </label>
+                                    <select name="HiringMethodId" class="form-control" id="hiringMethod">
+                                        <option value="1">Select Hiring Method</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="pAddress">
+                                        <label for="pAddress">Permanent Address</label>
+                                    </label>
+                                    <input type="text" class="form-control" name="PermanentAddress" value="@Model.PermanentAddress" id="pAddress" placeholder="Enter Permanent Address" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="form-group">
+                                    <label for="tAddress">
+                                        <label for="tAddress">Temporary Address</label>
+                                    </label>
+                                    <input type="text" class="form-control" name="TempAddress" value="@Model.TempAddress" id="tAddress" placeholder="Enter Permanent Address" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="homePhone">
+                                        <label for="homePhone">Home Phone</label>
+                                    </label>
+                                    <input type="text" class="form-control" name="HomePhone" value="@Model.HomePhone" id="homePhone" placeholder="Enter Home Phone" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="mobile">
+                                        <label for="mobile">Mobile Number</label>
+                                    </label>
+                                    <input type="text" class="form-control" name="MobileNumber" value="@Model.MobileNumber" id="mobile" placeholder="Enter Mobile No" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="officeEmail">
+                                        <label for="officeEmail">Office Email</label>
+                                    </label>
+                                    <input type="text" class="form-control" name="OfficeEmail" value="@Model.OfficeEmail" id="officeEmail" placeholder="Enter Office Email" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="officePhone">
+                                        <label for="officePhone">Office Phone</label>
+                                    </label>
+                                    <input type="text" class="form-control" name="OfficePhone" value="@Model.OfficePhone" id="officePhone" placeholder="Enter Office Phone" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="citNumber">Citizenship Number</label>
+                                    </label>
+                                    <input type="text" id="citNumber" name="CitizenNumber" placeholder="Citizenship Number" value="@Model.CitizenNumber" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="citIssueDate">Citizenship Issue Date</label>
+                                    </label>
+                                    <input type="text" id="citIssueDate" name="CitIssDateNP" value="@Model.CitIssDateNP" placeholder="Citizenship Issue Date" class="form-control date" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="citIssDistrict">Citizenship Issue District</label>
+                                    </label>
+                                    <select name="CitIssDistrictId" id="citIssDistrict" class="form-control">
+                                        <option value="">Select District</option>
+                                        @foreach (var district in Model.Districts)
+                                        {
+                                            <option @(Model.CitIssDistrictId == district.Id.ToString() ? "selected" : "") value="@district.Id">@district.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label>Huliya</label>
+                                    </label>
+                                    <textarea name="Huliya" class="form-control">@Model.Huliya</textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="empDob">Date Of Birth</label>
+                                    </label>
+                                    <input type="text" name="DateOfBirthNP" id="empDob" placeholder="Date of Birth" value="@Model.DateOfBirthNP" class="form-control date" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="annDate">Marriage Anniversary</label>
+                                    </label>
+                                    <input type="text" name="MarriageAnniversaryNP" id="annDate" placeholder="Anniversary Date" value="@Model.MarriageAnniversaryNP" class="form-control date" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="retireDate">Age Retire Date</label>
+                                    </label>
+                                    <input type="text" name="AgeRetireDateNP" id="retireDate" placeholder="Age Retire Date" value="@Model.AgeRetireDateNP" class="form-control date" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="ethnicity">Ethnicity</label>
+                                    </label>
+                                    <select class="form-control" name="EthnicityId" id="ethnicity">
+                                        <option value="">Select Ethnicity</option>
+                                        @foreach (var ethnicity in Model.Ethnicities)
+                                        {
+                                            <option @(Model.EthnicityId == ethnicity.EthnicityId.ToString() ? "selected" : "") value="@ethnicity.EthnicityId">@ethnicity.EthnicityName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="religion">Religion</label>
+                                    </label>
+                                    <select class="form-control" name="ReligionInd" id="religion">
+                                        <option value="">Select Religion</option>
+                                        @foreach (var religion in Model.Religions)
+                                        {
+                                            <option @(Model.ReligionInd == religion.ReligionId.ToString() ? "selected" : "") value="@religion.ReligionId">@religion.ReligionName</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="bloodGroup">Blood Group</label>
+                                    </label>
+                                    <input type="text" name="BloodGroup" id="bloodGroup" value="@Model.BloodGroup" placeholder="Blood Group" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="pNumber">PAN Number</label>
+                                    </label>
+                                    <input type="text" name="PANNumber" id="pNumber" value="@Model.PANNumber" placeholder="PAN Number" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="citNumber">CIT Number</label>
+                                    </label>
+                                    <input type="text" id="citNumber" name="CitNumber" value="@Model.CitNumber" placeholder="CIT Number" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="pfNumber">PF Number</label>
+                                    </label>
+                                    <input type="text" id="pfNumber" name="PFNumber" value="@Model.PFNumber" placeholder="PF Number" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="driNo">Driving License Number</label>
+                                    </label>
+                                    <input type="text" class="form-control" name="DrivingLicenseNumber" value="@Model.DrivingLicenseNumber" placeholder="Driving License Number" id="driNo" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="ppNumber">Passport Number</label>
+                                    </label>
+                                    <input type="text" class="form-control" name="PassportNumber" value="@Model.PassportNumber" placeholder="Passport Number" id="ppNumber" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="fbLink">Facebook Link</label>
+                                    </label>
+                                    <input type="text" id="fbLink" name="FBLink" value="@Model.FBLink" placeholder="Facebook Link" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="twitLink">Twitter Link</label>
+                                    </label>
+                                    <input type="text" id="twitLink" name="TwitterLink" placeholder="Twitter Link" value="@Model.TwitterLink" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="lLink">Linked In Link</label>
+                                    </label>
+                                    <input type="text" id="lLink" name="LinkedInLink" placeholder="LinkedIn Link" value="@Model.LinkedInLink" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="emerContactName">Emergency Contact Name</label>
+                                    </label>
+                                    <input type="text" name="EmerContactName" id="emerContactName" placeholder="Emergency Contact Name" value="@Model.EmerContactName" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="emerRelation">Emergency Contact Relation</label>
+                                    </label>
+                                    <input type="text" name="EmerContactRelation" id="emerRelation" placeholder="Emergency Contact Relation" value="@Model.EmerContactRelation" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="emerContact">Emergency Contact</label>
+                                    </label>
+                                    <input type="text" id="emerContact" name="EmerContact" placeholder="Emergency Contact" value="@Model.EmerContact" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="emerAddress">Emergency Contact Address</label>
+                                    </label>
+                                    <input type="text" id="emerAddress" name="EmerAddress" placeholder="Emergency Address" value="@Model.EmerAddress" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="Nationality">Nationality</label>
+                                    </label>
+                                    <input type="text" name="Nationality" id="Nationality" placeholder="Nationality" value="@Model.Nationality" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="SpouseName">SpouseName</label>
+                                    </label>
+                                    <input type="text" name="SpouseName" id="SpouseName" placeholder="SpouseName" value="@Model.SpouseName" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="EmployeeHeight">Employee Height</label>
+                                    </label>
+                                    <input type="text" id="EmployeeHeight" name="EmployeeHeight" placeholder="Employee Height" value="@Model.EmployeeHeight" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="PfEffectiveDate">Pf Effective Date</label>
+                                    </label>
+                                    <input type="text" id="PfEffectiveDate" name="PfEffectiveDateNP" placeholder="Pf Effective Date" value="@Model.PfEffectiveDateNP" class="form-control date" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="GratuityEffectiveDate">Gratuity Effective Date</label>
+                                    </label>
+                                    <input type="text" id="GratuityEffectiveDate" name="GratuityEffectiveDateNP" placeholder="Gratuity Effective Date" value="@Model.GratuityEffectiveDateNP" class="form-control date" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="EmployeeBankAccountNumber">Employee Bank Account Number</label>
+                                    </label>
+                                    <input type="text" id="EmployeeBankAccountNumber" name="EmployeeBankAccountNumber" placeholder="Employee Bank Account Number" value="@Model.EmployeeBankAccountNumber" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="nomName">Nominee Name</label>
+                                    </label>
+                                    <input type="text" id="nomName" name="NomineeName" placeholder="Nominee Name" value="@Model.NomineeName" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="nomDob">Nominee Date Of Birth</label>
+                                    </label>
+                                    <input type="text" id="nomDob" name="NomineeDobNP" placeholder="Nominee Date Of Birth" value="@Model.NomineeDobNP" class="form-control date" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="nomAddress">Nominee Address</label>
+                                    </label>
+                                    <input type="text" id="nomAddress" name="NomineeAddress" placeholder="Nominee Address" value="@Model.NomineeAddress" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="nomRelation">Nominee Relation</label>
+                                    </label>
+                                    <input type="text" id="nomRelation" name="NomineeRelation" placeholder="Nominee Relation" value="@Model.NomineeRelation" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="nomCitNo">Nominee Ctz. Number</label>
+                                    </label>
+                                    <input type="text" id="nomCitNo" name="NomCitNo" placeholder="Nominee Ctz. No" value="@Model.NomCitNo" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="nomCitIssueDate">Nominee Ctz. Issue Date</label>
+                                    </label>
+                                    <input type="text" id="nomCitIssueDate" name="NomCitIssueDateNP" placeholder="Nominee Ctz. Issue Date" value="@Model.NomCitIssueDateNP" class="form-control date" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>
+                                        <label for="nomCitIssueDistrict">Nominee Ctz. Issue District</label>
+                                    </label>
+                                    <select class="form-control" name="NomCitIssDistrictId">
+                                        <option value="">Select District</option>
+                                        @foreach (var district in Model.Districts)
+                                        {
+                                            <option @(Model.NomCitIssDistrictId == district.Id.ToString() ? "selected" : "") value="@district.Id">@district.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="text-center" style="padding: 10px;">
+                                        <img class="img-thumbnail" alt="Nominee Photo" src="~/Uploads/@Model.Code/@Model.NomineePhoto" style="width: 140px; height: 140px;">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <label for="name">
+                                                <label for="nomPhoto">Nominee Photo</label>
+                                            </label>
+                                        </div>
+                                        <div class="col-md-9">
+                                            <input class="" name="NomImage" type="file" id="nomPhoto">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="submit" id="btnEditSubmit" value="Update Employee" class="btn btn-primary" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                                    }
+    @*</form>*@
+
+
+

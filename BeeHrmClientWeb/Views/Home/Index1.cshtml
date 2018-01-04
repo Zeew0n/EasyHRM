@@ -1,0 +1,409 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div  id="page-content-wrapper" class="container-fluid>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+    }
+        <div class="row">
+            <div class="col-md-6 ">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="name">
+                                <label for="Name">Employee Code </label>
+
+                            </label>
+                           
+                            <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpCode" placeholder="Enter employee Code" type="text" value="">
+
+                            <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">
+                                <label for="Employee_Code">Name</label>
+                            </label>
+                            <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpName" id="Name" name="Name" placeholder="Enter employee Name" type="text" value="">
+
+                            <span class="field-validation-valid" data-valmsg-for="Code" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">
+                                <label for="UserName">UserName</label>
+                            </label>
+                            <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="UserName" ng-model="emp.EmpUserName" name="UserName" placeholder="Enter employee Username" type="text" value="">
+
+                            <span class="field-validation-valid" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">
+                                <label for="Created_Date">Created Date</label>
+                            </label>
+
+                            <input class="form-control datepicker hasDatepicker ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpCreatedDate" placeholder="Join date " id="dp1465277313260">
+                            <span class="field-validation-valid" data-valmsg-for="CreatedDate" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="text-center" style="padding: 10px;">
+                                <img class="img-thumbnail" alt="140x140" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" style="width: 140px; height: 140px;">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="name">
+                                        <label for="Photo">Photo</label>
+                                    </label>
+                                </div>
+                                <div class="col-md-9">
+                                    <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" name="photo" type="file" id="photo" ng-model="emp.EmpPhoto">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="form-group ">
+                            <label for="name"> Gender</label>
+                            <br>
+                            <div class="radio radio-primary radio-inline">
+                                <label class="">
+                                    <input id="Gender" name="Gender" ng-model="emp.EmpGender" type="radio" value="Male" class="ng-pristine ng-untouched ng-valid ng-not-empty"> Male
+                                </label>
+                            </div>
+
+
+                            <div class="radio radio-primary radio-inline">
+                                <label class="">
+                                    <input id="Gender" name="Gender" ng-model="emp.EmpGender" type="radio" value="Female" class="ng-pristine ng-untouched ng-valid ng-not-empty"> Female
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline ">
+                                <label class="">
+                                    <input id="Gender" name="Gender" ng-model="emp.EmpGender" type="radio" value="Others" class="ng-pristine ng-untouched ng-valid ng-not-empty">  Others
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label> Employee Status</label>
+                            <br>
+                            <div class="radio radio-primary radio-inline mt0">
+                                <label class="">
+                                    <input id="MaritalStatus" name="EmpStatus" ng-model="emp.EmpStatus" type="radio" value="true " class="ng-pristine ng-untouched ng-valid ng-not-empty"> Active
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline">
+                                <label>
+                                    <input id="EmpStatus" ng-model="emp.EmpStatus" name="EmpStatusw" type="radio" value="false " class="ng-pristine ng-untouched ng-valid ng-not-empty"> Inactive
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label> Marital Status</label>
+                            <br>
+                            <div class="radio radio-primary radio-inline mt0">
+                                <label class="">
+                                    <input id="MaritalStatus" name="MaritalStatus" ng-model="emp.EmpMaritalStatus" type="radio" value="Married " class="ng-pristine ng-untouched ng-valid ng-not-empty"> Married
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline">
+                                <label>
+                                    <input id="MaritalStatus" ng-model="emp.EmpMaritalStatus" name="MaritalStatus" type="radio" value="UnMarried " class="ng-pristine ng-untouched ng-valid ng-not-empty"> UnMarried
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline">
+                                <label class="">
+                                    <input id="MaritalStatus" ng-model="emp.EmpMaritalStatus" name="MaritalStatus" type="radio" value="Divorce " class="ng-pristine ng-untouched ng-valid ng-not-empty"> Divorce
+                                </label>
+                            </div>
+                            <div class="form-group ">
+                                <label>Incapacitated</label>
+                                <br>
+                                <div class="radio radio-primary radio-inline mt0">
+                                    <label>
+                                        <input ng-model="emp.EmpIncapacitated" name="EmpIncapacitated" type="radio" value="true" class="ng-pristine ng-untouched ng-valid ng-empty"> Yes
+                                    </label>
+                                </div>
+                                <div class="radio radio-primary radio-inline">
+                                    <label>
+                                        <input name="EmpIncapitated" ng-model="emp.EmpIncapacitated" type="radio" value="false" class="ng-pristine ng-untouched ng-valid ng-empty"> No
+                                    </label>
+                                </div>
+
+
+                            </div>
+                            <div class="form-group ">
+                                <label>Department Head</label>
+                                <br>
+                                <div class="radio radio-primary radio-inline mt0">
+                                    <label>
+                                        <input ng-model="emp.EmpDeptHead" name="EmpDeptHead" type="radio" value="true" class="ng-pristine ng-untouched ng-valid ng-empty"> Yes
+                                    </label>
+                                </div>
+                                <div class="radio radio-primary radio-inline">
+                                    <label>
+                                        <input ng-model="emp.EmpDeptHead" name="EmpDeptHead" type="radio" value="false" class="ng-pristine ng-untouched ng-valid ng-empty"> No
+                                    </label>
+                                </div>
+
+
+                            </div>
+                            <div class="form-group ">
+                                <label>Office Head</label>
+                                <br>
+                                <div class="radio radio-primary radio-inline mt0">
+                                    <label>
+                                        <input ng-model="emp.EmpOfficeHead" name="EmpOfficeHead" type="radio" value="true" class="ng-pristine ng-untouched ng-valid ng-empty"> Yes
+                                    </label>
+                                </div>
+                                <div class="radio radio-primary radio-inline">
+                                    <label>
+                                        <input ng-model="emp.EmpOfficeHead" name="EmpOfficeHead" type="radio" value="false" class="ng-pristine ng-untouched ng-valid ng-empty"> No
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="form-group ">
+                                <label>Attendance Ignore</label>
+                                <br>
+                                <div class="radio radio-primary radio-inline mt0">
+                                    <label>
+                                        <input ng-model="emp.EmpAttendanceIgnore" name="EmpAttendanceIgnore" type="radio" value="true" class="ng-pristine ng-untouched ng-valid ng-empty"> Yes
+                                    </label>
+                                </div>
+                                <div class="radio radio-primary radio-inline">
+                                    <label>
+                                        <input ng-model="emp.EmpAttendanceIgnore" name="EmpAttendanceIgnore" type="radio" value="false" checked="checked" class="ng-pristine ng-untouched ng-valid ng-empty"> No
+                                    </label>
+                                </div>
+
+
+                            </div><div class="form-group ">
+                                <label>Payroll</label>
+                                <br>
+                                <div class="radio radio-primary radio-inline mt0">
+                                    <label>
+                                        <input ng-model="emp.EmpPayroll" name="Payroll" type="radio" value="true" class="ng-pristine ng-untouched ng-valid ng-empty"> Yes
+                                    </label>
+                                </div>
+                                <div class="radio radio-primary radio-inline">
+                                    <label>
+                                        <input ng-model="emp.EmpPayroll" name="Payroll" type="radio" value="false" class="ng-pristine ng-untouched ng-valid ng-empty"> No
+                                    </label>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4-col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Branch">Office</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpOfficeId" ng-options="obj.OfficeId as obj.OfficeName for obj in officeList"><option value="" class="" selected="selected">---- Select Office -----</option><option label="abcd" value="number:1">abcd</option><option label="jhgjh1q" value="number:2">jhgjh1q</option><option label="kjh" value="number:3">kjh</option><option label="fgs" value="number:4">fgs</option>  </select>
+                                    <span class="help-block"><span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name" class="control-label">
+                                        <label for="Level">Level</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpLevelId" ng-options="obj.LevelId as obj.LevelName for obj in getLevelList"><option value="" class="" selected="selected">-----Select Level-----</option><option label="First Class" value="number:1">First Class</option><option label="Second Class" value="number:2">Second Class</option><option label="Third Class" value="number:3">Third Class</option>
+                                    </select>
+                                     <span class="help-block"><span class="field-validation-valid ng-binding" data-valmsg-for="Email" data-valmsg-replace="true"></span></span>
+
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Branch">Rank</label>
+                                    </label>
+
+                                    <select id="sel" class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpRankId" ng-options="obj.RankId as obj.RankName for obj in getRankList"><option value="" class="" selected="selected">----- Select Rank -----</option><option label="1" value="number:1">1</option><option label="2" value="number:2">2</option><option label="3" value="number:3">3</option><option label="4" value="number:4">4</option></select>
+
+                                    <span class="help-block"><span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"> </span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4-col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Department">Department</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpDeptId" ng-options="obj.DeptId as obj.DeptName for obj in getDeptsList"><option value="" class="" selected="selected">---- Select Department---</option><option label="HR" value="number:1">HR</option><option label="Finance" value="number:2">Finance</option><option label="Account" value="number:3">Account</option><option label="Credit Division" value="number:4">Credit Division</option><option label="null" value="number:5"></option><option label="Branch Operation Division" value="number:6">Branch Operation Division</option><option label="Central Training Institute" value="number:7">Central Training Institute</option><option label="Company Secretariat" value="number:8">Company Secretariat</option><option label="Credit Division" value="number:9">Credit Division</option><option label="Finance And Account Division" value="number:10">Finance And Account Division</option><option label="General Service Division" value="number:11">General Service Division</option><option label="Human Resource Management Division" value="number:12">Human Resource Management Division</option><option label="Information Technology Div." value="number:13">Information Technology Div.</option><option label="Interbranch Account Management Project" value="number:14">Interbranch Account Management Project</option><option label="Internal Audit Division" value="number:15">Internal Audit Division</option><option label="Legal Division" value="number:16">Legal Division</option><option label="Office Of The C E O" value="number:17">Office Of The C E O</option><option label="Office Of The D G M (Business Operation))" value="number:18">Office Of The D G M (Business Operation))</option><option label="Office Of The D G M (Human Resource)" value="number:19">Office Of The D G M (Human Resource)</option><option label="Office Of The D G M (Service)" value="number:20">Office Of The D G M (Service)</option><option label="Plannig Div" value="number:21">Plannig Div</option><option label="Reserve Pool" value="number:22">Reserve Pool</option><option label="Retirement Fund Mgmnt Office" value="number:23">Retirement Fund Mgmnt Office</option><option label="Risk Management Division" value="number:24">Risk Management Division</option><option label="Small And MicEnterprise Dev Division" value="number:25">Small And MicEnterprise Dev Division</option><option label="Trueasury Division" value="number:26">Trueasury Division</option></select>
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Designation">Section</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpSectionId" ng-options="obj.SectionId as obj.SectionName for obj in getSectionList"><option value="" class="" selected="selected">---- Select Section -----</option><option label="Section One" value="number:1">Section One</option><option label="Section Two" value="number:2">Section Two</option><option label="Section Three" value="number:3">Section Three</option><option label="Section Four" value="number:4">Section Four</option></select>
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Branch">Shift</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpShiftId" ng-options="obj.ShiftId as obj.ShiftName for obj in getShiftList"><option value="" class="" selected="selected">-----Select Shift----</option><option label="Shift(10-6)" value="number:1">Shift(10-6)</option><option label="Shift(9-5)" value="number:2">Shift(9-5)</option></select>
+
+                                    <span class="help-block"><span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4-col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Group">Designation</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpDesgId" ng-options="obj.DsgId as obj.DsgName for obj in getDesignationList"><option value="" class="" selected="selected">----- Select Designation-----</option><option label="Section Chief" value="number:1">Section Chief</option><option label="Loan Officer" value="number:2">Loan Officer</option><option label="Support Staff" value="number:3">Support Staff</option><option label="Account Assistant" value="number:4">Account Assistant</option><option label="Act. Section Chief" value="number:5">Act. Section Chief</option></select>
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Leave_rule">Employee Group</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpTypeId" ng-options="obj.GroupId as obj.GroupName for obj in getGroupList"><option value="" class="" selected="selected">----Select Group----</option><option label="Technical" value="number:1">Technical</option><option label="Administration" value="number:2">Administration</option></select>
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Leave_rule">Service Event Group</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpServiceEventGroupId" ng-options="obj.ServiceEventId as obj.ServiceEventGroup for obj in getServiceEventGroupList"><option value="" class="" selected="selected">-----Select Value----- </option><option label="Appointment" value="number:1">Appointment</option><option label="Transfer" value="number:2">Transfer</option><option label="Promotion" value="number:3">Promotion</option><option label="General Exit" value="number:4">General Exit</option></select>
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-3 col-md-4-col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Shift">LeaveRule</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpLeaveRuleId" ng-options="obj.LeaveRuleId as obj.LeaveRuleName for obj in getLeaveRuleList"><option value="" class="" selected="selected">-----Select LeaveRule----- </option><option label="Leave Rule One" value="number:1">Leave Rule One</option><option label="Leave Rule Two" value="number:2">Leave Rule Two</option></select>
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Service_Status">Job Type</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpJobTypeId" ng-options="obj.JobtypeId as obj.JobTypeName for obj in getJobTypesList"><option value="" class="" selected="selected">----Select Job Type----- </option><option label="Permanent" value="number:1">Permanent</option><option label="Contract" value="number:2">Contract</option><option label="Monthly Wages" value="number:3">Monthly Wages</option></select>
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Leave_rule">Business Group</label>
+                                    </label>
+                                    <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="emp.EmpBgId" ng-options="obj.GroupId as obj.GroupName for obj in getGroupList"><option value="" class="" selected="selected">----Select Group----</option><option label="Technical" value="number:1">Technical</option><option label="Administration" value="number:2">Administration</option></select>
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Name">Email</label>
+                                    </label>
+                                    <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="Email" ng-model="emp.EmpEmail" name="Email" placeholder="Enter employee Email" type="text" value="">
+
+                                    <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Password">Password</label>
+                                    </label>
+                                    <input class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="Password" ng-model="emp.EmpPassword" name="Password" placeholder="Enter employee Password" type="text" value="">
+
+                                    <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label for="name">   </label>  <input data-val="true" data-val-required="The Checked field is required." id="Checked" name="Checked" type="checkbox" value="true"><input name="Checked" type="hidden" value="false"> Send Employee's Login information to their email ?
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+              
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button ng-click="btnClick()" class="btn btn-info"> Save </button>
+                                <button ng-click="btnClose()" class="btn btn-info"> Save &amp; Close </button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".datepicker").datepicker();
+            });
+        </script>
+
+
+
+
+
+

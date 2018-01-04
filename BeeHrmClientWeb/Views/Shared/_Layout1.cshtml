@@ -1,0 +1,214 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Beehrm Human Resource System</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="~/img/fev/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/img/fev/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/img/fev/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/img/fev/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/img/fev/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/img/fev/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/img/fev/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/img/fev/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/img/fev/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/img/fev/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/img/fev/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/img/fev/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/img/fev/favicon-16x16.png">
+    <link rel="manifest" href="~/img/fev//manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/startbootstrap-simple-sidebar-1.0.5/css/simple-sidebar.css" rel="stylesheet" />
+
+
+    <link href="~/Content/admin.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/brand.css" rel="stylesheet" />
+    <link href="~/Content/nanoscroller.css" rel="stylesheet" />
+</head>
+
+<style type="text/css">
+    input, select {
+        border: 1px solid #999 !important;
+    }
+
+    .appendedDiv {
+        background: rgba(280, 285, 225, 0.8) none repeat scroll 0% 0%;
+        position: absolute;
+        width: 210px;
+        height: 100px;
+        overflow: scroll;
+        z-index: 9;
+        opacity: 1;
+    }
+
+        .appendedDiv ul {
+            list-style: none;
+        }
+
+    .pointer {
+        cursor: pointer;
+    }
+
+    .showFormBlock {
+        display: block;
+    }
+
+    .hideFormBlock {
+        display: none;
+    }
+
+    .regFormTable {
+        width: 100%;
+    }
+
+        .regFormTable thead tr th {
+            padding: 5px;
+        }
+
+        .regFormTable tbody tr td {
+            padding: 5px;
+        }
+
+    .stpForm {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 5px;
+    }
+
+    body {
+        background: url('public/img/bg.jpg');
+        background-color: #d8e4f0;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    footer.navbar-fixed-bottom1 {
+        margin-top: 0px;
+    }
+
+    .alert, .alert-danger ul li {
+        list-style: none;
+    }
+</style>
+
+
+
+<body>
+    <div class="color-line"></div>
+    <nav class="navbar navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span class="logo">
+                    <a href="#">
+                        <span>
+                            <img src="~/img/inspire_logo.png">
+                        </span>
+                    </a>
+                </span>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="navbar-custom-menu navbar-right">
+                    @*<ul class="nav navbar-nav">
+                       
+                        <li>
+                            <a href="#search-toggle" id="search-toggle">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                                Search
+                            </a>
+                        </li>
+                        
+                     
+                        
+
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="http://hr.youngminds.com.np/assets/img/avatar5.png" class="user-image"
+                                     alt="User Image">
+                                <span class="hidden-xs"> Welcome, Prakash Bhandari &nbsp;&nbsp;&nbsp;&nbsp;</span>
+
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header  navbar-custom">
+                                    <img src="http://hr.youngminds.com.np/assets/img/avatar5.png" class="img-circle"
+                                         alt="User Image">
+
+                                    <p>
+                                        Prakash Bhandari <br />- Software Developer <br />
+                                        <small>Since Nov. 2014</small>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>*@
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+            
+            <div class="row">
+            <footer class="blue navbar-fixed-bottom1">
+                <hr />
+                <p style="padding-bottom: 2px; margin-bottom: 2px;"> Copyright &copy; 2016 <a href="http://www.youngminds.com.np">Young Minds  </a>. All rights reserved </p>
+                Powered by <a href="http://www.youngminds.com.np" target="_blank">Young Minds</a>
+            </footer>
+            </div>
+
+        </div>
+             <script src="~/Scripts/angular.js"></script>
+             <script src="~/Scripts/jquery-2.2.3.js"></script>
+             <script src="~/Scripts/jquery.validate.js"></script>
+             <script src="~/Scripts/bootstrap.min.js"></script>
+             <script src="~/Scripts/jquery.nanoscroller.js"></script>
+
+             <script>
+                $("#menu-toggle").click(function (e) {
+                    e.preventDefault();
+                    $("#wrapper").toggleClass("toggled");
+                });
+
+                $("#search-toggle").click(function () {
+                    $('#search-box').toggleClass('toggledSearch');
+                });
+
+                $(".nano").css({ height: ($(window).height() - 50) + 'px' });
+                $("#sidebar-wrapper").css({ height: ($(document).height() - 90) + 'px' });
+                $(".nano").nanoScroller();
+                $(".nano-message").nanoScroller();
+                $(".nano-notification").nanoScroller();
+
+             </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.ViewModel.EmployeeSkillViewModel>
+@{
+    ViewBag.Title = "FamilyDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Detail of Employee
+                    @*Details of Employee - @Model.Name*@
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    @Html.Partial("_partialpageUserProfileDetail")
+    <div class="col-md-8 col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+            </div>
+            <div class="panel-body basic">
+
+                <h3>Skill</h3>
+                <table class="table">
+                    <tr>
+                        <th>
+                           Name
+                        </th>
+                        <th>
+                           Point
+                        </th>
+
+                        <th>
+                           Status
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SkillName)
+                            </td>
+                            <td>
+                                <meter min="0" max="100" value="@item.EmpSkillPoint"></meter>
+                                @Html.DisplayFor(modelItem => item.EmpSkillPoint)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmpSkillStatus)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

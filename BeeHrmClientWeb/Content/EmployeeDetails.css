@@ -1,0 +1,77 @@
+﻿        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+            background: #fff;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #2196f3;
+                    color: #fff;
+                    font-weight: 600;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 1px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+
+        .profile-info-name {
+            background-color: transparent;
+            color: #667e99;
+            display: table-cell;
+            text-align: left;
+            vertical-align: middle;
+            width: 900px !important;
+            border:none !important;
+        }
+
+        .profile-info-value {
+            display: table-cell;
+            padding: 6px 4px 6px 6px;
+        }
+        .profile-user-info-striped .profile-info-value
+        {
+            border:none !important;
+        }
+        .profile-user-info-striped .profile-info-name {
+            background-color:#fefefe;
+            color: #336199;
+            text-align: left;
+        }
+
+        profile-user-info-striped .profile-info-value {
+           border:none !important;
+            padding-left: 12px;
+        }
+        .profile-user-info-striped
+        {
+            border:none;
+        }
+
+.profile-heading {
+    background-color:#ddd;
+    padding:2px;
+    color: #323a7a;    
+    margin-bottom:10px;
+    width:100%;
+}
+.profile-heading>h4
+{
+    margin-left:10px;
+    
+}
+   

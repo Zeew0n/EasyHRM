@@ -1,0 +1,215 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.ApproverList
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <link href="~/Scripts/multiselect/css/style.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+
+
+
+
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                <i class="fa fa-plus"></i>  <a href="/Employee/AssiginApprover"> Select Approver </a>
+                            </span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Approver List
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Danger"] != null)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+            @TempData["Danger"]
+        </div>
+    }
+
+    </div>
+
+
+<div class="panel-body box box-top-border">
+
+    <div class="plane panel-body">
+        <div class="row">
+            <form action="/Employee/ApproverList" method="post">
+                <div class="col-lg-4 col-md-4">
+                    @Html.DropDownListFor(m => m.OfficeId, Model.BranchSelectList, new { @class = "form-control" })
+                </div>
+                
+                <div class="col-lg-4 col-md-4">
+                    <input type="submit" class="btn btn-success" value="Search" />
+                </div>
+            </form>
+
+        </div>
+        <div class="clearfix">
+
+        </div>
+    </div>
+</div>
+
+<div class="panel-body box box-top-border">
+    <div class="col-xs-12">
+
+
+
+
+        @if (Model.Employee == null)
+        {
+
+            <strong class="error"> Please select the parameter to select the employee </strong>
+
+        }
+        else
+        {
+            <table class="table table-responsive table-bordered ">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th class="text-center">Code</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Designation</th>
+                        <th class="text-center">Office Name</th>
+                        <th class="text-center">Department</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.Employee)
+                    {
+                        i = i + 1;
+
+                        <tr>
+                            <td> @i
+                            @Html.HiddenFor(model => row.ApproverID)
+                            @Html.HiddenFor(model=>row.EmpOfficeId)
+                            </td>
+                            <td>@row.EmpCode</td>
+                            <td>@row.EmpName</td>
+                            <td>@row.DsgName</td>
+                            <td>@row.OfficeName</td>
+                            <td>@row.DeptName</td>
+                           <td> <center>
+    <a class="label-success label confirm_delete" href="@Url.Action("DeleteEmployeeApprover", "Employee", new { ApproverId = row.ApproverID, EmpOfficeId = row.EmpOfficeId})"><i class="fa fa-trash-o"></i> </a>
+
+
+</center>
+                               </td>
+                       
+
+                        </tr>
+
+
+
+                    }
+                </tbody>
+
+            </table>
+
+
+
+        }
+
+
+
+
+
+    </div>
+
+</div>
+
+
+
+@section scripts{
+
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#holiday').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $(".datepicker").datepicker();
+
+        });
+
+
+    </script>
+
+}
+

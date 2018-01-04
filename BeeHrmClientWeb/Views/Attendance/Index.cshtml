@@ -1,0 +1,510 @@
+﻿@{
+    ViewBag.Title = "Attendance Daily ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+   
+    var officeid = "";
+    if (ViewBag.officeid != null)
+    {
+        officeid = ViewBag.officeid.ToString();
+    }
+
+    var desgid = "";
+    if (ViewBag.Desgid != null)
+    {
+        desgid = ViewBag.Desgid.ToString();
+    }
+
+    var deprtId = "";
+    if (ViewBag.deprtId != null)
+    {
+        deprtId = ViewBag.deprtId.ToString();
+    }
+
+    var empcode = "";
+    if (ViewBag.attempcode != null)
+    {
+        empcode = ViewBag.attempcode.ToString();
+    }
+
+    var emptype = "";
+    if (ViewBag.emptype != null)
+    {
+        emptype = ViewBag.emptype.ToString();
+    }
+
+
+}
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    @*<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Attendances
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class=" row">
+    <div class="box box-top-border">
+        <div class="panel-body">
+            <div class="box-body row">
+                <form action="/Attendances" method="post">
+                    <div class="form-group col-md-3">
+                        <select name="officeid" class="form-control custom-select" id="branchlist" required="required">
+                            <option value=""> ----Select Office Name----</option>
+                            @foreach (var row in ViewBag.ddlOfficeTypeList)
+
+                            {
+                                <option @(officeid == row.OfficeId.ToString() ? "selected" : "") value="@row.OfficeId"> @row.OfficeName</option>
+                            }
+
+                        </select>
+
+
+
+                    </div>
+                    <div class="form-group  col-md-3">
+                        <select class="form-control custom-select" id="Desg" name="DsgId">
+                            <option value=""> ----Select Designation -----</option>
+                            @foreach (var row in ViewBag.ddlDesignationList)
+                            {
+                                <option @(desgid == row.DsgId.ToString() ? "selected" : "") value="@row.DsgId"> @row.DsgName</option>
+
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group  col-md-3">
+                        <select class="form-control custom-select" id="BusGrp" name="emptypeid">
+                            <option value=""> ---Select Employee Group ----</option>
+                            @foreach (var row in ViewBag.ddlBusinessGroupList)
+                            {
+                                <option @(emptype == row.GroupId.ToString() ? "selected" : "") value="@row.GroupId"> @row.GroupName</option>
+
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group  col-md-3">
+
+                        <select class="form-control custom-select" id="department" name="dprtid">
+                            <option value="">---Select department--- </option>
+                            @foreach (var row in ViewBag.ddlDepartmentList)
+                            {
+                                <option @(deprtId == row.DeptId.ToString() ? "selected" : "") value="@row.DeptId"> @row.DeptName</option>
+
+                            }
+                        </select>
+
+                    </div>
+
+                    <div class="form-group  col-md-3">
+                        <input class="form-control" placeholder="Enter employee Code" type="text" value="@empcode" name="EmpCode">
+
+
+                    </div>
+
+                    <div class="form-group col-md-3 ">
+                            <input type='text' class="form-control date" placeholder="Date" id="date" name="startdateNP" required="required" value='@ViewBag.nepaliDate' />
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <br />
+    </div>
+    <div class="box box-top-border">
+        <div class="box-body table-responsive">
+            <div id="divToPrint">
+
+
+                @if (ViewBag.attendancelist != null)
+                {
+
+                    int i = 0;
+
+                    <table class="table table-bordered" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>S.N</th>
+                                <th>Day</th>
+                                <th>Name</th>
+                                <th>EmpCode</th>
+                                <th>Designation</th>
+                                <th>Status</th>
+                                <th>Check In</th>
+                                <th>CheckOut</th>
+                                <th>WorkedHour</th>
+                                <th class="text-center">Late Entry</th>
+                                <th class="text-center">Early Exit</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @foreach (var row in ViewBag.attendancelist)
+                            {
+                                i = i + 1;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@ViewBag.nepaliDate (@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd"))</td>
+                                    <td>@row.EmpName</td>
+                                    <td>@row.code</td>
+                                    <td>@row.DsgName</td>
+                                    <td>
+                                        @{
+                                            var isAbsent = true;
+                                            var weekend = row.IsWeekend.ToString();
+                                            var isTraining = row.IsTraining.ToString();
+
+
+                                            if (row.AttCheckIn != "" || row.AttCheckOut != "")
+                                            {
+                                                <p>Present</p>
+                                                isAbsent = false;
+                                            }
+                                            if (row.IsHoliday != null && row.IsHoliday != "")
+                                            {
+                                                <p>Holiday</p>
+                                                isAbsent = false;
+                                            }
+                                            if (weekend == "True")
+                                            {
+                                                <p>Weekend</p>
+                                                isAbsent = false;
+                                            }
+                                            if (row.Isleave != null && row.Isleave != "")
+                                            {
+                                                <p>Leave</p>
+                                                isAbsent = false;
+                                            }
+                                            if (row.IsOfficialVisit != null && row.IsOfficialVisit != "")
+                                            {
+                                                if (Convert.ToInt32(row.IsOfficialVisit) > 0)
+                                                {
+                                                    <p>Official Visit</p>
+                                                }
+
+                                                isAbsent = false;
+                                            }
+
+
+                                            if (isTraining == "True")
+                                            {
+                                                <p>On Training</p>
+                                                isAbsent = false;
+                                            }
+                                            if (isAbsent == true)
+                                            {
+                                                <p>Absent</p>
+                                            }
+
+                                        }
+
+                                        @*@{
+
+                                                bool status = Convert.ToBoolean(String.IsNullOrEmpty(row.IsAbsent) ? "true" : row.IsAbsent);
+                                                int visit = Convert.ToInt32(String.IsNullOrEmpty(row.IsOfficialVisit) ? "0" : row.IsOfficialVisit);
+                                                bool status_holiday = Convert.ToBoolean(String.IsNullOrEmpty(row.IsWeekend) ? "false" : row.IsWeekend);
+                                                int holiday = Convert.ToInt32(String.IsNullOrEmpty(row.IsHoliday) ? "0" : row.IsHoliday);
+                                                int leave = Convert.ToInt32(String.IsNullOrEmpty(row.Isleave) ? "0" : row.Isleave);
+
+                                                if (status == false)
+                                                {
+                                                    if (row.IsHoliday != null && row.IsHoliday != "")
+                                                    {
+                                                        <p>Holiday</p>
+                                                    }
+                                                    if (Convert.ToBoolean(row.IsWeekend) == true)
+                                                    {
+                                                        <p>Weekend</p>
+                                                    }
+                                                    if (row.Isleave != null && row.Isleave != "")
+                                                    {
+                                                        <p>Leave</p>
+                                                    }
+                                                    if (row.IsOfficialVisit != null && row.IsOfficialVisit != "")
+                                                    {
+                                                        if (Convert.ToInt32(row.IsOfficialVisit) > 0)
+                                                        {
+                                                            <p>Official Visit</p>
+                                                        }
+                                                    }
+                                                    <p> Present</p>
+                                                }
+                                                else
+                                                {
+                                                    if (row.IsOfficialVisit != null && row.IsOfficialVisit != "")
+                                                    {
+                                                        <p>Official Visit </p>
+                                                        if (Convert.ToBoolean(row.IsWeekend) == true)
+                                                        {
+                                                            <p>Weekend</p>
+                                                        }
+                                                        else
+                                                              if (row.IsHoliday != null && row.IsHoliday != "")
+                                                        {
+                                                            <p>Holiday</p>
+                                                        }
+                                                        else
+                                                                 if (row.Isleave != null && row.Isleave != "")
+                                                        {
+                                                            <p>Leave</p>
+                                                        }
+                                                    }
+                                                    else
+
+                                                if (Convert.ToBoolean(row.IsWeekend) == true)
+                                                    {
+                                                        <p>Weekend</p>
+                                                    }
+                                                    else
+                                                                  if (row.IsHoliday != null && row.IsHoliday != "")
+                                                    {
+                                                        <p>Holiday</p>
+                                                    }
+                                                    else
+                                                                      if (row.Isleave != null && row.Isleave != "")
+                                                    {
+                                                        <p>Leave</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <b> Absent</b>
+                                                    }
+
+                                                }
+
+
+                                            }*@
+                                    </td>
+                                    <td>
+
+                                        @{
+                                            if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                            {
+                                                <p>@Convert.ToDateTime(row.AttCheckIn).ToString("HH:mm:ss")</p>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+
+
+                                        @{
+                                            if (row.AttCheckOut != null && row.AttCheckOut != "")
+                                            {
+                                                <p>@Convert.ToDateTime(row.AttCheckOut).ToString("HH:mm:ss")</p>
+                                            }
+                                        }
+
+
+
+                                    </td>
+                                    <td>
+                                        @{if (row.Worked_Hour != null && row.Worked_Hour != "")
+                                            {
+                                                <p>@TimeSpan.FromMinutes(Convert.ToInt32(row.Worked_Hour))</p>
+
+                                            }
+                                            else
+                                            {
+                                                <p> </p>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+
+                                        @{
+                                            if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                            {
+                                                DateTime? checkin = Convert.ToDateTime(row.AttCheckIn);
+                                                TimeSpan? starttime = TimeSpan.Parse(row.AttShiftStart);
+                                                TimeSpan? delayallow = TimeSpan.Parse(row.ShiftDelayAllow);
+                                                TimeSpan? diff = FormatLateEntry(checkin, starttime);
+
+                                                if ((-delayallow) > diff)
+                                                {
+                                                    <p class="label label-danger">@(-diff)</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>@(-diff)</p>
+                                                }
+
+
+                                            }
+                                        }
+
+                                    </td>
+
+                                    <td>
+
+                                        @{
+                                            if (row.AttCheckOut != null && row.AttCheckOut != "")
+                                            {
+                                                DateTime? checkout = Convert.ToDateTime(row.AttCheckOut);
+                                                TimeSpan? endtime = TimeSpan.Parse(row.AttShiftEnd);
+                                                TimeSpan? delayallow = TimeSpan.Parse(row.ShiftDelayAllow);
+                                                TimeSpan? diff = FormatEarlyExit(checkout, endtime);
+
+                                                if ((-delayallow) > diff)
+                                                {
+                                                    <p class="label label-danger">@(-diff)</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>@(-diff)</p>
+                                                }
+
+
+                                            }
+                                        }
+
+
+                                    </td>
+
+
+
+
+
+                                </tr>
+
+                                            }
+                        </tbody>
+                    </table>
+                                            }
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+
+            $('#attendanceTable').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+
+
+
+        });
+
+    </script>
+
+    <script>
+        $(function () {
+            $("#branchlist").customselect();
+            $("#Desg").customselect();
+            $("#BusGrp").customselect();
+            $("#department").customselect();
+        });
+    </script>
+}
+@functions{
+        public TimeSpan? FormatLateEntry(DateTime? date, TimeSpan? shiftStart)
+        {
+            TimeSpan ret = new TimeSpan();
+            TimeSpan? checkInTime = date != null ? TimeSpan.Parse(date.Value.ToString("HH:mm:ss")) : ret;
+            TimeSpan? lateTime = shiftStart - checkInTime;
+            if (lateTime == TimeSpan.Parse("10:00:00"))
+            {
+                return TimeSpan.Parse("00:00:00");
+            }
+            return lateTime;
+        }
+
+        public TimeSpan? FormatEarlyExit(DateTime? checkOut, TimeSpan? shiftEnd)
+        {
+            TimeSpan? checkOutTime = checkOut != null ? TimeSpan.Parse(checkOut.Value.ToString("HH:mm:ss")) + TimeSpan.Parse("00:00:00") : new TimeSpan();
+            TimeSpan? earlyExit = checkOutTime - shiftEnd;
+            if (earlyExit == TimeSpan.Parse("-18:00:00"))
+            {
+                return TimeSpan.Parse("00:00:00");
+            }
+            return earlyExit;
+        }
+}
+
+
+

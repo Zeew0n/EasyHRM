@@ -1,0 +1,173 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.LeaveApplicationRecommendDetailViewModel
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/user/leaveapplications/approve"><i class="fa fa-bars"></i> View Approve Leave Applications List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Application to Approve
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@{
+
+
+    if (Model.LeaveApplier != null)
+    {
+        <section>
+            <div class="row">
+                <div class="col-sm-12 col-md-5 col-lg-3">
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="avatar">
+                                    <div class="text-center">
+                                        <a href="/employee/@Model.LeaveApplier.Code">
+                                            @{
+                                                if (Model.LeaveApplier.PhotoName != null)
+                                                {
+                                                    <img src="~/img/emp_photos/@Model.LeaveApplier.PhotoName" alt="Profile of @Model.LeaveApplier.Name" class="img-responsive">
+                                                }
+                                                else
+                                                {
+                                                    <img src="http://demo.beehrm.com/assets/img/avatar5.png" alt="Profile Photo" class="img">
+                                                }
+                                            }
+                                        </a>
+                                    </div>
+                                    <div class="text-center">
+                                        <h3 class="nomarginbtm">[@Model.LeaveApplier.Code] @Model.LeaveApplier.Name</h3>
+                                        <i>@Model.LeaveApplier.Designation</i>
+                                        <br />
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="list-group mt20" id="list-border-remove">
+                                <li class="list-group-item">
+                                    <i class="fa fa-envelope"></i> <span>@Model.LeaveApplier.Email</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa fa-fw fa-calendar-o"></i> <span>@(!String.IsNullOrEmpty(Model.LeaveApplier.JoinDate) ? Convert.ToDateTime(Model.LeaveApplier.JoinDate).ToString("d MMM, yyyy") : "No Join Date") </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8 col-lg-9">
+                    <div class="box box-top-border">
+                        <div class="box-body">
+                            <div class="panel panel-default">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <span class="pull-right">@Model.LeaveDetail.LeaveSubject</span>
+                                        <strong>Leave Subject</strong>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">@Model.LeaveDetail.LeaveDays</span>
+                                        <strong>Leave Days</strong>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">@Model.LeaveDetail.LeaveAppliedDate.ToString("d MMM, yyyy")</span>
+                                        <strong>Leave Request Date</strong>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">@Model.LeaveDetail.LeaveStartDate.ToString("d MMM, yyyy")</span>
+                                        <strong>Leave Start Date</strong>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">@Model.LeaveDetail.LeaveEndDate.ToString("d MMM, yyyy")</span>
+                                        <strong>Leave End Date</strong>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">@Model.LeaveDetail.LeaveTypeName</span>
+                                        <strong>Leave Type</strong>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <span class="pull-right">@Model.LeaveDetail.ApproverName</span>
+                                        <strong>Approver Name</strong>
+                                    </li>
+
+                                    <div class="list-group-item">
+                                        <p class="list-group-item-heading"><strong>Leave Description</strong></p>
+                                        <br>
+                                        <p class="list-group-item-text">@Model.LeaveDetail.LeaveDetails</p>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                                                    <div class="box-footer">
+                            @{
+                                if (Model.LeaveDetail.LeaveStatus == 1 )
+                                {
+                                    <form method="POST" action="/user/leaveapplication/approve/@Model.LeaveDetail.LeaveId" accept-charset="UTF-8">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" value="@Model.LeaveDetail.LeaveId" name="LeaveId" />
+                                        <div class="radio radio-success">
+                                            <label>
+                                                <input type="radio" name="LeaveStatus" value="2" checked="checked">&nbsp;
+                                                Approve
+                                            </label>
+                                            &nbsp;
+                                            <label>
+                                                <input type="radio" name="LeaveStatus" value="3">&nbsp;
+                                                Reject
+                                            </label>
+                                        </div>
+                                        <br />
+                                        <div class="form-group ">
+                                            <label for="remarks">Message</label>
+                                            <textarea rows="3" class="form-control" placeholder="Enter your message" name="StatusChangeMessage" cols="50" id="remarks"></textarea>
+                                            <div class="text text-danger">
+                                                @Html.ValidationSummary()
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <h4>@Model.LeaveDetail.RecommendMessage</h4>
+                                }
+                            }
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+                }
+                 else
+                   {
+                      <div class="alert alert-danger">
+                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                          <i class="fa fa-times" aria-hidden="true"></i> Oops! It seems you are not authorised for this action.
+                            </div>
+                     }
+}

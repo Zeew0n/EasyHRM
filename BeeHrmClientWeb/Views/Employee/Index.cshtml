@@ -1,0 +1,299 @@
+﻿@model PagedList.IPagedList<BeeHRM.ApplicationService.DTOs.EmployeeDTO>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "EmpIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string empName = "", empCode = "", officeId = "", deptId = "", desgId = "", groupId = "", bgId = "";
+
+    if (ViewBag.SearchEmpCode != null)
+    {
+        empCode = Convert.ToString(ViewBag.SearchEmpCode);
+    }
+    if (ViewBag.EmpName != null)
+    {
+        empName = Convert.ToString(ViewBag.EmpName);
+    }
+    if (ViewBag.OfficeId != null)
+    {
+        officeId = Convert.ToString(ViewBag.OfficeId);
+    }
+    if (ViewBag.DeptId != null)
+    {
+        deptId = Convert.ToString(ViewBag.DeptId);
+    }
+    if (ViewBag.DesgId != null)
+    {
+        desgId = Convert.ToString(ViewBag.DesgId);
+    }
+    if (ViewBag.GroupId != null)
+    {
+        groupId = Convert.ToString(ViewBag.GroupId);
+    }
+    if (ViewBag.BgId != null)
+    {
+        bgId = Convert.ToString(ViewBag.BgId);
+    }
+
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#employeeTable').DataTable();
+        $(".clearFields").click(function () {
+            $(".empName").val("");
+            $(".selector").val("");
+            return false;
+        });
+    </script>
+
+
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @if (ViewBag.SideBar != null)
+                {
+                    foreach (var item in ViewBag.SideBar)
+                    {
+                        <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                    }
+                }
+
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        @if (ViewBag.AllowCreate == true)
+                        {
+                            <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/employee/create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New Employee</a></span><a href="#"></a></li>
+                        }
+
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Employee LIST
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@if (Session["EmployeeInsert"] != null && Session["EmployeeInsert"].ToString() == "Success")
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> The employee has been added.
+    </div>
+    Session.Remove("EmployeeInsert");
+}
+
+<form action="" method="post" id="MyForm">
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <input type="text" name="EmpCode" id="EmpCode" value="@(empCode != "" ? empCode : "" )" class="form-control empCode" placeholder="Employee Code" />
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <input type="text" name="EmpName" id="EmpName" value="@(empName != "" ? empName : "" )" class="form-control empName"
+                           placeholder="Employee Name" />
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <select name="OfficeId" class="form-control custom-select">
+                        <option value="" selected>Select Office</option>
+                        @if (ViewBag.dllOfficeTypeList != null)
+                        {
+                            foreach (var row in ViewBag.dllOfficeTypeList)
+                            {
+                                <option value="@row.OfficeId" @(officeId == row.OfficeId.ToString() ? "selected" : "")> @row.OfficeName</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <select class="form-control custom-select" name="DeptId">
+                        <option selected="selected" value="">Select Department</option>
+                        @if (ViewBag.dllDepartmentList != null)
+                        {
+                            foreach (var row in ViewBag.dllDepartmentList)
+                            {
+                                <option value="@row.DeptId" @(deptId == row.DeptId.ToString() ? "selected" : "")> @row.DeptName</option>
+
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <select class="form-control custom-select" name="DesgId">
+                        <option selected="selected" value="">Select Designation</option>
+                        @if (ViewBag.dllDesginationList != null)
+                        {
+                            foreach (var row in ViewBag.dllDesginationList)
+                            {
+                                <option value="@row.DsgId" @(desgId == row.DsgId.ToString() ? "selected" : "")>@row.DsgName</option>
+
+                            }
+                        }
+
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <select class="form-control selector" name="GroupId">
+                        <option value="" selected="selected">Select Group</option>
+                        @if (ViewBag.ddlGroupList != null)
+                        {
+                            foreach (var row in ViewBag.ddlGroupList)
+                            {
+                                <option value="@row.GroupId" @(groupId == row.GroupId.ToString() ? "selected" : "")>@row.GroupName</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <select class="form-control selector" name="BgId">
+                        <option value="" selected="selected">Select Business Group</option>
+                        @if (ViewBag.ddlBgGroupList != null)
+                        {
+                            foreach (var row in ViewBag.ddlBgGroupList)
+                            {
+                                <option value="@row.BgId" @(bgId == row.BgId.ToString() ? "selected" : "")>@row.BgName</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-3 pull-right">
+            <input type="button" class="btn btn-primary clearFields pull-right" value="Clear Fields" />
+            <input type="submit" class="btn btn-primary pull-right" style="margin-right:10px;" value="Search" />
+        </div>
+    </div>
+</form>
+<br />
+<div class="box box-top-border">
+    <div class="box-header with-border">
+
+        <div class="row">
+            <h3 class="box-title"><i class="fa fa-bars" aria-hidden="true"></i> Employee List </h3>
+            <form action="/Employee/EmployeeExcel" method="post">
+                <input type="submit" value="Excel" class="btn btn-info" />
+            </form>
+        </div>
+    </div>
+
+    <div class="box-body">
+        <div class="well" id="tabular">
+            @*id="employeeTable"*@
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name <br> Designation</th>
+                        <th>Branch <br> Department</th>
+                        <th>Email <br> Contact</th>
+                        <th>Address</th>
+                        <th>Joined On</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @{
+                        if (Model != null && ViewBag.AllowView == true)
+                        {
+                            foreach (var row in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @row.DsgName<br>
+                                        <a href="/admin/userDetail/@row.EmpCode">[@row.EmpCode] @row.EmpName</a>
+                                    </td>
+                                    <td>@row.OfficeName <br>Accounts &amp; @row.DeptName</td>
+                                    <td>
+                                        <a href="mailto:@row.EmpEmail">@row.EmpEmail</a> <br>
+                                        @row.Contact
+
+                                    </td>
+                                    <td>
+                                        @row.Address
+                                    </td>
+                                    <td>
+                                        @{
+                                            if (row.EmpAppointmentDate == null)
+                                            {
+                                                <span>Not Given</span>
+                                            }
+                                            else
+                                            {
+                                                <span>@*@row.JoinDate.Value.ToString("dd MMM, yyyy")*@
+                                                      @{var a = !String.IsNullOrEmpty(Convert.ToString(row.EmpAppointmentDate)) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(row.EmpAppointmentDate)).ToString().Replace('/', '-') : null;}
+                                                        @a (@row.EmpAppointmentDate.Value.ToString("yyyy-MMM-dd"))
+                                        </span>
+                                            }
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @if (ViewBag.AllowEdit == true)
+                                        {
+                                            <a href="/employee/edit/@row.EmpCode">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        }
+
+                                    </td>
+                                </tr>
+                                                }   
+
+                                            }
+                                            else
+                                            {
+                                                <tr colspan="6"><td>You are not Authorize to Access Employees List</td></tr>
+                                            }
+                    }
+
+                </tbody>
+            </table>
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+            <!--
+            @*@(Model)*@
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { @class = "", page = page, }), new PagedListRenderOptions() { LiElementClasses = new List<string> { "Pager", "yourClass" } })
+                    @*@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))*@
+                    @*new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))*@
+
+                -->
+
+
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, EmpName = ViewBag.EmpName, SearchEmpCode = ViewBag.SearchEmpCode, OfficeId = ViewBag.OfficeId, DeptId = ViewBag.DeptId, DesgId = ViewBag.DesgId, GroupId = ViewBag.GroupId, BgId = ViewBag.BgId }))
+
+
+
+
+        </div>
+    </div>
+</div>
+

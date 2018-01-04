@@ -1,0 +1,387 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollSalaryMasterSheetDTO
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("Index","PayrollSalaryMasterSheets")'><i class="fa fa-bars" aria-hidden="true"></i>View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    My Salary Detail
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="row" style="text-align:center">
+    <h4>Youngs Minds Pvt Ltd</h4>
+</div>
+@*<div class="row" style="text-align:center">
+        Branch : Head Office
+    </div>*@
+<div class="row" style="text-align:center">
+    Branch : @Model.Office.OfficeName
+</div>
+<div class="row" style="text-align:center">
+    Month Nepali:  @Model.PayrollSalaryTable.PayrollMonthDescription.MonthNameNepali
+</div>
+<div class="row" style="text-align:center">
+    Month English:  @Model.PayrollSalaryTable.PayrollMonthDescription.MonthNameEnglish
+</div>
+@*<div class="row" style="text-align:center">
+        Salary To Date : 31 October, 2015
+    </div>*@
+<div>
+    <div class="box">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel-body basic">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <strong> @Html.DisplayNameFor(model => model.EmployeeCode)</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.EmployeeCode)
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>@Html.DisplayNameFor(model => model.EmployeeName)</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.EmployeeName)
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <strong>@Html.DisplayNameFor(model => model.MaritialStatus)</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.MaritialStatus)
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>@Html.DisplayNameFor(model => model.Designation.DsgName)</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Designation.DsgName)
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <strong> @Html.DisplayNameFor(model => model.Department.DeptName)</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Department.DeptName)
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>  @Html.DisplayNameFor(model => model.Office.OfficeName)</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.Office.OfficeName)
+                                </div>
+                            </div>
+                            
+                            @*<div class="form-group">
+                                <div class="col-md-3">
+                                    <strong>  @Html.DisplayNameFor(model => model.CurrentGrade)</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.CurrentGrade)
+                                </div>
+                                <div class="col-md-3">
+                                    <strong>  @Html.DisplayNameFor(model => model.RankMaxGrade)</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    @Html.DisplayFor(model => model.RankMaxGrade)
+                                </div>
+                            </div>*@
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="box box-top-border">
+        <div class="box-body">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well box">
+                        <div class="box-body table-responsive">
+                            <table class="table table-hover table-bordered dataTable" id="rATable">
+                                <tr>
+                                    <th>
+                                        Earning
+                                    </th>
+                                    <th style="text-align:right">
+                                        Amount
+                                    </th>
+                                </tr>
+                                @if (Model.RankSalary != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.RankSalary)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.RankSalary)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.GradeSalary != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.GradeSalary)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.GradeSalary)
+                                        </td>
+                                    </tr>
+                                }
+
+                                @if (Model.RankAndGradeSalary != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <strong>@Html.DisplayFor(model => model.RankAndGradeSalary)</strong>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <th>Rank Allowances</th>
+                                    <th></th>
+                                </tr>
+                                @if (Model.BankAllowance != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.BankAllowance)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.BankAllowance)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.RankInchargeShipAllowance != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.RankInchargeShipAllowance)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.RankInchargeShipAllowance)
+                                        </td>
+                                    </tr>
+                                }
+
+                                @if (Model.RankSpecialAllowance != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.RankSpecialAllowance)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.RankSpecialAllowance)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.RankOtherAllowances != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.RankOtherAllowances)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.RankOtherAllowances)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.TotalRankAllowances != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>Total</strong>
+                                        </td>
+                                        <td style="text-align:right">
+                                           <strong> @Html.DisplayFor(model => model.TotalRankAllowances)</strong>
+                                        </td>
+                                    </tr>
+                                }
+
+                                @if (Model.RemoteAllowance != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.RemoteAllowance)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.RemoteAllowance)
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <th>Other Allowance</th>
+                                    <th></th>
+                                </tr>
+                                @foreach (var allowance in Model.PayrollSalaryDetailSheets)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @allowance.AllowanceName
+                                        </td>
+                                        <td style="text-align:right">
+                                            @allowance.CalculatedValue.ToString("0.00")
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.totalAllowance != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>Total Allowance</strong>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <strong> @Html.DisplayFor(model => model.totalAllowance)</strong>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <th>Overtime</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th>Provident Fund</th>
+                                    <th></th>
+                                </tr>
+                                @if (Model.PfCompany != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.PfCompany)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.PfCompany)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.PfSelf != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.PfSelf)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.PfSelf)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.PfExtra != 0)
+                                {
+                                    <tr>
+                                        <td style="padding-left:40px">
+                                            @Html.DisplayNameFor(model => model.PfExtra)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.PfExtra)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.totalPf != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            <strong>Total </strong>
+                                        </td>
+                                        <td style="text-align:right">
+                                            <strong>@Html.DisplayFor(model => model.totalPf)</strong>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.CitAmount != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayNameFor(model => model.CitAmount)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.CitAmount)
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model.GrossSalary != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayNameFor(model => model.GrossSalary)
+                                        </td>
+                                        <td style="text-align:right">
+                                            @Html.DisplayFor(model => model.GrossSalary)
+                                        </td>
+                                    </tr>
+                                }
+                               
+                                @if (Model.TaxAmount != 0)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayNameFor(model => model.TaxAmount)
+                                        </td>
+                                        <td style="text-align:right">
+                                            <strong>@Html.DisplayFor(model => model.TaxAmount)</strong>
+                                        </td>
+                                    </tr>
+                                }
+
+                                <tr>
+                                    <td>
+                                        <strong>Net Pay</strong>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <strong>@Html.DisplayFor(model => model.SalaryAfterTaxDeduction)</strong>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

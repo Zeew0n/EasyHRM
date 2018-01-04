@@ -1,0 +1,118 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.EmpEducationDTO>
+
+@{
+    ViewBag.Title = "EducationList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('.delete').on('click', function () {
+            var res = confirm("Are you sure you want to delete?");
+            if (!res)
+            {
+                return false;
+            }
+        });
+    </script>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/employees" class="btn btn-success"><i class="fa fa-bars"></i> View Employee List</a></span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Education
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+        </div>
+        <div class="panel-body basic">
+            <div class="pull-right">
+                <a href="/education/@ViewBag.EmployeeDetail.Code/create" class="btn btn-sm btn-primary">Add More</a>
+            </div>
+            <h3>Educations</h3>
+            <table class="table">
+                <tr>
+                    <th>Degree <br>School/University</th>
+                    <th>Education Level</th>
+                    @*<th>Status</th>*@
+                    <th>Obtained Mark</th>
+                    <th>Options</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DegreeName)
+                            <br />
+                            <span style="font-size: 12px;color:#756464;">
+                                @Html.DisplayFor(modelItem => item.UniversityName)
+                                <i style="padding:0 5px;" class="fa fa-calendar-o"></i>
+                                @*@Html.DisplayFor(modelItem => item.PassedDate)*@
+                                @{var a = BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(item.PassedDate)).ToString().Replace('/', '-');}
+                                @a (@(Convert.ToString(item.PassedDate) == "" ? "" : Convert.ToDateTime(item.PassedDate).ToString("yyyy-MMM-dd")))
+                            </span>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.EducationLevelName)</td>
+                        @*<td>@if(item.Stat)</td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ObtainedMark)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", item.EmpCode.ToString()+"/Edit", new { id = item.EduId }) |
+                            @Html.ActionLink("Delete", item.EmpCode.ToString()+"/Delete", new { id = item.EduId }, new { @class = "delete" })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,204 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeDetailsViewModel
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Details of Employee - @Model.Name
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    @Html.Partial("_partialpageUserProfile")
+    <div class="col-md-8 col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Basic Information</strong>
+            </div>
+            <div class="panel-body basic">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="col-md-4">Username</span>
+                        @Model.Username
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Extension/Off. Contact</span>
+                        @Model.Contact
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Branch</span>
+                        @Model.OfficeName <span style="color:white">test</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Department</span>
+                        @Model.Department
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Group</span>
+                        @Model.Group <span style="color:white">test</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Rank</span>
+                        @Model.Rank
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Shift</span>
+                        @Model.Shift
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Designation</span>
+                        @Model.Designation
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Level</span>
+                        @Model.Level
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Service Status</span>
+                        @Model.ServiceStatus
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4"> Contract Expiry Date </span>
+                        @{
+                            if (Model.ContractExpiryDate == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                @Model.ContractExpiryDate
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Marital status</span>
+                        @Model.MaritalStatus
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Date of Birth</span>
+                        @{
+                            if (Model.DateOfBirth == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                @Convert.ToDateTime(Model.DateOfBirth).ToString("d MMM, yyyy")
+                            }
+                        }
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Marriage Anniversary</span>
+                        @{
+                            if (Model.MarriageAnniversary == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                @Convert.ToDateTime(Model.MarriageAnniversary).ToString("d MMM, yyyy")
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Blood Group</span>
+                        @Model.BloodGroup
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Pan no</span>
+                        @Model.PAN
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">PF Number</span>
+                        @Model.PFNUmber
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">CIT Number</span>
+                        @Model.CITNumber
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Incapacitated</span>
+                        @{
+                            if (Model.Incapacitated == "True")
+                            {
+                                <label class="label label-success">
+                                    <i class="fa fa-minus-circle"></i>
+                                    True
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    <i class="fa fa-minus-circle"></i>
+                                    False
+                                </label>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Ignore Attendance For Payroll</span>
+                        @{
+                            if (Model.AttendanceIgnore == "True")
+                            {
+                                <label class="label label-success">
+                                    <i class="fa fa-minus-circle"></i>
+                                    True
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    <i class="fa fa-minus-circle"></i>
+                                    False
+                                </label>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Remote Area</span>
+                        @Model.RemoteArea
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+
+
+

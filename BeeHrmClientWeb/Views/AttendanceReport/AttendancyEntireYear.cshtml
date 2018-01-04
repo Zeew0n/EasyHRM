@@ -1,0 +1,1210 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.AttendanceEntireYearViewModel
+@{
+    ViewBag.Title = "Attendance Reports ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string fsId = Request["fyId"];
+    var css = "";
+    var redline = "";
+    var fredline = "";
+}
+
+
+<style type="text/css">
+    .weekend {
+        background-color: #f89090;
+        color: #fff;
+        text-align: center;
+    }
+
+    .holiday {
+        background-color: palevioletred;
+        color: #fff;
+        text-align: center;
+    }
+
+    .training {
+        background-color: yellow;
+        color: black;
+        text-align: center;
+    }
+
+    .leave {
+        background-color: darkseagreen;
+        color: #fff;
+        ;
+        text-align: center;
+    }
+
+    .OfficialVisit {
+        background-color: aqua;
+        color: #fff;
+        ;
+        text-align: center;
+    }
+
+    .absent {
+        background-color:#990000;
+        color: #fff;
+        ;
+        text-align: center;
+    }
+
+
+    .legend li {
+        list-style: none;
+        line-height: 35px;
+        float: left;
+        margin-left: 15px;
+    }
+    .redLine{
+        width:100%;
+        height:20px;
+        background-color:red;
+    }
+</style>
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <form action="/AttendancyEntireYear/Index" method="post">
+
+                <div class="form-group col-md-3 ">
+
+                    <select class="form-control" name="fyId" style="width:250px;" required>
+                        <option value="">Please Choose Fiscal Year</option>
+                        @if (ViewBag.FiscalsDropdown != null)
+                        {
+                            foreach (var row in ViewBag.FiscalsDropdown)
+                            {
+                                <option value="@row.Value" @( fsId == row.Value.ToString() ? "selected" : "")> @row.Text</option>
+                            }
+                        }
+
+                    </select>
+
+                </div>
+
+                <div class="form-group col-md-3 ">
+                   
+                    <input class="form-control" type="number" required name="empCode" value="" placeholder="Please Enter Employee Code" />
+                </div>
+
+                <div class="col-lg-3 col-md-4">
+                    <input type="submit" class="btn btn-success" value="Search">
+               </div>
+               
+                <div class="col-lg-2 col-md-2">
+                   
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+    <br>
+</div>
+
+
+
+   <div class="alert alert-info">Please Choose Fiscal Year and Enter Employee Code</div>
+
+@{ 
+    if (ViewBag.EmpDetails.Name != null) { 
+
+    <h2>Attendance Report : @ViewBag.EmpDetails.Name (@ViewBag.EmpDetails.Code)</h2>
+}
+}   
+    <div class="box box-top-border">
+        <div style="overflow:scroll">
+            <table width="100%" border="1">
+                <thead>
+
+                    <tr>
+                        <th>महिना</th>
+                        @{
+                       for (int i = 1; i <= 32; i++)
+                       {
+                                <th>@i</th>
+                       }
+                        }
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+                    <tr>
+
+                        <td>श्रावन</td>
+
+                        @{
+
+                        foreach (var item in Model.DailyData)
+                        {
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+
+                    <tr>
+
+                        <td>भाद्र</td>
+
+                        @{
+                        foreach (var item in ViewBag.SecondMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>असोज</td>
+
+                        @{
+                        foreach (var item in ViewBag.ThirdMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+
+                            if(item.CheckInTime!="" && item.CheckOutTime=="")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = @item.CheckOutTime;
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                fredline = "redline";
+                            }
+                            else
+                            {
+                                fredline = @item.CheckOutTime;
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                            {<div class="fredline"></div> }
+                                <br /> @item.CheckOutTime
+                                @if(redline == "redline") {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+
+                    <tr>
+
+                        <td>कार्तिक</td>
+
+                        @{
+                        foreach (var item in ViewBag.FourthMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>मंसिर</td>
+
+                        @{
+                        foreach (var item in ViewBag.FivethMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>पौष</td>
+
+                        @{
+                        foreach (var item in ViewBag.SixthMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>माघ</td>
+
+                        @{
+                        foreach (var item in ViewBag.SeventhMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>फागुन</td>
+
+                        @{
+                        foreach (var item in ViewBag.EightthMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>चैत्र</td>
+
+                        @{
+                        foreach (var item in ViewBag.NinethMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>बैशाख</td>
+
+                        @{
+                        foreach (var item in ViewBag.TenthMonth.DailyData)
+                        {
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>जेष्ठ</td>
+
+                        @{
+                        foreach (var item in ViewBag.EleventhMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+                    <tr>
+
+                        <td>आषाढ</td>
+
+                        @{
+                        foreach (var item in ViewBag.TwelevethMonth.DailyData)
+                        {
+
+                            css = (Convert.ToBoolean(item.Weekend) == true) ? "weekend" : "";
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Holiday) > 0) ? "holiday" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToBoolean(item.Training) == true) ? "training" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.Leave) > 0) ? "leave" : "";
+                            }
+                            if (css == "")
+                            {
+                                css = (Convert.ToInt32(item.OfficialVisit) > 0) ? "OfficialVisit" : "";
+                            }
+                            if (item.AttStatus == "A")
+                            {
+                                css = "absent";
+                            }
+                            if (item.CheckInTime != "" && item.CheckOutTime == "")
+                            {
+                                redline = "redline";
+                            }
+                            else
+                            {
+                                redline = "";
+                            }
+
+
+                            if (item.CheckOutTime != "" && item.CheckInTime == "")
+                            {
+                                fredline = "fredline";
+                            }
+                            else
+                            {
+                                fredline = "";
+                            }
+
+
+                            <td class="@css">
+                                @item.AttStatus @item.CheckInTime
+                                @if (fredline == "fredline")
+                                {<div class="redLine"></div> }
+                                <br /> @item.CheckOutTime
+                                @if (redline == "redline")
+                                {<div class="redLine"></div> }@item.LeaveTypeName
+                            </td>
+                        }
+
+
+                        }
+
+
+                    </tr>
+
+
+
+                </tbody>
+            </table>
+        </div>
+        <p>&nbsp;</p>
+        <ul class="legend">
+            <li><span class="weekend" style="width:35px; padding:5px;">W</span> : Weekend</li>
+            <li><span class="holiday" style="width:35px; padding:5px;">H</span> : Holiday</li>
+            <li><span class="leave" style="width:35px; padding:5px;">L</span> : Leave</li>
+            <li><span class="training" style="width:35px; padding:5px;">T</span> : Training</li>
+            <li><span class="OfficialVisit" style="width:35px; padding:5px;">K</span> : Kaaj</li>
+            <li><span class="absent" style="width:35px; padding:5px;">A</span> : Absent</li>
+
+        </ul>
+        <div style="clear:both"></div>
+    </div>
+
+<h2>Summary</h2>
+<div class="box box-top-border">
+    <table class="table">
+
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>श्रावन</th>
+                <th>भाद्र</th>
+                <th>असोज</th>
+                <th>कार्तिक</th>
+                <th>मंसिर</th>
+                <th>पौष</th>
+                <th>माघ</th>
+                <th>फागुन</th>
+                <th>चैत्र</th>
+                <th>बैशाख</th>
+                <th>जेष्ठ</th>
+                <th>आषाढ</th>
+                <th>Total</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>जम्मा दिन </td>
+                <td>@ViewBag.FirstMonthSummary.totalDays</td>
+                <td>@ViewBag.SecondMonthSummary.totalDays</td>
+                <td>@ViewBag.ThirdMonthSummary.totalDays</td>
+                <td>@ViewBag.FourthMonthSummary.totalDays</td>
+                <td>@ViewBag.FivethMonthSummary.totalDays</td>
+                <td>@ViewBag.SisthMonthSummary.totalDays</td>
+                <td>@ViewBag.SeventhMonthSummary.totalDays</td>
+                <td>@ViewBag.EightthMonthSummary.totalDays</td>
+                <td>@ViewBag.NinethMonthSummary.totalDays</td>
+                <td>@ViewBag.TenthMonthSummary.totalDays</td>
+                <td>@ViewBag.EleventMonthSummary.totalDays</td>
+                <td>@ViewBag.TwelevethMonthSummary.totalDays</td>
+                <td>
+                    @{
+                        int totalDays = ViewBag.FirstMonthSummary.totalDays + ViewBag.SecondMonthSummary.totalDays + ViewBag.ThirdMonthSummary.totalDays + ViewBag.FourthMonthSummary.totalDays + ViewBag.FivethMonthSummary.totalDays;
+                        totalDays = totalDays + ViewBag.SisthMonthSummary.totalDays + ViewBag.SeventhMonthSummary.totalDays + ViewBag.EightthMonthSummary.totalDays + ViewBag.NinethMonthSummary.totalDays;
+                        totalDays = totalDays + ViewBag.TenthMonthSummary.totalDays + ViewBag.EleventMonthSummary.totalDays + ViewBag.TwelevethMonthSummary.totalDays;
+
+                    }@totalDays
+                </td>
+
+            </tr>
+            <tr>
+                <td>उपस्थित </td>
+                <td>@ViewBag.FirstMonthSummary.presentdays</td>
+                <td>@ViewBag.SecondMonthSummary.presentdays</td>
+                <td>@ViewBag.ThirdMonthSummary.presentdays</td>
+                <td>@ViewBag.FourthMonthSummary.presentdays</td>
+                <td>@ViewBag.FivethMonthSummary.presentdays</td>
+                <td>@ViewBag.SisthMonthSummary.presentdays</td>
+                <td>@ViewBag.SeventhMonthSummary.presentdays</td>
+                <td>@ViewBag.EightthMonthSummary.presentdays</td>
+                <td>@ViewBag.NinethMonthSummary.presentdays</td>
+                <td>@ViewBag.TenthMonthSummary.presentdays</td>
+                <td>@ViewBag.EleventMonthSummary.presentdays</td>
+                <td>@ViewBag.TwelevethMonthSummary.presentdays</td>
+                <td>
+                    @{
+                    int present = ViewBag.FirstMonthSummary.presentdays + ViewBag.SecondMonthSummary.presentdays + ViewBag.ThirdMonthSummary.presentdays + ViewBag.FourthMonthSummary.presentdays + ViewBag.FivethMonthSummary.presentdays;
+                    present = present + ViewBag.SisthMonthSummary.presentdays + ViewBag.SeventhMonthSummary.presentdays + ViewBag.EightthMonthSummary.presentdays + ViewBag.NinethMonthSummary.presentdays;
+                    present = present + ViewBag.TenthMonthSummary.presentdays + ViewBag.EleventMonthSummary.presentdays + ViewBag.TwelevethMonthSummary.presentdays;
+
+                }@present
+            </td>
+
+        </tr>
+        <tr>
+            <td>सप्ताहांत</td>
+            <td>@ViewBag.FirstMonthSummary.weekend</td>
+            <td>@ViewBag.SecondMonthSummary.weekend</td>
+            <td>@ViewBag.ThirdMonthSummary.weekend</td>
+            <td>@ViewBag.FourthMonthSummary.weekend</td>
+            <td>@ViewBag.FivethMonthSummary.weekend</td>
+            <td>@ViewBag.SisthMonthSummary.weekend</td>
+            <td>@ViewBag.SeventhMonthSummary.weekend</td>
+            <td>@ViewBag.EightthMonthSummary.weekend</td>
+            <td>@ViewBag.NinethMonthSummary.weekend</td>
+            <td>@ViewBag.TenthMonthSummary.weekend</td>
+            <td>@ViewBag.EleventMonthSummary.weekend</td>
+            <td>@ViewBag.TwelevethMonthSummary.weekend</td>
+            <td>
+                @{
+                    int totalweekend = ViewBag.FirstMonthSummary.weekend + ViewBag.SecondMonthSummary.weekend + ViewBag.ThirdMonthSummary.weekend + ViewBag.FourthMonthSummary.weekend + ViewBag.FivethMonthSummary.weekend;
+                    totalweekend = totalweekend + ViewBag.SisthMonthSummary.weekend + ViewBag.SeventhMonthSummary.weekend + ViewBag.EightthMonthSummary.weekend + ViewBag.NinethMonthSummary.weekend;
+                    totalweekend = totalweekend + ViewBag.TenthMonthSummary.weekend + ViewBag.EleventMonthSummary.weekend + ViewBag.TwelevethMonthSummary.weekend;
+
+                }@totalweekend
+            </td>
+
+        </tr>
+        <tr>
+            <td>सरकारी बिदा</td>
+            <td>@ViewBag.FirstMonthSummary.holiday</td>
+            <td>@ViewBag.SecondMonthSummary.holiday</td>
+            <td>@ViewBag.ThirdMonthSummary.holiday</td>
+            <td>@ViewBag.FourthMonthSummary.holiday</td>
+            <td>@ViewBag.FivethMonthSummary.holiday</td>
+            <td>@ViewBag.SisthMonthSummary.holiday</td>
+            <td>@ViewBag.SeventhMonthSummary.holiday</td>
+            <td>@ViewBag.EightthMonthSummary.holiday</td>
+            <td>@ViewBag.NinethMonthSummary.holiday</td>
+            <td>@ViewBag.TenthMonthSummary.holiday</td>
+            <td>@ViewBag.EleventMonthSummary.holiday</td>
+            <td>@ViewBag.TwelevethMonthSummary.holiday</td>
+            <td>
+                @{
+                    int totalHoliday = ViewBag.FirstMonthSummary.holiday + ViewBag.SecondMonthSummary.holiday + ViewBag.ThirdMonthSummary.holiday + ViewBag.FourthMonthSummary.holiday + ViewBag.FivethMonthSummary.holiday;
+                    totalHoliday = totalHoliday + ViewBag.SisthMonthSummary.holiday + ViewBag.SeventhMonthSummary.holiday + ViewBag.EightthMonthSummary.holiday + ViewBag.NinethMonthSummary.holiday;
+                    totalHoliday = totalHoliday + ViewBag.TenthMonthSummary.holiday + ViewBag.EleventMonthSummary.holiday + ViewBag.TwelevethMonthSummary.holiday;
+
+                }@totalHoliday
+            </td>
+
+        </tr>
+        <tr>
+            <td>बिदा लिएको</td>
+            <td>@ViewBag.FirstMonthSummary.leave</td>
+            <td>@ViewBag.SecondMonthSummary.leave</td>
+            <td>@ViewBag.ThirdMonthSummary.leave</td>
+            <td>@ViewBag.FourthMonthSummary.leave</td>
+            <td>@ViewBag.FivethMonthSummary.leave</td>
+            <td>@ViewBag.SisthMonthSummary.leave</td>
+            <td>@ViewBag.SeventhMonthSummary.leave</td>
+            <td>@ViewBag.EightthMonthSummary.leave</td>
+            <td>@ViewBag.NinethMonthSummary.leave</td>
+            <td>@ViewBag.TenthMonthSummary.leave</td>
+            <td>@ViewBag.EleventMonthSummary.leave</td>
+            <td>@ViewBag.TwelevethMonthSummary.leave</td>
+            <td>
+                @{
+                    int totalLeave = ViewBag.FirstMonthSummary.leave + ViewBag.SecondMonthSummary.leave + ViewBag.ThirdMonthSummary.leave + ViewBag.FourthMonthSummary.leave + ViewBag.FivethMonthSummary.leave;
+                    totalLeave = totalLeave + ViewBag.SisthMonthSummary.leave + ViewBag.SeventhMonthSummary.leave + ViewBag.EightthMonthSummary.leave + ViewBag.NinethMonthSummary.leave;
+                    totalLeave = totalLeave + ViewBag.TenthMonthSummary.leave + ViewBag.EleventMonthSummary.leave + ViewBag.TwelevethMonthSummary.leave;
+
+                }@totalLeave
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>अनुपस्थित</td>
+            <td>@ViewBag.FirstMonthSummary.totalAbsent</td>
+            <td>@ViewBag.SecondMonthSummary.totalAbsent</td>
+            <td>@ViewBag.ThirdMonthSummary.totalAbsent</td>
+            <td>@ViewBag.FourthMonthSummary.totalAbsent</td>
+            <td>@ViewBag.FivethMonthSummary.totalAbsent</td>
+            <td>@ViewBag.SisthMonthSummary.totalAbsent</td>
+            <td>@ViewBag.SeventhMonthSummary.totalAbsent</td>
+            <td>@ViewBag.EightthMonthSummary.totalAbsent</td>
+            <td>@ViewBag.NinethMonthSummary.totalAbsent</td>
+            <td>@ViewBag.TenthMonthSummary.totalAbsent</td>
+            <td>@ViewBag.EleventMonthSummary.totalAbsent</td>
+            <td>@ViewBag.TwelevethMonthSummary.totalAbsent</td>
+            <td>
+                @{
+                    int Absent = ViewBag.FirstMonthSummary.totalAbsent + ViewBag.SecondMonthSummary.totalAbsent + ViewBag.ThirdMonthSummary.totalAbsent + ViewBag.FourthMonthSummary.totalAbsent + ViewBag.FivethMonthSummary.totalAbsent;
+                    Absent = Absent + ViewBag.SisthMonthSummary.totalAbsent + ViewBag.SeventhMonthSummary.totalAbsent + ViewBag.EightthMonthSummary.totalAbsent + ViewBag.NinethMonthSummary.totalAbsent;
+                    Absent = Absent + ViewBag.TenthMonthSummary.totalAbsent + ViewBag.EleventMonthSummary.totalAbsent + ViewBag.TwelevethMonthSummary.totalAbsent;
+
+                }@Absent
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>ढिलो प्रवेश</td>
+            <td>@ViewBag.FirstMonthSummary.latentry</td>
+            <td>@ViewBag.SecondMonthSummary.latentry</td>
+            <td>@ViewBag.ThirdMonthSummary.latentry</td>
+            <td>@ViewBag.FourthMonthSummary.latentry</td>
+            <td>@ViewBag.FivethMonthSummary.latentry</td>
+            <td>@ViewBag.SisthMonthSummary.latentry</td>
+            <td>@ViewBag.SeventhMonthSummary.latentry</td>
+            <td>@ViewBag.EightthMonthSummary.latentry</td>
+            <td>@ViewBag.NinethMonthSummary.latentry</td>
+            <td>@ViewBag.TenthMonthSummary.latentry</td>
+            <td>@ViewBag.EleventMonthSummary.latentry</td>
+            <td>@ViewBag.TwelevethMonthSummary.latentry</td>
+            <td>
+                @{
+                    int totallatentry = ViewBag.FirstMonthSummary.latentry + ViewBag.SecondMonthSummary.latentry + ViewBag.ThirdMonthSummary.latentry + ViewBag.FourthMonthSummary.latentry + ViewBag.FivethMonthSummary.latentry;
+                    totallatentry = totallatentry + ViewBag.SisthMonthSummary.latentry + ViewBag.SeventhMonthSummary.latentry + ViewBag.EightthMonthSummary.latentry + ViewBag.NinethMonthSummary.latentry;
+                    totallatentry = totallatentry + ViewBag.TenthMonthSummary.latentry + ViewBag.EleventMonthSummary.latentry + ViewBag.TwelevethMonthSummary.latentry;
+
+                }@totallatentry
+            </td>
+
+        </tr>
+        <tr>
+            <td>चाँडो गएको </td>
+            <td>@ViewBag.FirstMonthSummary.earlyexit</td>
+            <td>@ViewBag.SecondMonthSummary.earlyexit</td>
+            <td>@ViewBag.ThirdMonthSummary.earlyexit</td>
+            <td>@ViewBag.FourthMonthSummary.earlyexit</td>
+            <td>@ViewBag.FivethMonthSummary.earlyexit</td>
+            <td>@ViewBag.SisthMonthSummary.earlyexit</td>
+            <td>@ViewBag.SeventhMonthSummary.earlyexit</td>
+            <td>@ViewBag.EightthMonthSummary.earlyexit</td>
+            <td>@ViewBag.NinethMonthSummary.earlyexit</td>
+            <td>@ViewBag.TenthMonthSummary.earlyexit</td>
+            <td>@ViewBag.EleventMonthSummary.earlyexit</td>
+            <td>@ViewBag.TwelevethMonthSummary.earlyexit</td>
+            <td>
+                @{
+                    int totalearlyexit = ViewBag.FirstMonthSummary.earlyexit + ViewBag.SecondMonthSummary.earlyexit + ViewBag.ThirdMonthSummary.earlyexit + ViewBag.FourthMonthSummary.earlyexit + ViewBag.FivethMonthSummary.earlyexit;
+                    totalearlyexit = totalearlyexit + ViewBag.SisthMonthSummary.earlyexit + ViewBag.SeventhMonthSummary.earlyexit + ViewBag.EightthMonthSummary.earlyexit + ViewBag.NinethMonthSummary.earlyexit;
+                    totalearlyexit = totalearlyexit + ViewBag.TenthMonthSummary.earlyexit + ViewBag.EleventMonthSummary.earlyexit + ViewBag.TwelevethMonthSummary.earlyexit;
+
+                }@totalearlyexit
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>काज</td>
+            <td>@ViewBag.FirstMonthSummary.officialvisit</td>
+            <td>@ViewBag.SecondMonthSummary.officialvisit</td>
+            <td>@ViewBag.ThirdMonthSummary.officialvisit</td>
+            <td>@ViewBag.FourthMonthSummary.officialvisit</td>
+            <td>@ViewBag.FivethMonthSummary.officialvisit</td>
+            <td>@ViewBag.SisthMonthSummary.officialvisit</td>
+            <td>@ViewBag.SeventhMonthSummary.officialvisit</td>
+            <td>@ViewBag.EightthMonthSummary.officialvisit</td>
+            <td>@ViewBag.NinethMonthSummary.officialvisit</td>
+            <td>@ViewBag.TenthMonthSummary.officialvisit</td>
+            <td>@ViewBag.EleventMonthSummary.officialvisit</td>
+            <td>@ViewBag.TwelevethMonthSummary.officialvisit</td>
+            <td>
+                @{
+                    int totalofficialvisit = ViewBag.FirstMonthSummary.officialvisit + ViewBag.SecondMonthSummary.officialvisit + ViewBag.ThirdMonthSummary.officialvisit + ViewBag.FourthMonthSummary.officialvisit + ViewBag.FivethMonthSummary.officialvisit;
+                    totalofficialvisit = totalofficialvisit + ViewBag.SisthMonthSummary.officialvisit + ViewBag.SeventhMonthSummary.officialvisit + ViewBag.EightthMonthSummary.officialvisit + ViewBag.NinethMonthSummary.officialvisit;
+                    totalofficialvisit = totalofficialvisit + ViewBag.TenthMonthSummary.officialvisit + ViewBag.EleventMonthSummary.officialvisit + ViewBag.TwelevethMonthSummary.officialvisit;
+
+                }@totalofficialvisit
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>तालिम</td>
+            <td>@ViewBag.FirstMonthSummary.training</td>
+            <td>@ViewBag.SecondMonthSummary.training</td>
+            <td>@ViewBag.ThirdMonthSummary.training</td>
+            <td>@ViewBag.FourthMonthSummary.training</td>
+            <td>@ViewBag.FivethMonthSummary.training</td>
+            <td>@ViewBag.SisthMonthSummary.training</td>
+            <td>@ViewBag.SeventhMonthSummary.training</td>
+            <td>@ViewBag.EightthMonthSummary.training</td>
+            <td>@ViewBag.NinethMonthSummary.training</td>
+            <td>@ViewBag.TenthMonthSummary.training</td>
+            <td>@ViewBag.EleventMonthSummary.training</td>
+            <td>@ViewBag.TwelevethMonthSummary.training</td>
+            <td>
+                @{
+                    int totaltraining = ViewBag.FirstMonthSummary.training + ViewBag.SecondMonthSummary.training + ViewBag.ThirdMonthSummary.training + ViewBag.FourthMonthSummary.training + ViewBag.FivethMonthSummary.training;
+                    totaltraining = totaltraining + ViewBag.SisthMonthSummary.training + ViewBag.SeventhMonthSummary.training + ViewBag.EightthMonthSummary.training + ViewBag.NinethMonthSummary.training;
+                    totaltraining = totaltraining + ViewBag.TenthMonthSummary.training + ViewBag.EleventMonthSummary.training + ViewBag.TwelevethMonthSummary.training;
+
+                }@totaltraining
+            </td>
+
+        </tr>
+    </tbody>
+</table>
+
+
+
+</div>
+

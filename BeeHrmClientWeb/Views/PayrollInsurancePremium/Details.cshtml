@@ -1,0 +1,97 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollInsurancePremiumDTO
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    History
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Insurance Information of @Model.Employee.EmpName</strong>
+        </div>
+        <div class="panel-body basic">
+            <ul class="list-group">
+                @*<li class="list-group-item">
+                        <span class="col-md-4">सदर गर्ने अधिकारी </span>
+                        @Model.SadarGarneName
+                    </li>*@
+                <li class="list-group-item">
+                    <span class="col-md-4">Employee</span>
+                    @Html.DisplayFor(modelItem => @Model.Employee.EmpName) [ @Model.EmpCode ] &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Insurance Company</span>
+                    @Html.DisplayFor(modelItem => @Model.InsuranceCompany.CompanyName) &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Insured Amount</span>
+                    Rs.@Html.DisplayFor(modelItem => @Model.InsuredAmount) &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Premium Amount</span>
+                    Rs.@Html.DisplayFor(modelItem => @Model.PremiumAmount) &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Amount Type</span>
+                    @Html.DisplayFor(modelItem => @Model.AmountType) &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Start Date</span>
+                    @Html.DisplayFor(modelItem => @Model.StartDateNP) (@Convert.ToDateTime(Model.StartDate).ToString("yyyy-MMM-dd"))
+                </li>
+
+                <li class="list-group-item">
+                    <span class="col-md-4">End Date</span>
+                    @Html.DisplayFor(modelItem => @Model.EndDateNP) (@Convert.ToDateTime(Model.EndDate).ToString("yyyy-MMM-dd"))
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Insurance Policy Number</span>
+                    @Html.DisplayFor(modelItem => @Model.InsurancePolicyNumber) &nbsp;
+                </li>
+            </ul>
+            <a href="/PayrollInsurancePremium/Index" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+</div>
+

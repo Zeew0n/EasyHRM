@@ -1,0 +1,106 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.LeaveRuleAddViewModel
+@{
+    ViewBag.Title = "LeaveRuleAdd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/leaverules" class="btn btn-success"><i class="fa fa-bars"></i> View Leaverules</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    New Leave Rule
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-8">
+                <form action="/leaverule/create" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="box-body">
+                        <div class="form-group ">
+                            <label for="label">Label(*)</label>
+                            <input class="form-control" placeholder="Enter leave rule name" name="LeaveRuleName" type="text" id="label">
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.LeaveRuleName)</span>
+                        </div>
+                        <div class="form-group ">
+                            <label for="description">Description</label>
+                            <input class="form-control" placeholder="Enter leave rule name" name="LeaveRuleDescription" type="text" id="description">
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.LeaveRuleDescription)</span>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr><th></th><th>Rule type</th><th>Days</th></tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Params != null)
+                                {
+                                    for(var i = 0; i < Model.Params.Count(); i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="hidden" value="@Model.Params[i].LeaveTypeId" name="Params[@i].LeaveTypeId" />
+                                                <input type="hidden" value="@Model.Params[i].LeaveTypeName" name="Params[@i].LeaveTypeName" />
+                                                <input type="hidden" value="@Model.Params[i].LeaveTypeAssignment" name="Params[@i].LeaveTypeAssignment" />
+                                            </td>
+                                            <td>@Model.Params[i].LeaveTypeName</td>
+                                            <td><input value="" name="Params[@i].Days" class="form-control" /></td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+                        <input type="submit" class="btn btn-success" name="action:Create" value="Save" />
+                        <input type="submit" class="btn btn-success" name="action:CreateClose" value="Save & Close" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

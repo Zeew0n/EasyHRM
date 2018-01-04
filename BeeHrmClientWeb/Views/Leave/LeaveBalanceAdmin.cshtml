@@ -1,0 +1,199 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.LeaveBalanceViewModel
+@using BeeHRM.ApplicationService.ViewModel
+@{
+    ViewBag.Title = "Leave Applications";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                   
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Balance Detail
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+<link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <style>
+        .modal-header {
+            padding: 5px;
+            border-bottom: 1px solid #a94442;
+        }
+
+        @@media only screen and (min-width: 500px) {
+            .modal-dialog {
+                width: 500px;
+                margin: 30px auto;
+                top: 100px;
+            }
+        }
+
+        .modal-content {
+            background-color: #eff5ff;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        }
+    </style>
+}
+
+
+<div class="delerror"></div>
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-4">
+                <select class="form-control custom-select " id="sltEmployee" name="LeaveEmpCode">
+                    <option value="" selected="selected">Choose Employee </option>
+                    @foreach (var item in Model.EmpList)
+            {
+                        <option value="@item.EmpCode">@item.EmpName (@item.EmpCode)</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select class="form-control" id="sltYear" >
+                    <option value="" selected="selected">Choose Year </option>
+                    @foreach (var item in Model.YearList)
+                     {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="button" id="search" class="btn btn-success"   value="Search"/>
+            </div>
+        </div>
+        <br clear="all" />
+        <br clear="all" />
+
+        <div class="row">
+         
+            <div id="error"></div>
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="tblLeaveYear">
+                    <thead>
+                        <tr>
+                            <th>EmpCode</th>
+                            <th>IsPayable</th>
+                            <th>Leave Types</th>
+                            <th>Entitlement</th>
+                            <th>Leave Taken</th>
+                            <th>Balance</th>
+                            <th>Apply Before (Days)</th>
+                            <th>Max Days per Month</th>
+                        </tr>
+                    <tbody id="leavebalance"></tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#sltEmployee").customselect();
+            $('#tblLeaveYear').hide();
+            var test = "<div  class='alert alert-danger' ><strong> Sorry no employee selected yet !!</strong> </div>";
+            $("#error").append(test);
+
+            $("#search").click(function ()
+            {
+                var id = $("#sltEmployee").val();
+                var year = $("#sltYear").val();
+                if (id == "")
+                {
+                    $('#tblLeaveYear').hide();
+                    $("#error").empty();
+                    var test = "<div  class='alert alert-danger' ><strong>Please Select Employee from list!</strong></div>";
+                    $("#error").append(test);
+                }
+                else
+                    if (year == "")
+                    {
+                        $('#tblLeaveYear').hide();
+                        $("#error").empty();
+                        var test = "<div  class='alert alert-danger' ><strong>Please Select Fiscal yer from list   !!</strong></div>";
+                        $("#error").append(test);
+                    }
+                    else
+                    {
+                        $.ajax({
+
+                            url: "/admin/leave/leeavebalance/",
+                            data: { id: id, year: year },
+                            success: function (data) {
+                                $("#leavebalance").empty();
+                                var result = '';
+                                debugger;
+                                if (data.length < 1) {
+                                    $("#error").empty();
+                                    $('#tblLeaveYear').hide();
+                                    var test = "<div  class='alert alert-danger' ><strong>Sorry!</strong> No Leave Rule assigned yet for this employee  </div>";
+                                    $("#error").append(test);
+                                }
+                                else {
+                                    $("#error").empty();
+                                    $('#tblLeaveYear').show();
+                                    for (var i = 0; i < data.length; i++)
+                                    {
+                                        var ispayable = '';
+                                        if (data[i].EmpCode == true)
+                                            ispayable += '<i class="fa fa-check"> </i>';
+                                        else
+                                            ispayable += '<i class="fa fa-times" aria-hidden="true"></i>';
+
+                                        result += ('<tr><td>' + data[i].EmpCode + '</td><td>' + ispayable +
+                                            '</td><td>' + data[i].LeaveTypeName + '</td><td>'
+                                            + data[i].LeaveDays + '</td><td>' + data[i].TotalLeaveTakenDays +
+                                            '</td><td>' + data[i].TotalRemainingDays + '</td><td>' + data[i].LeaveApplyBeforeDays +
+                                            '</td> <td>' + data[i].MonthlyQuantity + '</tr>');
+                                    }
+                                    $("#leavebalance").append(result);
+                                }
+
+                            }
+
+                        });
+
+                        $.ajax({
+
+                            url: "/admin/leave/leeavebalance/",
+                            data: { id: id, year: year },
+                            success: function (data) {
+                            }
+
+                        });
+
+                    }
+              
+            });
+        });
+</script>
+
+}

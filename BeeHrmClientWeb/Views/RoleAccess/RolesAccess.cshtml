@@ -1,0 +1,116 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.RolesAccessDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('.dataTable').DataTable();
+    </script>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href="~/RolesAccess/Create/@ViewBag.Roles.RoleId"><i class="fa fa-plus-circle"></i> Add</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Roles for @ViewBag.Roles.RoleName
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well box">
+                        <div class="box-body table-responsive">
+                            <table class="table table-hover dataTable">
+                                <tr>
+                                  
+                                    <th>
+                                       Modules Assigned
+                                    </th>
+                                    <th>
+                                        Add
+                                    </th>
+                                    <th>
+                                       Edit
+                                    </th>
+                                    <th>
+                                        Delete
+                                    </th>
+                                    <th>
+                                       View
+                                    </th> 
+                                     <th>
+                                       Parent Modules
+                                    </th>
+                                    <th></th>
+                                </tr>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ModuleName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.AllowAdd)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.AllowEdit)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.AllowDelete)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.AllowView)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ParentModuleName)
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("Edit", "roleaccess/Edit", new {  roleid=item.AssignRoleId,moduleid = item.AssignModuleId,assignid = item.AssignId })
+                                            @Html.ActionLink("Delete", "roleaccess/delete", new { roleid = item.AssignRoleId, assignid = item.AssignId }, new { id="delete" })
+                                        </td>
+                                    </tr>
+                                }
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    $("#delete").click(function () {
+        alert("Handler for .click() called.");
+    });
+</script>

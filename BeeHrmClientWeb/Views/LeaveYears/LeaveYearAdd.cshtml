@@ -1,0 +1,124 @@
+﻿@model BeeHRM.ApplicationService.DTOs.LeaveYearDTO
+@{
+    ViewBag.Title = "LeaveRuleAdd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/leaveyears" class="btn btn-success"><i class="fa fa-bars"></i> View LeaveYear List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    New Leave Year
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Request.QueryString["msg"] != null && Request.QueryString["msg"].ToString() == "done")
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> The Leave Year has been added.
+    </div>
+}
+
+@if (Request.QueryString["msg"] != null && Request.QueryString["msg"].ToString() == "failed")
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> The Leave Year Cannot be added at the moment.
+    </div>
+}
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-8">
+                @Html.ValidationSummary()
+                <form action="/leaveyear/create" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="box-body">
+                        <div class="form-group ">
+                            <label for="label">Year Name(*)</label>
+                            <input class="form-control" placeholder="Enter leave year name" name="YearName" type="text" id="label">
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.YearName)</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="yearStartDate">Year Start Date(*)</label>
+                                <input type='text' class="form-control" id="date" placeholder="Enter Year Start Date" name="YearStartDateNp" />
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.YearStartDateNp)</span>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="yearEndDate">Year End Date(*)</label>
+                                <input type='text' class="form-control" id="date1" placeholder="Enter Year Start Date" name="YearEndDateNp" />
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.YearEndDateNp)</span>
+                        </div>
+
+
+                        <div class="form-group ">
+                            <input type="checkbox" name="YearCurrent" value="true" id="isActiveYear" /> <label>Is Active Year</label>
+                            <input type="hidden" value="false" name="YearCurrent" />
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.YearCurrent)</span>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <input type="submit" class="btn btn-success" name="action:Create" value="Save" />
+                        <input type="submit" class="btn btn-success" name="action:CreateClose" value="Save & Close" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#date1').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+
+    </script>
+}

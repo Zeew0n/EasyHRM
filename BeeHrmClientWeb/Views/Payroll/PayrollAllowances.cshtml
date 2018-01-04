@@ -1,0 +1,80 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollAllowanceMasterDTO>
+
+@{
+    ViewBag.Title = "PayrollAllowances";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/PayrollAllowancesCreate"><i class="fa fa-bars"></i> View Employee List</a></span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Payroll allowances
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<p>
+    @Html.ActionLink("Create New", "PayrollAllowancesCreate")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AllowanceName)
+        </th>
+        <th>
+           Type
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        
+      
+        <th>
+            Same For All Employee
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AllowanceName)
+        </td>
+        <td> @item.EarningDeduction</td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+       
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.SameForAllEmployee)
+        </td>
+        <td>
+           
+            @Html.ActionLink("AssignEmployees", "AssignEmployees", new { id = item.AllowanceMasterId })
+           
+            @Html.ActionLink("Edit", "PayrollAllowancesEdit", new {  id=item.AllowanceMasterId  }) 
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,475 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.ViewModel.DailyAttendanceFilterViewModel>
+@{
+    ViewBag.Title = "Attendance Daily ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //var sdate = "";
+    //if (ViewBag.sdate != null)
+    //{
+    //    sdate = ViewBag.sdate.ToString("MM/dd/yyyy");
+    //}
+
+    //var edate = "";
+    //if (ViewBag.edate != null)
+    //{
+    //    edate = ViewBag.edate.ToString("MM/dd/yyyy");
+    //}
+
+    var i = 0;
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/Content/DataTables/datatables.min.css" />
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<div class="panel-body box box-top-border">
+
+
+    <form action="/AttendanceDetails/Index/@ViewBag.Empcode" method="post">
+
+
+        <div class="form-group col-md-3 ">
+            <input type='text' class="form-control" name="startdateNP" id="date" placeholder="Start Date" value="@ViewBag.sdate" required />
+
+        </div>
+        <div class="form-group col-md-3 ">
+            <input type='text' class="form-control" name="EnddateNP" id="date2" placeholder="End Date" value="@ViewBag.edate" required />
+        </div>
+
+        <div class="form-group col-md-3 ">
+            <input type="submit" class="btn btn-success" value="Filter" />
+        </div>
+
+
+    </form>
+
+    <div class="clearfix"></div>
+</div>
+
+<div class="box well well">
+    <div class="box-body">
+        <div class="media">
+          
+            <div class="media-body">
+                <div class="col-md-6">
+                    <div class="profile-user-info profile-user-info-striped">
+
+
+                        <div class="profile-info-list">
+                            <div class="profile-info-name">
+                                <label for="Branch">Name</label>
+
+                            </div>
+                            <div class="profile-info-value">
+                                <span class="ng-binding">
+                                    @ViewBag.Name
+                                </span>
+                            </div>
+                        </div>
+                        <div class="profile-info-list">
+                            <div class="profile-info-name">
+                                <label for="Branch">Branch</label>
+
+                            </div>
+                            <div class="profile-info-value">
+                                <span class="ng-binding">
+                                    @ViewBag.office
+                                </span>
+                            </div>
+                        </div>
+                        <div class="profile-info-list">
+                            <div class="profile-info-name">
+                                <label for="Department">Department</label>
+                            </div>
+                            <div class="profile-info-value">
+                                <span class="ng-binding">
+                                    @ViewBag.Department
+                                </span>
+                            </div>
+                        </div>
+                        <div class="profile-info-list">
+                            <div class="profile-info-name">
+                                <label for="Group">Group</label>
+                            </div>
+                            <div class="profile-info-value">
+                                <span class="ng-binding">
+                                    @ViewBag.EmployeeType
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="profile-user-info profile-user-info-striped">
+                        <div class="profile-info-list">
+                            <div class="profile-info-name">
+                                <label for="Branch">Empcode</label>
+
+                            </div>
+                            <div class="profile-info-value">
+                                <span class="ng-binding">
+                                    @ViewBag.Empcode
+                                </span>
+                            </div>
+                        </div>
+                        <div class="profile-info-list">
+                            <div class="profile-info-name">
+                                <label for="Branch">Shift</label>
+                            </div>
+                            <div class="profile-info-value">
+                                <span class="ng-binding">
+                                    @ViewBag.Shift
+                                </span>
+                            </div>
+                        </div>
+                        <div class="profile-info-list">
+                            <div class="profile-info-name">
+                                <label for="Department">Designation</label>
+                            </div>
+                            <div class="profile-info-value">
+                                <span class="ng-binding">
+                                    @ViewBag.Desg
+                                </span>
+                            </div>
+                        </div>
+                        <div class="profile-info-list">
+                            <div class="profile-info-name">
+                                <label for="Group">Level</label>
+                            </div>
+                            <div class="profile-info-value">
+                                <span class="ng-binding">
+                                    @ViewBag.level
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br class="clearfix" />
+<div class="panel-body box box-top-border">
+
+    <div class="plane panel-body">
+        <div class="col-xs-12">
+
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-bars" aria-hidden="true"></i> Attendance Details  </h3>
+            </div>
+
+
+
+
+            @if (Model == null)
+            {
+                <div class="alert alert-danger fade in">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <strong> @ViewBag.Error</strong>
+                </div>
+            }
+            else
+            {
+                <table class="table table-responsive table-bordered " id="attendanceTable">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th class="text-center">Day</th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">CheckIn Time</th>
+                            <th class="text-center">CheckOut Time</th>
+                            <th class="text-center">Work Hours</th>
+                            <th class="text-center"> Late Entry </th>
+                            <th class="text-center">Early Exit</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model)
+                        {
+                            i = i + 1;
+                            <tr>
+                                <td>@i</td>
+                                <td>@{var a = BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(row.AttDate)).ToString().Replace('/', '-');
+                                }
+                                @a (@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd"))</td>
+                                <td>
+                                    @{
+                                        var isAbsent = true;
+                                        var weekend = row.IsWeekend.ToString();
+
+                                        if (row.AttCheckIn != "" || row.AttCheckOut != "")
+                                        {
+                                            <p>Present</p>
+                                            isAbsent = false;
+                                        }
+                                        if (row.IsHoliday != null && row.IsHoliday != "")
+                                        {
+                                            <p>Holiday</p>
+                                            isAbsent = false;
+                                        }
+                                        if (weekend == "True")
+                                        {
+                                            <p>Weekend</p>
+                                            isAbsent = false;
+                                        }
+                                        if (row.Isleave != null && row.Isleave != "")
+                                        {
+                                            <p>Leave</p>
+                                            isAbsent = false;
+                                        }
+                                        if (row.IsOfficialVisit != null && row.IsOfficialVisit != "")
+                                        {
+                                            if (Convert.ToInt32(row.IsOfficialVisit) > 0)
+                                            {
+                                                <p>Official Visit</p>
+                                            }
+
+                                            isAbsent = false;
+                                        }
+
+
+                                        if (row.IsTraining != null && row.IsTraining != "")
+                                        {
+                                            <p>On Training</p>
+                                            isAbsent = false;
+                                        }
+                                        if (isAbsent == true)
+                                        {
+                                            <p>Absent</p>
+                                        }
+
+                                    }
+                                </td>
+                                <td>
+
+                                    @{
+                                        if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                        {
+                                            <p>@Convert.ToDateTime(row.AttCheckIn).ToString("hh:mm tt")</p>
+                                        }
+                                    }
+                                </td>
+                                <td>
+
+
+                                    @{
+                                        if (row.AttCheckOut != null && row.AttCheckOut != "")
+                                        {
+                                            <p>@Convert.ToDateTime(row.AttCheckOut).ToString("hh:mm tt")</p>
+                                        }
+                                    }
+
+
+
+                                </td>
+                                <td>
+                                    @{if (row.Worked_Hour != null && row.Worked_Hour != "")
+                                        {
+                                            <p>@TimeSpan.FromMinutes(Convert.ToInt32(row.Worked_Hour))</p>
+
+                                        }
+                                        else
+                                        {
+                                            <p> </p>
+                                        }
+                                    }
+                                </td>
+
+                                <td>
+
+                                    @{
+                                        if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                        {
+                                            if (row.AttShiftStart != null && row.AttShiftStart != "")
+                                            {
+                                                DateTime? checkin = Convert.ToDateTime(row.AttCheckIn);
+                                                TimeSpan? starttime = TimeSpan.Parse(row.AttShiftStart == "" ? null : row.AttShiftStart);
+                                                TimeSpan? delayallow = TimeSpan.Parse(row.ShiftDelayAllow);
+                                                TimeSpan? diff = FormatLateEntry(checkin, starttime);
+
+                                                if (-delayallow > diff)
+                                                {
+                                                    <p class="label label-danger">@(-diff)</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>@(-diff)</p>
+                                                }
+
+                                            }
+                                        }
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @{
+                                        if (row.AttCheckOut != null && row.AttCheckOut != "")
+                                        {
+                                            if (row.AttShiftEnd != null && row.AttShiftEnd != "")
+                                            {
+                                                DateTime? checkout = Convert.ToDateTime(row.AttCheckOut);
+                                                TimeSpan? endtime = TimeSpan.Parse(row.AttShiftEnd);
+                                                TimeSpan? delayallow = TimeSpan.Parse(row.ShiftDelayAllow);
+                                                TimeSpan? diff = FormatEarlyExit(checkout, endtime);
+
+                                                if ((-delayallow) > diff)
+                                                {
+                                                    <p class="label label-danger">@(-diff)</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>@(-diff)</p>
+                                                }
+
+                                            }
+                                        }
+                                    }
+
+
+                                </td>
+
+
+                            </tr>
+
+
+                                        }
+                    </tbody>
+
+                </table>
+
+
+
+                                        }
+
+
+
+
+
+        </div>
+
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#date2').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#attendanceTable').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+
+
+
+
+        });
+    </script>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    My Attendance
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+@functions{
+    public TimeSpan? FormatLateEntry(DateTime? date, TimeSpan? shiftStart)
+    {
+        TimeSpan ret = new TimeSpan();
+        TimeSpan? checkInTime = date != null ? TimeSpan.Parse(date.Value.ToString("HH:mm:ss")) : ret;
+        TimeSpan? lateTime = shiftStart - checkInTime;
+        if (lateTime == TimeSpan.Parse("10:00:00"))
+        {
+            return TimeSpan.Parse("00:00:00");
+        }
+        return lateTime;
+    }
+
+    public TimeSpan? FormatEarlyExit(DateTime? checkOut, TimeSpan? shiftEnd)
+    {
+        TimeSpan? checkOutTime = checkOut != null ? TimeSpan.Parse(checkOut.Value.ToString("HH:mm:ss")) + TimeSpan.Parse("00:00:00") : new TimeSpan();
+        TimeSpan? earlyExit = checkOutTime - shiftEnd;
+        if (earlyExit == TimeSpan.Parse("-18:00:00"))
+        {
+            return TimeSpan.Parse("00:00:00");
+        }
+        return earlyExit;
+    }
+
+
+
+}
+
+
+

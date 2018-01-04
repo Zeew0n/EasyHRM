@@ -1,0 +1,311 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollSalaryMasterSheetDTO
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/PayrollSalarySheet/Index" class="btn btn-success"><i class="fa fa-bars"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Payroll Receipt
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="hpanel">
+
+    <div class="panel-body">
+        <div class="well box">
+            <div class="box-body">
+                <div class="ro">
+                    <div class="col-md-12">
+                        <div style="text-align:center">
+                            <h4>AGRICULTURE DEVELOPMENT BANK LIMITED </h4>
+                            <h5>Ramshah path,Singha darbar,kathmandu,Nepal</h5>
+                            <h6>Fiscal Year : @Model.PayrollSalaryTable.Fiscal.FyName Month : @Model.PayrollSalaryTable.PayrollMonthDescription.MonthNameNepali</h6>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>
+                            <img src="/img/emp_photos/profile.jpg" alt="Beehrm User " class="img-responsive img-circle" style="width:120px;height:120px;">
+                        </p>
+                        <table class="table">
+                            <tr>
+                                <td>Code</td>
+                                <td>@Html.DisplayFor(model => model.EmployeeCode)</td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>@Html.DisplayFor(model => model.Employee.EmpName)</td>
+                            </tr>
+                            <tr>
+                                <td>Designation</td>
+                                <td>@Html.DisplayFor(model => model.Designation.DsgName)</td>
+                            </tr>
+                            <tr>
+                                <td>Department</td>
+                                <td>@Html.DisplayFor(model => model.Department.DeptName)</td>
+                            </tr>
+                            <tr>
+                                <td>Branch</td>
+                                <td>@Html.DisplayFor(model => model.PayrollSalaryTable.Office.OfficeName)</td>
+                            </tr>
+                            <tr>
+                                <td>Grade</td>
+                                <td>@Html.DisplayFor(model => model.CurrentGrade)</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table">
+                            <tr>
+                                <td colspan="3">Basic Salary</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>Rank Salary</td>
+                                <td align="right">@Html.DisplayFor(model => model.RankSalary)</td>
+
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>Grade Salary</td>
+                                <td align="right">@Html.DisplayFor(model => model.GradeSalary)</td>
+
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>Gross Rank and Grade Salary</td>
+                                <td align="right">@Html.DisplayFor(model => model.RankAndGradeSalary)</td>
+
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">Retirement Fund</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>Pf By Company</td>
+                                <td align="right">@Html.DisplayFor(model => model.PfCompany)</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>Pf By Employee</td>
+                                <td align="right">@Html.DisplayFor(model => model.PfSelf)</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>Extra PF</td>
+                                <td align="right">@Html.DisplayFor(model => model.PfExtra)</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>CIT</td>
+                                <td align="right">@Html.DisplayFor(model => model.CitAmount)</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>Total Retirement Fund</td>
+                                <td align="right">
+                                    @{
+                                        decimal totalPf = Model.PfCompany + Model.PfSelf + Model.PfExtra + Model.CitAmount;
+                                    }@Math.Round(totalPf, 2)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">Allowances</td>
+                            </tr>
+                            @if (Model.BankAllowance > 0)
+                            {
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>BankAllowance</td>
+                                    <td align="right">@Html.DisplayFor(model => model.BankAllowance)</td>
+
+                                </tr>
+                            }
+                            @if (Model.RankSpecialAllowance > 0)
+                            {
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>RankSpecialAllowance</td>
+                                    <td align="right">@Html.DisplayFor(model => model.RankSpecialAllowance)</td>
+
+                                </tr>
+                            } @if (Model.RankInchargeShipAllowance > 0)
+                            {
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>RankInchargeShipAllowance</td>
+                                    <td align="right">@Html.DisplayFor(model => model.RankInchargeShipAllowance)</td>
+
+                                </tr>
+                            }@if (Model.RankOtherAllowances > 0)
+                            {
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>RankOtherAllowance</td>
+                                    <td align="right">@Html.DisplayFor(model => model.RankOtherAllowances)</td>
+
+                                </tr>
+                            }@if (Model.RemoteAllowance > 0)
+                            {
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>RemoteAllowance</td>
+                                    <td align="right">@Html.DisplayFor(model => model.RemoteAllowance)</td>
+
+                                </tr>
+                            }
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>Total Allowances</td>
+                                <td align="right">
+                                    @{
+
+                                        var totalAllowances = Model.TotalRankAllowances + Model.RemoteAllowance;
+                                        @Math.Round(totalAllowances, 2)  ;
+                                    }
+                                </td>
+
+                            </tr>
+                            @{
+
+
+                                if (Model.PayrollSalaryDetailSheets.Count()!=0)
+                                {
+
+                                    <tr>
+                                        <td colspan="3" class="other_allowances">Other Allowances</td>
+                                    </tr>
+
+                                    decimal totalAllowance = 0;
+                                    foreach (var str in Model.PayrollSalaryDetailSheets)
+                                    {
+                                        totalAllowance = totalAllowance + str.CalculatedValue;
+
+                                        <tr>
+
+
+                                            <td>&nbsp;</td>
+                                            <td>@str.AllowanceName</td>
+                                            <td align="right">@Math.Round(str.CalculatedValue, 2)</td>
+                                        </tr>
+                                    }
+
+                                    if (totalAllowance > 0)
+                                    {
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <td>Total Allowances</td>
+                                            <td align="right">@Math.Round(totalAllowance, 2)</td>
+
+                                        </tr>
+                                    }
+
+                                }
+                            }
+                            <tr>
+
+                                <td colspan="2">Gross Salary</td>
+                                <td align="right">@Math.Round(Model.GrossSalary, 2)</td>
+                            </tr>
+                            @if (Model.DeductableDays > 0)
+                            {
+                                decimal deductedSalary = Model.PerDaysalary * Model.DeductableDays;
+
+                                decimal grossIncome = Model.GrossSalary - deductedSalary;
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>Deducted Salary (@Math.Round(Model.DeductableDays, 2) Days)</td>
+                                    <td align="right">(@Math.Round(deductedSalary, 2))</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Gross Income</td>
+                                    <td>&nbsp;</td>
+                                    <td align="right">@Math.Round(grossIncome, 2)</td>
+                                </tr>
+
+                            }
+                            <tr>
+                                <td>Total Taxable Salary</td>
+                                <td>&nbsp;</td>
+                                <td align="right">@Math.Round(Model.TaxableSalary, 2)</td>
+                            </tr>       @if (Model.RemoteTaxExcemption > 0)
+                            {
+
+                                <tr>
+
+
+
+                                    <td colspan="2">Remote Tax Excemption</td>
+                                    <td align="right">@Math.Round(Model.RemoteTaxExcemption, 2)</td>
+                                </tr>
+                            }
+
+                            <tr>
+                                <td colspan="3">Tax Details</td>
+                            </tr>
+                            @{ decimal totaltaxamount = 0;}
+                            @foreach (var taxItem in Model.PayrollEmployeeTaxDetails)
+                            {
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>@Math.Round(taxItem.DeductPercentage)%</td>
+                                    <td align="right">@Math.Round(taxItem.DeductedAmount, 2)</td>
+                                </tr>
+                                totaltaxamount = totaltaxamount + taxItem.DeductedAmount;
+
+                            }
+                            @{
+                                if (totaltaxamount != Model.TaxAmount)
+                                {
+                                    decimal taxAdjustment = Model.TaxAmount - totaltaxamount;
+
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td>Tax Adjustment</td>
+                                        <td align="right">@Math.Round(taxAdjustment, 2)</td>
+                                    </tr>
+                                }
+                            }
+
+                            <tr>
+                                <td>Total Tax</td>
+                                <td></td>
+                                <td align="right">@Math.Round(Model.TaxAmount, 2)</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><strong>Cash In Hand</strong></td>
+                                <td align="right"><strong>@Math.Round(Model.SalaryAfterTaxDeduction, 2)</strong></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

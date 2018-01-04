@@ -1,0 +1,85 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollMonthDescriptionDTO>
+
+@{
+    ViewBag.Title = "PayrollMonths";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="~/Payroll/AddPayrollMonth"><i class="fa fa-bars"></i> Create new</a></span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Payroll months
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Fiscal.FyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MonthNameEnglish)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MonthNameNepali)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WorkingDays)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fiscal.FyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MonthNameEnglish)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MonthNameNepali)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WorkingDays)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "EditPayrollMonth", new { id = item.Id }) 
+        </td>
+    </tr>
+}
+
+</table>
+

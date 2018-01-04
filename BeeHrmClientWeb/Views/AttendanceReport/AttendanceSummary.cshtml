@@ -1,0 +1,164 @@
+﻿@model BeeHRM.ApplicationService.DTOs.AttendanceReportsDTO
+@using System.Data;
+@{
+    ViewBag.Title = "Attendance Reports ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var sdate1 = "";
+    if (ViewBag.sdate != null)
+    {
+        sdate1 = ViewBag.sdate.ToString("MM/dd/yyyy");
+    }
+    var edate1 = "";
+    if (ViewBag.edate != null)
+    {
+        edate1 = ViewBag.edate.ToString("MM/dd/yyyy");
+    }
+
+
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <form action="/attendnace/summaryreports" method="post">
+                <div class="form-group col-md-3 ">
+                    @Html.DropDownListFor(m => m.nepali_year, Model.YearList, new { @class = "form-control" })
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    @Html.DropDownListFor(m => m.month_code, Model.MonthList, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-3 ">
+                    @Html.DropDownListFor(m => m.OfficeId, Model.BranchSelectList, new { @class = "form-control custom-select" })
+
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <input type="submit" class="btn btn-success" value="Report">
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+</div>
+@{
+
+    var dt = (DataTable)ViewBag.attreport;
+}
+@if (ViewBag.attreport != null)
+{
+    <div class="box box-top-border">
+        <div class="row">
+
+            <form action="/attendance/summaryreportexcel" method="post">
+                @Html.HiddenFor(m => m.ExcelStartDate, Model.ExcelStartDate)
+                @Html.HiddenFor(m => m.ExcelEndDate, Model.ExcelEndDate)
+                @Html.HiddenFor(m => m.OfficeId, Model.OfficeId)
+                <input type="submit" value="Excel" class="btn btn-info" />
+            </form>
+
+        </div>
+
+        <div class="box-body" style="overflow:scroll;">
+
+            <h3>  Attendance Summary Report</h3>
+            <table border="1" cellpadding="5" class="table">
+                <thead>
+                    <tr>
+                        @foreach (System.Data.DataColumn col in dt.Columns)
+                        {
+                            <th>@col.Caption</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (System.Data.DataRow row in dt.Rows)
+                {
+                        <tr>
+                            @foreach (var cell in row.ItemArray)
+                            {
+
+                                <td>@cell.ToString()</td>
+
+
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+
+        </div>
+        <br>
+    </div>
+}
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+            $(document).ready(function () {
+                $('.date').datetimepicker({
+                    format: 'MM/DD/YYYY',
+                    ignoreReadonly: true,
+                    maxDate: 'now'
+                });
+
+                $('.table').DataTable();
+                $('.dataTables_filter').css('float', 'right');
+
+
+
+            });
+
+    </script>
+}

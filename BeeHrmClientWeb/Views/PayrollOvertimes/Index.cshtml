@@ -1,0 +1,144 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollOvertimeDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('.dataTable').DataTable();
+    </script>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <a href="~/PayrollOvertimes/Create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Overtimes
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well box">
+                    <div class="box-body table-responsive">
+                        <table class="table table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Employee.EmpName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OvertimeDate)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Subject)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Details)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ApprovedById)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ApproveStatus)
+                                    </th>
+                                    @*<th>
+                                            @Html.DisplayNameFor(model => model.ApproveStatusDate)
+                                        </th>*@
+                                    @*<th>
+                                            @Html.DisplayNameFor(model => model.OvertimeAmount)
+                                        </th>*@
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.OvertimeHours)
+                                    </th>
+                                    @*<th>
+                                            @Html.DisplayNameFor(model => model.OvertimeAppliedDate)
+                                        </th>*@
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Employee.EmpName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OvertimeDateNP) (@ViewBag.OvertimeDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Subject)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Details)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ApproverName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ApproveStatus)
+                                        </td>
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => item.ApproveStatus)
+                                            </td>*@
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OvertimeHours)
+                                        </td>
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => item.OvertimeAmount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.OvertimeHours)
+                                            </td>*@
+                                        @*<td>
+                                                @Html.DisplayFor(modelItem => item.OvertimeAppliedDate)
+                                            </td>*@
+                                        <td>
+                                            @Html.ActionLink("Edit", "Edit", new { id = item.OvertimeId })
+                                            @*@Html.ActionLink("Details", "Details", new { id = item.OvertimeId }) |
+                                                @Html.ActionLink("Delete", "Delete", new { id = item.OvertimeId })*@
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,173 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollAllowanceMasterDTO
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="~/PayrollAllowance/Index" class="btn btn-success">Back to List</a>@*@Html.ActionLink("Back to List", "Index")*@</span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Edit payroll allowances
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="box box-top-border">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.AllowanceType)
+            @Html.HiddenFor(model => model.IsDefault)
+            @Html.HiddenFor(model => model.CreatedDate, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.HiddenFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.HiddenFor(model => model.AllowanceMasterId, new { htmlAttributes = new { @class = "form-control" } })
+            <input type="hidden" name="AllowanceType" value="E" />
+            <div class="form-group">
+                @Html.LabelFor(model => model.AllowanceName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.AllowanceName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AllowanceName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.EarningDeduction, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.EarningDeduction, Model.EarningDeductionSelectList, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EarningDeduction, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.PercentageAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.PercentageAmount, Model.PercentageAmountSelectList, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PercentageAmount, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Value, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Value, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.SameForAllEmployee, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.SameForAllEmployee)
+                        @Html.ValidationMessageFor(model => model.SameForAllEmployee, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:none">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ApplyToAllEmployee, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.ApplyToAllEmployee)
+                            @Html.ValidationMessageFor(model => model.ApplyToAllEmployee, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsPerDayDeductable, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.IsPerDayDeductable)
+                            @Html.ValidationMessageFor(model => model.IsPerDayDeductable, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GivenOnlyIfPresent, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.GivenOnlyIfPresent)
+                            @Html.ValidationMessageFor(model => model.GivenOnlyIfPresent, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsTaxable, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.IsTaxable)
+                            @Html.ValidationMessageFor(model => model.IsTaxable, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IsAlwaysAplicable, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.EditorFor(model => model.IsAlwaysAplicable)
+                            @Html.ValidationMessageFor(model => model.IsAlwaysAplicable, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsActive)
+                        @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="UPdate" class="btn btn-default" />
+                    <a href="/PayrollAllowance/Index" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+</div>

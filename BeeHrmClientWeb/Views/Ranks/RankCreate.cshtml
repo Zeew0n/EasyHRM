@@ -1,0 +1,203 @@
+﻿@model BeeHRM.ApplicationService.DTOs.RankDTO
+
+@{
+    ViewBag.Title = "RankCreate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("Ranks","Ranks")' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Rank
+                    <small>Add New</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.RankName, "Name(*)")
+                                        @Html.EditorFor(model => model.RankName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the name for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.RankName, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.RankDescription, "Description(*)")
+                                        @Html.EditorFor(model => model.RankDescription, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the description ", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.RankDescription, "", new { @class = "text-danger" })
+
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.RankSalary, "Salary(*)")
+                                        @Html.EditorFor(model => model.RankSalary, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the salary for this Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.RankSalary, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.RankMaxGrade, "Max Grade(*)")
+                                        @Html.EditorFor(model => model.RankMaxGrade, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the grade for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.RankMaxGrade, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.RankPerGradeAmount, "Grade Amount(*)")
+                                        @Html.EditorFor(model => model.RankPerGradeAmount, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the grade amount for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.RankPerGradeAmount, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.RankSpecialAllowance, "Special Allowances(*)")
+                                        @Html.EditorFor(model => model.RankSpecialAllowance, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the special allowance for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.RankSpecialAllowance, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                               
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.BankAllowance, "Bank Allowances(*)")
+                                        @Html.EditorFor(model => model.BankAllowance, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the bank allowance for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.BankAllowance, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Incentive, "Incentive")
+                                        @Html.EditorFor(model => model.Incentive, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the incentive for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.Incentive, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.SiteInchargeship, "Site Inchargeship")
+                                        @Html.EditorFor(model => model.SiteInchargeship, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the site inchargeship for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.SiteInchargeship, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                             
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.UniformAllowance, "Uniform Allowance")
+                                        @Html.EditorFor(model => model.UniformAllowance, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the uniform allowance for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.UniformAllowance, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.RankInchargeShipAllowance, "InchargeShip Allowance")
+                                        @Html.EditorFor(model => model.RankInchargeShipAllowance, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the Rank InchargeShipAllowance ", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.RankInchargeShipAllowance, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.RankOtherAllowances, "Other Allowances")
+                                        @Html.EditorFor(model => model.RankOtherAllowances, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter the other allowance for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.RankOtherAllowances   , "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                              
+                            </div>
+                            <div class="row">
+                                
+                                <div class="col-md-4">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OverTimeRate, "OvertimeRate")
+                                        @Html.EditorFor(model => model.OverTimeRate, new { htmlAttributes = new { @class = "form-control ", placeholder = "Enter the overtime rate for Rank", required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.OverTimeRate, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                            </div>
+
+                          
+
+                            <div class="box-footer">
+                                <input type="submit" value="Save" class="btn btn-success" />
+                                <a class="btn btn-danger" href="/Ranks"> Cancel</a> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

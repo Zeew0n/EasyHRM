@@ -1,0 +1,335 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.JobHistoryViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        .custom-select {
+            width: 80%;
+        }
+    </style>
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    सरुवा
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>कर्मचारी सरुवा </strong>
+        </div>
+        <div class="panel-body basic">
+            <h3> हालको कर्मचारी विवरण  </h3>
+            <div class="media-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Office:</th>
+                        <th>Designation:</th>
+                        <th>Department:</th>
+                        <th>Section:</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.EmployeeDetails.OfficeName</td>
+                        <td>@Model.EmployeeDetails.Designation</td>
+                        <td>@Model.EmployeeDetails.Department</td>
+                        <td>@Model.EmployeeDetails.Section</td>
+                    </tr>
+                    <tr>
+                        <th>Level:</th>
+                        <th>Rank:</th>
+                        <th>Current Rank Appt.:</th>
+                        <th>Job Type:</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.EmployeeDetails.Level</td>
+                        <td>@Model.EmployeeDetails.Rank</td>
+                        <td>@Model.EmployeeDetails.Rank</td>
+                        <td>@Model.EmployeeDetails.JobType</td>
+                    </tr>
+
+
+                </table>
+                <h3>सरुवा गरिने कार्यालय र अन्य विवरण छानुहुओस</h3>
+            </div>
+            @using (Html.BeginForm("EmployeeTransferEdit", "Transfer", FormMethod.Post, new { id = "target" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <hr />
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <table width="97%">
+                        <tr>
+                            @Html.HiddenFor(model => model.JobHistories.HistoryId)
+                            @Html.HiddenFor(model => model.JobHistories.EmpCode)
+                            <th>@Html.LabelFor(model => model.JobHistories.OfficeId)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.DeptId)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.SectionId)</th>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                @{
+                                    List<SelectListItem> OfficeList = ViewBag.officeList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.OfficeId, OfficeList, new { @class = "form-control custom-select", @style = "width:80%;" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> DepartmentList = ViewBag.departmentList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.DeptId, DepartmentList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> SectionList = ViewBag.sectionList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.SectionId, SectionList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.JobHistories.DesgKayamMukayamMuKaRaRa)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.DesgId)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.RankId)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.DesgKayamMukayamMuKaRaRa)
+                                @Html.ValidationMessageFor(model => model.JobHistories.DesgKayamMukayamMuKaRaRa, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> DesignationList = ViewBag.designationList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.DesgId, DesignationList, new { @class = "form-control custom-select", @style = "width:80%;" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> RankList = ViewBag.rankList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.RankId, RankList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.JobHistories.LevelId)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.BusinessGroupId)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.ShiftId)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @{
+                                    List<SelectListItem> LevelList = ViewBag.levelList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.LevelId, LevelList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> BusinessGroupList = ViewBag.businessGroupList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.BusinessGroupId, BusinessGroupList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> ShiftList = ViewBag.shiftList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.ShiftId, ShiftList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.JobHistories.RemoteId)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.JobTypeId)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.DecisionDate)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @{
+                                    List<SelectListItem> RemoteList = ViewBag.remoteList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.RemoteCode, RemoteList, new { @class = "form-control", @style = "width:80%;",@required="required" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> JobTypeList = ViewBag.jobTypeList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.JobTypeId, JobTypeList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.DecisionDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;", @id = "decisionDate" } })
+                                @Html.ValidationMessageFor(model => model.JobHistories.DecisionDateNP, "", new { @class = "text-danger" })
+                            </td>
+
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.JobHistories.LetterIssueDate)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.LetterRefNo)</th>
+                            <th> @Html.LabelFor(model => model.JobHistories.EffectiveDate)</th>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.LetterIssueDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;", @id = "letterIssueDate" } })
+                                @Html.ValidationMessageFor(model => model.JobHistories.LetterIssueDateNP, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.LetterRefNo, new { htmlAttributes = new { @class = "form-control", @style = "width:80%;" } })
+                                @Html.ValidationMessageFor(model => model.JobHistories.LetterRefNo, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.EffectiveDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;", @id = "effectiveDate" } })
+                                @Html.ValidationMessageFor(model => model.JobHistories.EffectiveDateNP, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.JobHistories.ServiceHolidingDate)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.OfficeJoinDate)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.SadarGarneEmployeeCode)</th>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.ServiceHolidingDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;", @id = "serviceHolidingDate" } })
+                                @Html.ValidationMessageFor(model => model.JobHistories.ServiceHolidingDateNP, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.OfficeJoinDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar ", @style = "width:80%;", @id = "officeJoinDate" } })
+                                @Html.ValidationMessageFor(model => model.JobHistories.OfficeJoinDateNP, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> EmployeeList = ViewBag.employeeList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.SadarGarneEmployeeCode, EmployeeList, new { @class = "form-control custom-select", @style = "width:80%;" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.JobHistories.SadarDate)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.ServiceEvent)</th>
+                            <th>@Html.LabelFor(model => model.JobHistories.Instruction)</th>
+                            @*<th>@Html.LabelFor(model => model.BadhuwaType)</th>*@
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.SadarDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;", @id = "from-nepali-calendar" } })
+                                @Html.ValidationMessageFor(model => model.JobHistories.SadarDateNP, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> ServiceEventSubGroupList = ViewBag.SubGroupList;
+                                }
+                                @Html.DropDownListFor(model => model.JobHistories.ServiceEventSubGroupId, ServiceEventSubGroupList, new { @class = "form-control", @style = "width:80%" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.JobHistories.Instruction, new { htmlAttributes = new { @class = "form-control", @style = "width:100%;" } })
+                                @Html.ValidationMessageFor(model => model.JobHistories.Instruction, "", new { @class = "text-danger" })
+                            </td>
+
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+
+                            <td>@Html.LabelFor(model => model.UpdateAsCurrent)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.EditorFor(model => model.UpdateAsCurrent, new { @class = "form-control" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td><input type="submit" value="Transfer" class="btn btn-primary" /></td>
+                        </tr>
+                    </table>
+                </div>
+
+                                    }
+
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+
+    <script>
+        $('#target').on('submit', function () {
+            if ($('#UpdateAsCurrent').prop('checked')) {
+                alert('This will update employees current status as well');
+            }
+            var res = confirm("Are you sure to transfer?");
+            if (!res) {
+                return false;
+            }
+        });
+
+        //$('.date').on('click', function () {
+        //        $('.date').datepicker();
+        //});
+        $(document).ready(function () {
+            //$("#decisionDate").nepaliDatePicker();
+            //$("#letterIssueDate").nepaliDatePicker();
+            //$("#effectiveDate").nepaliDatePicker();
+            //$("#serviceCountingFromDate").nepaliDatePicker();
+            //$("#officeJoinDate").nepaliDatePicker();
+            //$("#sadarDate").nepaliDatePicker();
+
+            $('.nepali-calendar').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $(".custom-select").customselect();
+
+        });
+
+
+    </script>
+}

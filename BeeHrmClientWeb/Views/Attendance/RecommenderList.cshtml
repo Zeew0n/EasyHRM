@@ -1,0 +1,341 @@
+﻿
+@{
+    ViewBag.Title = "RecommenderList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var i = 0;
+
+
+    var officeid = "";
+    if (ViewBag.officeid != null)
+    {
+        officeid = ViewBag.officeid.ToString();
+    }
+
+    var empcode = "";
+    if (ViewBag.empcode != null)
+    {
+        empcode = ViewBag.empcode.ToString();
+    }
+
+    var startdate = "";
+    if (ViewBag.startdate != null)
+    {
+        startdate = ViewBag.startdate.ToString();
+    }
+
+    var enddate = "";
+    if (ViewBag.enddate != null)
+    {
+        enddate = ViewBag.enddate.ToString();
+    }
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@model IEnumerable<BeeHRM.ApplicationService.ViewModel.AttendanceRequestsListViewModel>
+
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+@{
+    if (Session["recommend_status_chaged"] != null)
+    {
+        <div class="alert alert-success fade in" style="margin-top:18px;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+           <strong>@Session["recommend_status_chaged"]</strong> 
+        </div>
+    }
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                           
+
+                            
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Recommend- Attendence Request List
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+@{
+    if (Session["recommend-status_message"] != null)
+    {
+        <div class="alert alert-success fade in" style="margin-top:18px;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+            <strong>@Session["recommend-status_message"]</strong>
+
+        </div>
+
+        Session.Remove("recommend-status_message");
+    }
+
+
+}
+<div class="clearfix">
+    <br />
+</div>
+
+<div class="container-fluid">
+    <div class="row ">
+        <div class="panel panel-default box box-top-border">
+            <div class="panel-body">
+                <div class="box-body row">
+                    <form action="/user/attendancerequest/recommendlist/@ViewBag.id" method="post">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select name="OfficeId" class="form-control" id="officelist">
+                                    <option value="">  Office List </option>
+                                    @foreach (var row in ViewBag.OfficeList)
+
+                                    {
+
+                                        <option @(officeid == row.OfficeId.ToString() ? "selected" : "") value="@row.OfficeId"> @row.OfficeName</option>
+                                    }
+
+                                </select>
+
+                            </div>
+                            <div class="col-md-3">
+                                <select name="EmpCodes" class="form-control">
+                                    <option value="">  Employee List </option>
+                                    @foreach (var row in ViewBag.emplist)
+
+                                    {
+
+
+                                        <option @(empcode == row.EmpCode.ToString() ? "selected" : "") value="@row.EmpCode"> @row.EmpName</option>
+
+                                    }
+
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-3">
+
+                                <input type="text" class="form-control datepicker" name="startdate" value="@startdate" placeholder="Start date" required />
+
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control datepicker" name="enddate" value="@enddate" placeholder="End Date" required />
+                            </div>
+
+                        </div>
+
+                        <div class="clearfix"> <br /> </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <input type="submit" class="btn btn-success" value="Search" />
+                            </div>
+                        </div>
+
+
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <br />
+        </div>
+        <div class="box box-green well box box-top-border">
+            <div class="box-body table-responsive">
+                <div id="divToPrint">
+
+
+
+
+                    <table class="table table-bordered" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>S.N</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Request Type</th>
+                                <th>Request date</th>
+                                <th>Recommend Status</th>
+                                <th>Recommend On</th>
+                                <th>Approve Satus </th>
+                                <th>Approved On </th>
+                                <th>Option </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lst in Model)
+                            {
+                                i = i + 1;
+
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@lst.EmpName</td>
+                                    <td>@lst.Designation</td>
+                                    <td>@lst.RequestType</td>
+                                    <td> @(lst.RequestDate == "" ? "" : Convert.ToDateTime(lst.RequestDate).ToString("yyyy-MMM-dd"))</td>
+
+                                    <td>
+                                        @{
+                                            if (lst.RecommendStatus.ToString() == "1")
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                            else
+                                                   if (lst.RecommendStatus.ToString() == "2")
+                                            {
+                                                <label class="label label-success">Approve</label>
+                                            }
+                                            else
+                                                 if (lst.RecommendStatus.ToString() == "3")
+                                            {
+                                                <label class="label label-danger">Rejected</label>
+                                            }
+                                            else
+                                              if (lst.RecommendStatus.ToString() == "4")
+                                            {
+                                                <label class="label label-danger">Cancelled</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                        }
+                                    </td>
+                                    <td>@(lst.RecommendeDate == "" ? "" : Convert.ToDateTime(lst.RecommendeDate).ToString("yyyy-MMM-dd"))</td>
+                                    <td>
+                                        @{ if (lst.ApproveStatus.ToString() == "1")
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                            else
+                                                   if (lst.ApproveStatus.ToString() == "2")
+                                            {
+                                                <label class="label label-success">Approve</label>
+                                            }
+                                            else
+                                                 if (lst.ApproveStatus.ToString() == "3")
+                                            {
+                                                <label class="label label-danger">Rejected</label>
+                                            }
+                                            else
+                                              if (lst.ApproveStatus.ToString() == "4")
+                                            {
+                                                <label class="label label-danger">Cancelled</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                        }
+
+                                    </td>
+                                    <td>@(lst.ApproveDate == "" ? "" : Convert.ToDateTime(lst.ApproveDate).ToString("yyyy-MMM-dd"))</td>
+                                    <td>
+                                    @{if (lst.ApproveStatus=="1" || lst.ApproveStatus == "0")
+                                        {
+                                            <a class="label label-info" href="/user/attendancerequest/recommend/@lst.RequestId"> <i class="fa fa-eye fa-2x"></i></a>
+                                        }
+
+                                    }
+                                   </td>
+                                </tr>
+
+
+
+
+                                            }
+                        </tbody>
+                    </table>
+
+
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#attendanceTable').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $(".datepicker").datepicker();
+            
+        });
+
+    </script>
+}
+
+
+@if (Session["recommend-status_message"] != null)
+    {
+
+
+        Session.Remove("recommend-status_message");
+    }

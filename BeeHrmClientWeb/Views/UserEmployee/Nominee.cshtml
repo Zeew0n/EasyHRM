@@ -1,0 +1,248 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeEditViewModel
+@{
+    ViewBag.Title = "FamilyDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <style type="text/css">
+        .quick-link a.list-group-item {
+            font-weight: 600;
+        }
+
+        .quick-link .nav {
+            border: none;
+            font-size: 19px;
+            color: #FBC702;
+            font-weight: 600;
+            padding: 7px 10px;
+        }
+
+        #list-border-remove .badge {
+            color: black;
+            background-color: transparent;
+        }
+
+        #list-border-remove .list-group-item {
+            border: none;
+        }
+
+        .ribbon span {
+            border: 1px solid #faa;
+            color: #fff;
+            display: block;
+            font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 1px 0;
+            padding: 10px 41px;
+            text-align: center;
+            text-decoration: none;
+            text-shadow: 0 0 5px #444;
+        }
+
+        .nomarginbtm {
+            margin-bottom: 0 !important;
+        }
+
+        .ribbon-wrapper {
+            width: 350px;
+            height: 150px;
+            overflow: hidden;
+            position: absolute;
+            top: -18px;
+            left: -13px;
+        }
+
+        .ribbon-green {
+            font: bold 15px Sans-Serif;
+            color: #333;
+            border-radius: 40px 40px 1px 1px;
+            text-align: center;
+            text-shadow: rgba(255,255,255,0.5) 0px 1px 0px;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            position: relative;
+            padding: 7px 0;
+            left: -26px;
+            top: 49px;
+            width: 172px;
+            background-color: #BFDC7A;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#BFDC7A), to(#8EBF45));
+            background-image: -webkit-linear-gradient(top, #BFDC7A, #8EBF45);
+            background-image: -moz-linear-gradient(top, #BFDC7A, #8EBF45);
+            background-image: -ms-linear-gradient(top, #BFDC7A, #8EBF45);
+            background-image: -o-linear-gradient(top, #BFDC7A, #8EBF45);
+            color: #6a6340;
+            -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+            -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+            box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        }
+
+        .ribbon-red {
+            font: bold 15px Sans-Serif;
+            color: #333;
+            border-radius: 40px 40px 1px 1px;
+            text-align: center;
+            text-shadow: rgba(166, 134, 134, 0.5) 0px 1px 0px;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            position: relative;
+            padding: 7px 0;
+            left: -26px;
+            top: 49px;
+            width: 172px;
+            background-color: #a00 !important;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#C22323), to(#CA4E4E));
+            background-image: -webkit-linear-gradient(top, #C22323, #CA4E4E);
+            background-image: -moz-linear-gradient(top, #C22323, #CA4E4E);
+            background-image: -ms-linear-gradient(top, #C22323, #CA4E4E);
+            background-image: -o-linear-gradient(top, #C22323, #CA4E4E);
+            color: #F4F4F4;
+            -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+            -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+            box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        }
+
+        .ribbon-green:before, .ribbon-green:after {
+            content: "";
+            border-top: 3px solid #6e8900;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            position: absolute;
+            bottom: -3px;
+        }
+
+        .ribbon-red:before, .ribbon-red:after {
+            content: "";
+            border-top: 3px solid #a00;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            position: absolute;
+            bottom: -3px;
+        }
+
+        .ribbon-green:before {
+            left: 0;
+        }
+
+        .ribbon-green:after {
+            right: 0;
+        }
+
+        .ribbon-red:before {
+            left: 0;
+        }
+
+        .ribbon-red:after {
+            right: 0;
+        }
+    </style>
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Details of Employee @*- @Model.Name*@
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    @Html.Partial("_partialpageUserProfileDetail")
+    <div class="col-md-8 col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+            </div>
+            <div class="panel-body basic">
+                <h3>Nominee Detail</h3>
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="col-md-4"><strong>Name</strong></span>
+                        @if (Model.NomineeName == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.NomineeName
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-4"><strong>Adress</strong></span>
+                        @if (Model.NomineeAddress == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.NomineeAddress
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-4"><strong>Date Of Birth</strong></span>
+                        @if (Model.NomineeDob == null)
+                        {
+                            <p>Not Found</p>
+                        }
+                        @{
+                            //var a = Model.NomineeDob.Split(' ');
+                            //string first = a[0];
+                            var date = !String.IsNullOrEmpty(Model.NomineeDob.ToString()) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.NomineeDob)).ToString().Replace('/', '-') : null;
+                            <t>@date (@(Convert.ToString(Model.NomineeDob) == "" ? "" : Convert.ToDateTime(Model.NomineeDob).ToString("yyyy-MMM-dd")))</t>
+                        }
+                        @*@first*@
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4"><strong>Relation</strong></span>
+                        @if (Model.NomineeRelation == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.NomineeRelation
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-4"><strong>Photo</strong></span>
+                        <span>
+                            @if (Model.NomineePhoto == "")
+                            {
+                                <img src="/img/emp_photos/profile.jpg" style="height: 200px;"
+                                     alt="Beehrm User " class="img-responsive">
+                            }
+                            else
+                            {
+                                <img src="~/img/nom_photos/@Model.NomineePhoto" style="height: 200px;"
+                                     alt="Profile photo of @Model.NomineePhoto" class="img-responsive">
+                            }
+                        </span>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

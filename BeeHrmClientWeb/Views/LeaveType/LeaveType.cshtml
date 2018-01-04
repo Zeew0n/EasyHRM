@@ -1,0 +1,164 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.LeaveTypeDTO>
+@{
+    ViewBag.Title = "LeaveTypes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style type="text/css">
+        #tblLeaveTypes tr td:last-child{ width:15%;}
+    </style>
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#tblLeaveTypes').DataTable();
+        $('.deleteLeaveType').click(function () {
+            var conf = confirm("Are you sure to delete this leavetype?");
+            if (!conf) {
+                return false;
+            }
+        });
+    </script>
+}
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+@foreach (ModelState modelState in ViewData.ModelState.Values)
+{
+    foreach (ModelError error in modelState.Errors)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-close" aria-hidden="true"></i> @error.ErrorMessage.ToString()
+        </div>
+    }
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/leavetype/create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New Leavetype</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leavetypes list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="tblLeaveTypes">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Is Payable</th>
+                            <th>Is Transferable</th>
+                            <th>Maximum Transferable</th>
+                            <th>Type</th>
+                            <th>Leave Apply Before Days</th>
+                            <th>No. of Leave Days / Month</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.LeaveTypeName</td>
+                                <td>
+                                    @{ 
+                                        if (item.IsPayable == true)
+                                        {
+                                            <i class="fa fa-check"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-remove"></i>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        if (item.IsTransferable == true)
+                                        {
+                                            <i class="fa fa-check"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-remove"></i>
+                                        }
+                                    }
+                                </td>
+                                <td>@item.MaxTransferable</td>
+                                <td>
+                                    @{ 
+                                        if (item.NumberOfTime == 0)
+                                        {
+                                            <span>Yearly</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.NumberOfTime Time(s)</span>
+                                        }
+                                    }
+                                </td>
+                                <td>@item.LeaveApplyBefore</td>
+                                <td>@item.MonthlyQty</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/leavetype/edit/@item.LeaveTypeId" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                                        <a href="/leavetype/delete/@item.LeaveTypeId" class="btn btn-danger deleteLeaveType"><i class="fa fa-trash-o"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

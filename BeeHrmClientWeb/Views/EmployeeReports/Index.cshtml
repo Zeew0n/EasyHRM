@@ -1,0 +1,89 @@
+﻿
+@using System.Data;
+@{
+    ViewBag.Title = "Attendance Reports ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var sdate1 = "";
+    if (ViewBag.sdate != null)
+    {
+        sdate1 = ViewBag.sdate.ToString("MM/dd/yyyy");
+    }
+    var edate1 = "";
+    if (ViewBag.edate != null)
+    {
+        edate1 = ViewBag.edate.ToString("MM/dd/yyyy");
+    }
+
+
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+            $(document).ready(function () {
+                $('.date').datetimepicker({
+                    format: 'MM/DD/YYYY',
+                    ignoreReadonly: true,
+                    maxDate: 'now'
+                });
+
+                $('.table').DataTable();
+                $('.dataTables_filter').css('float', 'right');
+
+
+
+            });
+
+    </script>
+}

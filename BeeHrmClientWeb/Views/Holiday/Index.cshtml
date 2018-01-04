@@ -1,0 +1,332 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.HolidayDTOs>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <link href="~/Scripts/multiselect/css/style.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+
+
+
+
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                  <a href="/holiday/create" class="btn btn-success"><i class="fa fa-plus"></i> Create Holiday</a>
+                            </span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Holiday List
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+<div class="panel-body box box-top-border">
+
+    <div class="plane panel-body">
+        <div class="col-xs-12">
+
+
+            @if (Session["UpdateHoliday"] != null)
+            {
+                <div class="alert alert-success fade in" style="margin-top:18px;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <strong>@Session["UpdateHoliday"]</strong>
+
+                </div>
+
+                Session.Remove("UpdateHoliday");
+            }
+            else
+            if (Session["updateerroe"] != null)
+            {
+                <div class="alert alert-danger fade in" style="margin-top:18px;">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <strong>@Session["updateerroe"]</strong>
+
+                </div>
+
+                Session.Remove("updateerroe");
+
+            }
+            @if (Model == null)
+            {
+                <div class="alert alert-danger fade in">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <strong> Sorry !! No Holiday Found with this Id</strong>
+                </div>
+            }
+            else
+            {
+                <table class="table table-responsive table-bordered " id="holiday">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th class="text-center">Holiday Title</th>
+                            <th class="text-center">Holiday Date</th>
+                            <th class="text-center">Branch</th>
+                            <th class="text-center">Religion </th>
+                            <th class="text-center">Ethinicity </th>
+                            <th class="text-center">Status</th>
+                            <th class="text-center">Option</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model)
+                        {
+                            i = i + 1;
+                            <tr>
+                                <td> @i</td>
+                                <td>@row.HolidayTitle</td>
+                                <td>
+                                    @*@Convert.ToDateTime(row.HolidayDate).ToString("yyyy-MMM-dd")*@
+                                @{var holiday = !String.IsNullOrEmpty(row.HolidayDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(row.HolidayDate)).ToString().Replace('/', '-') : null;
+                                }
+                                @if (@holiday != null)
+                                {
+                                    <p>@holiday (@(Convert.ToString(row.HolidayDate) == "" ? "" : Convert.ToDateTime(row.HolidayDate).ToString("yyyy-MMM-dd")))</p>
+                                }
+                                else {
+                                    <p></p>
+                                }
+                            </td>
+                            <td>
+                                @{
+                                int ofcid = row.HolidayOfficeId;
+                                if (ofcid == 0)
+                                {
+                                    <p> All Offices </p>
+                                }
+                                else
+                                {
+                                    <button onclick="Officelist(@row.HolidayId)" class="btn btn-xs btn-info"> Offices </button>
+
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                int rel = row.HolidayReligionId;
+                                if (rel == 0)
+                                {
+                                    <p>All </p>
+                                }
+                                else
+                                {
+                                    <p>@row.ReligionName </p>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                int eth = row.HolidayEthnicityId;
+                                if (eth == 0)
+                                {
+                                    <p>All</p>
+                                }
+                                else
+                                {
+                                    <p>@row.EthnicityName</p>
+                                }
+                            }
+                        </td>
+                        <td>
+                            <a href="/admin/holiday/update/@row.HolidayDate.ToString("yyyy-MMM-dd")" class="label label-info">Update Holiday</a>
+                        </td>
+                        <td>
+                            <a href="/holiday/details/@row.HolidayId" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></a>
+                            <a class="btn-danger btn btn-xs" data-toggle="modal" data-target="#@row.HolidayId"><i class="fa fa-trash-o"></i></a>
+
+                            <div id="@row.HolidayId" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                        </div>
+                                        <div class="modal-body">
+                                            <h6>Are you Sure ?  you really want to delete this Holiday ?</h6>
+
+                                            <button class="btn btn-success btn-sm" data-dismiss="modal" onclick="Delete(@row.HolidayId)"> Yes</button>
+                                            <button class="btn btn-danger btn-sm" data-dismiss="modal"> No</button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+
+
+                                }
+                    </tbody>
+
+                </table>
+
+
+
+                                }
+
+
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header" style="background:#6666ff">
+                <b style="color:#FFF">Holiday Assigned Offices </b>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body" id="modelbody">
+                <div id="office">
+                    <ul class="list-unstyled"></ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#holiday').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $(".datepicker").datepicker();
+
+        });
+
+        function Delete(id) {
+
+            $.ajax({
+                type: "post",
+                url: "/holiday/delete/" + id,
+                ajaxasync: true,
+                contentType: 'application/json; charset=utf-8',
+
+                success: function (response) {
+                    console.log();
+                    if (response.Success) {
+                        location.reload();
+                    }
+                    else {
+                        var error = '<div class="alert alert-danger" ><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a> <b > <snap>Sorry !!</snap> The attendance request cannot be deleted as its status has already changed. !!!</b></div>';
+                        $('.delerror').html(error);
+                    }
+
+                },
+                error: function () {
+                    console.log("error");
+                }
+            });
+        }
+
+        function Officelist(id) {
+
+            $.ajax({
+                url: "/holiday/officeholidaylist/" + id,
+                success: function (data) {
+                    $("#office ul").empty();
+                    for (var i = 0; i < data.length; i++) {
+
+
+                        $("#office ul").append('<li class="list-group-item">' + data[i].OfficeName + '</li>');
+
+
+                    }
+                    $("#myModal").modal();
+                }
+
+            });
+
+        }
+
+    </script>
+
+}

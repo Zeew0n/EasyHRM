@@ -1,0 +1,244 @@
+﻿@model BeeHRM.ApplicationService.Leave_Module.DTOs.LeaveApplicationDTOs
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li>
+                            <a href="~/LeaveUser/LeaveApplistList" class="btn btn-success"><i class="fa fa-bar-chart"></i> Leave List</a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Application
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="box box-top-border">
+
+
+    @if (Session["error"] != null)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i></button>
+            @Session["error"]
+        </div>
+    }
+
+
+    @if (Session["sucess"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["sucess"]
+        </div>
+    }
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(false)
+
+                    <div class="form-horizontal">
+                        @if (Model.ErrorList != null)
+                        {
+
+                            for (int i = 0; i < Model.ErrorList.Count; i++)
+                            {
+                                <p class="text-danger col-md-offset-4">@Model.ErrorList[i]</p>
+                            }
+
+                        }
+
+                        @Html.HiddenFor(x => x.LeaveEmpCode)
+                        @Html.HiddenFor(x => x.LeaveTypeId)
+                        @{
+                            string ishalfDisplay = "none";
+                        }
+                        <span></span>
+                        @if (Model.IsHalfDayAllow == true)
+                        {
+                            ishalfDisplay = "Block";
+                            <div class="form-group col-md-10">
+                                @Html.LabelFor(model => model.LeaveDaysType, htmlAttributes: new { @class = "control-label" })<br />
+                                <div class="col-md-8 row">
+                                    <div style="display=@ishalfDisplay">
+                                        @Html.CheckBoxFor(model => model.IsHalfDay, new { @id = "IsHalfday" })
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="form-group col-md-10">
+                            <label class="control-label">Leave Name</label><br />
+                            <div class="col-md-8 row">
+                                @Html.EditorFor(x => x.LeaveTypeName, new { htmlAttributes = new { @class = "form-control ", @disabled = "disabled"} })
+                                @Html.HiddenFor(x => x.LeaveTypeName)
+                                @Html.HiddenFor(x => x.IsHalfDayAllow)
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.LeaveSubject, htmlAttributes: new { @class = "control-label" })<br />
+                            <div class="col-md-8 row">
+                                @Html.EditorFor(model => model.LeaveSubject, new { htmlAttributes = new { @class = "form-control ", @required = "required", @placeholder = "Enter Leave Subject" } })
+                                @Html.ValidationMessageFor(model => model.LeaveSubject, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.LeaveStartDateNP, "Start Date", htmlAttributes: new { @class = "control-label" })<br />
+                            <div class="col-md-8 row">
+                                @Html.EditorFor(model => model.LeaveStartDateNP, new { htmlAttributes = new { @class = "form-control date", @required = "required", @placeholder = "Enter Leave Startdate", @id = "StartDate" } })
+                                @Html.ValidationMessageFor(model => model.LeaveStartDateNP, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-10" id="EndDate">
+                            @Html.LabelFor(model => model.LeaveEndDateNP, "End Date", htmlAttributes: new { @class = "control-label" })<br />
+                            <div class="col-md-8 row">
+                                @Html.EditorFor(model => model.LeaveEndDateNP, new { htmlAttributes = new { @class = "form-control date", @required = "required", @placeholder = "Enter Leave Enddate", @id = "LeaveEndDate" } })
+                                @Html.ValidationMessageFor(model => model.LeaveEndDateNP, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-10" id="DayPart" style="Display:none;">
+                            @Html.LabelFor(model => model.LeaveDaysPart, htmlAttributes: new { @class = "control-label" })<br />
+                            <div class="col-md-8 row">
+                                @Html.RadioButtonFor(m => m.LeaveDaysPart, "F") First Half
+                                @Html.RadioButtonFor(m => m.LeaveDaysPart, "S")  Second Half
+                            </div>
+                        </div>
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.RecommededEmpCode, htmlAttributes: new { @class = "control-label" })<br />
+                            <div class="col-md-8 row">
+                                @Html.DropDownListFor(model => model.RecommededEmpCode, Model.RecommenderList, new { @class = "form-control custom-select" })
+                                @Html.ValidationMessageFor(model => model.RecommededEmpCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.LeaveApproverEmpCode, htmlAttributes: new { @class = "control-label" })
+                            <br />
+                            <div class="col-md-8 row">
+                                @Html.DropDownListFor(model => model.LeaveApproverEmpCode, Model.ApproverList, new { @class = "form-control custom-select" })
+                                @Html.ValidationMessageFor(model => model.LeaveApproverEmpCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.LeaveDetails, htmlAttributes: new { @class = "control-label" })
+                            <br />
+                            <div class="col-md-8 row">
+                                @Html.EditorFor(model => model.LeaveDetails, new { htmlAttributes = new { @class = "form-control", @required = "required", @placeholder = "Enter Leave Description" } })
+                                @Html.ValidationMessageFor(model => model.LeaveDetails, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <input type="submit" id="apply_leave" value="Apply Leave" class="btn btn-success" />
+                                <a href="/LeaveUser/LeaveApplistList/LeaveApplistList" class="btn btn-success">Back</a>
+                            </div>
+                        </div>
+                    </div>
+                            }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".custom-select").customselect();
+
+        });
+        $('.date').nepaliDatePicker({
+            npdMonth: true,
+            npdYear: true,
+            npdYearCount: 10 // Options | Number of years to show
+        });
+        //$('#date1').nepaliDatePicker({
+        //    npdMonth: true,
+        //    npdYear: true,
+        //    npdYearCount: 10 // Options | Number of years to show
+        //});
+
+        $("#apply_leave").click(function () {
+
+            if ($("#IsHalfday").prop("checked")) {
+
+                $("#LeaveEndDate").val($("#StartDate").val());
+            }
+
+        });
+        $("#IsHalfday").change(function () {
+            if (this.checked) {
+                $('#DayPart').show();
+                $('#EndDate').hide();
+                $('#LeaveDaysPart').attr("required", "required");
+            }
+            else {
+                $('#DayPart').hide();
+                $('#EndDate').show();
+                $('#LeaveDaysPart').removeAttr("required");
+            }
+
+
+        });
+
+    </script>
+}
+@{
+    if (Session["error"] != null)
+    {
+        Session.Remove("error");
+    }
+}

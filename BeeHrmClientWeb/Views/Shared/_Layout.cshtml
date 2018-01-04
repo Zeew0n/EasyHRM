@@ -1,0 +1,407 @@
+﻿@using StackExchange.Profiling;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Copy Right Young Minds -->
+    <title>Beehrm Human Resource System</title>
+    <link rel="apple-touch-icon" sizes="57x57" href="~/img/fev/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/img/fev/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/img/fev/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/img/fev/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/img/fev/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/img/fev/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/img/fev/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/img/fev/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/img/fev/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/img/fev/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/img/fev/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/img/fev/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/img/fev/favicon-16x16.png">
+    <link rel="manifest" href="~/img/fev//manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <link href="~/Content/startbootstrap-simple-sidebar-1.0.5/css/simple-sidebar.css" rel="stylesheet" />
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+
+
+
+    <link href="~/Content/admin.css" rel="stylesheet" />
+    <link href="~/Content/style.css" rel="stylesheet" />
+    <link href="~/Content/brand.css" rel="stylesheet" />
+    <link href="~/Content/nanoscroller.css" rel="stylesheet" />
+    <link href="~/Content/EmployeeProfile.css" rel="stylesheet" />
+
+
+    <style type="text/css">
+        #notification_li {
+            position: relative;
+        }
+
+        #notificationContainer {
+            background-color: #fff;
+            border: 1px solid rgba(100, 100, 100, .4);
+            -webkit-box-shadow: 0 3px 8px rgba(0, 0, 0, .25);
+            overflow: visible;
+            position: absolute;
+            top: 30px;
+            margin-left: -180px;
+            width: 390px;
+            z-index: 999999;
+            display: none;
+        }
+
+        #notificationContainer:before {
+            content: '';
+            display: block;
+            position: absolute;
+            width: 0;
+            height: 0;
+            color: transparent;
+            border: 10px solid black;
+            border-color: transparent transparent white;
+            margin-top: -20px;
+            margin-left: 188px;
+        }
+
+        #notificationTitle {
+            font-weight: bold;
+            padding: 8px;
+            font-size: 13px;
+            background-color: #1ac6ff;
+            position: fixed;
+            z-index: 1000;
+            width: 390px;
+            color: #fff;
+        }
+
+        #notificationsBody {
+            padding: 33px 0px 0px 0px !important;
+            min-height: 300px;
+            margin-top: 5px;
+        }
+
+        #notificationFooter {
+            background-color: #e9eaed;
+            text-align: center;
+            font-weight: bold;
+            padding: 8px;
+            font-size: 12px;
+            border-top: 1px solid #dddddd;
+        }
+
+        #notification_count {
+            background: #F00;
+            border-radius: 9px;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: bolder;
+            margin-left: 23px;
+            padding: 5px;
+            position: absolute;
+        }
+        .hbreadcrumb a:hover{color:white!important;}
+    </style>
+    @RenderSection("styles", required: false)
+</head>
+
+<body>
+    <div class="color-line"></div>
+    <nav class="navbar navbar-custom navbar-fixed-top">
+        <div class="container-fluid" style="padding-right:25px; padding-left:25px;">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span class="logo">
+                    <a href="/Account/Login">
+                        <span>
+                            <img src="~/img/inspire_logo.png">
+                        </span>
+                    </a>
+                </span>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="navbar-custom-menu navbar-right">
+                    <ul class="nav navbar-nav">
+                        
+                        <li>
+                            <form action="/employees" method="post">
+                                <div style="padding-top:10px">
+                                    <input type="text" name="EmpCode" id="QuickEmpCode" value="" placeholder="Employee Code">
+                                    <input type="submit" value="Search" name="Search" />
+                                </div>
+                            </form>
+                        </li>
+                        <li id="notification_li">
+                            @{
+                                int i = 0;
+                                int j = 0;
+                                foreach (var row in ViewBag.res)
+                                {
+
+                                    if (String.IsNullOrEmpty(row.ReadDate))
+                                    {
+                                        i = i + 1;
+                                        ViewBag.count = i;
+                                    }
+                                    j++;
+                                    ViewBag.data = j;
+                                }
+
+                            }
+                            @if (ViewBag.count > 0)
+                            {
+                                <span id="notification_count" class="label label-success">
+                                    @ViewBag.count
+                                </span>
+                            }
+                            <a href="#" id="notificationLink"><span class="hidden-xs" style="color:white"><i class="fa fa-globe"></i> </span>  </a>
+                            @if (ViewBag.data > 0)
+                            {
+                                <div id="notificationContainer" style="margin-top:20px;">
+                                    <div id="notificationTitle">Notifications</div>
+                                    <div id="notificationsBody" class="notifications" style="max-height:500px;overflow-y: scroll; margin-bottom: 12px;">
+                                        @foreach (var row in ViewBag.res)
+                                        {
+                                            <div class="list-group-item-info list-group" style="padding:2px">
+                                                <div class="pull-left">
+                                                   @{
+                                                        if (!String.IsNullOrEmpty(row.EmpPhoto))
+                                                        {
+                                                           
+                                                            <img class="img img-responsive img-circle" style="height: 40px; padding:5px" src="~/Uploads/@row.ReceiverID/@row.EmpPhoto" alt="@row.EmpName">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="img img-responsive img-circle" style="height: 40px; padding:5px" src="~/Uploads/profile.jpg" alt="@row.EmpName">
+                                                        }
+                                                    }
+                                                    
+                                                </div>
+                                                <a data-notification-id="376" class="notification-link" href="/notification/readnotification/@row.NotificationID">
+                                                    <b>
+                                                        @row.Subject
+
+                                                    </b>
+
+                                                    <p>
+                                                        @row.Message
+
+                                                        <small style="margin-left:15px">
+                                                            <i class="fa fa-clock-o">
+                                                                @{
+
+                                                                    DateTime date1 = Convert.ToDateTime(row.Date);
+                                                                    DateTime datenow = DateTime.Now.ToLocalTime();
+                                                                    TimeSpan date2 = datenow - date1;
+
+                                                                    int sec = Convert.ToInt32(date2.TotalMinutes);
+                                                                    int day = 0;
+                                                                    int hrs = 0;
+                                                                    int min = 0;
+                                                                    if ((sec / 60) > 24)
+                                                                    {
+                                                                        day = (sec / 60) / 24;
+                                                                        hrs = (sec / 60) % 24;
+                                                                        min = (sec % 60) % 24;
+                                                                        ViewBag.time = day + "day  " + hrs + "hrs";
+                                                                    }
+                                                                    else
+                                                                        if (sec > 60)
+                                                                    {
+                                                                        hrs = sec / 60;
+                                                                        min = sec % 60;
+                                                                        ViewBag.time = hrs + "hrs  " + min + "min";
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        min = sec;
+                                                                        ViewBag.time = min + "min";
+                                                                    }
+
+                                                                }
+                                                                @ViewBag.time ago
+                                                            </i>
+                                                        </small>
+
+                                                    </p>
+
+                                                </a>
+
+                                            </div>
+                                                                    }
+
+                                    </div>
+                                    <div id="notificationFooter">
+                                        <a href="/user/notifications" target="_blank">See  All</a>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="notificationContainer" style="margin-top: 20px">
+                                    <div id="notificationTitle">Notifications</div>
+                                    <div id="notificationsBody" class="notifications">
+
+                                    </div>
+                                </div>
+                            }
+                        </li>
+                       
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                @{
+                                    if (HttpContext.Current.Session["UserName"] == null)
+                                    {
+                                        Response.Redirect("~/");
+                                    }
+
+                                    var user_empCode = HttpContext.Current.Session["EmpCode"].ToString();
+                                }
+                                <img src="~/Uploads/@user_empCode/@HttpContext.Current.Session["ProfilePhoto"].ToString()" class="user-image"
+                                     alt="User Image">
+                                <span class="hidden-xs" style="color:white"> Welcome, @HttpContext.Current.Session["UserName"].ToString()</span>
+
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header  navbar-custom">
+                                    <img src="~/Uploads/@user_empCode/@HttpContext.Current.Session["ProfilePhoto"].ToString()" class="img-circle"
+                                         alt="Profile photo of @HttpContext.Current.Session["UserName"].ToString()">
+
+                                    <p>
+                                        @HttpContext.Current.Session["UserName"].ToString() <br /> <small>@HttpContext.Current.Session["Designation"].ToString()</small> <br />
+
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="/user/profile" class="btn btn-default btn-flat">Profile</a>
+                                    </div>
+                                    <div class="pull-right">
+                                        <a href="/auth/logout" class="btn btn-default btn-flat">Sign out</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <ol class="subMenu menusBg menusColor">
+        <ul>
+            <li><a href="#menu-toggle" id="menu-toggle"> <i class="fa fa-bars" aria-hidden="true"></i></a></li>
+            @foreach (var item in ViewBag.TopMenuList)
+            {
+                <li>
+                    <a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a>
+                </li>
+            }
+        </ul>
+        <div style="clear: both"></div>
+    </ol>
+    <div class="container-fluid" id="wrapper">
+        @RenderSection("SideBar", required: false)
+        @RenderSection("PageHeader", required: false)
+
+        <div class="row">
+            <div class="col-lg-12 col-md-12" id="page-content-wrapper">
+                @RenderBody()
+            </div>
+        </div>
+        <div class="row">
+            <footer class="blue navbar-fixed-bottom1">
+                <hr />
+                <p>
+                    Today
+                    @{
+
+                        DateTime today = System.DateTime.Now;
+
+                        string todayNepali = BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(today);
+
+                        string todayEng = BeeHrmClientWeb.Utilities.NepEngDate.NepToEng(todayNepali);
+
+                    }
+                    <label class="label label-info">BS : @todayNepali</label>
+                    <label class="label label-info"> AD : @todayEng</label>
+                </p>
+                <p style="padding-bottom: 2px; margin-bottom: 2px;"> Copyright &copy; 2016 <a href="http://www.youngminds.com.np">Young Minds  </a>. All rights reserved </p>
+                Powered by <a href="http://www.youngminds.com.np" target="_blank">Young Minds</a>
+            </footer>
+        </div>
+    </div>
+
+    @* SCRIPTS HERE *@
+    <script src="~/Scripts/jquery-2.2.3.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.nanoscroller.js"></script>
+    <script src="~/Content/scripts/ConfigurationCreate.js"></script>
+    <script src="~/Scripts/BeehrmCustom.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#notificationLink").click(function () {
+                $("#notificationContainer").fadeToggle(300);
+                $("#notification_count").fadeOut("slow");
+                return false;
+            });
+
+
+
+            //Document Click hiding the popup
+            $(document).click(function () {
+                $("#notificationContainer").hide();
+            });
+
+            //Popup on click
+            $('li a #parentMenuId').on('click', function () {
+
+                alert('clicked');
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".custom-select").customselect();
+
+        });
+</script>
+    <script type="text/javascript">
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        $("#search-toggle").click(function () {
+            $('#search-box').toggleClass('toggledSearch');
+        });
+        $(".nano").css({ height: ($(window).height() - 50) + 'px' });
+        $("#sidebar-wrapper").css({ height: ($(document).height() - 90) + 'px' });
+        $(".nano").nanoScroller();
+        $(".nano-message").nanoScroller();
+        $(".nano-notification").nanoScroller();
+    </script>
+    @RenderSection("scripts", required: false)
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+
+</body>
+</html>

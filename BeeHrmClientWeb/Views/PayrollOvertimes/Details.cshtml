@@ -1,0 +1,99 @@
+﻿@model BeeHRM.Repository.PayrollOvertime
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PayrollOvertime</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EmpCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmpCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OvertimeDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OvertimeDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Details)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Details)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApprovedById)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApprovedById)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApproveStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApproveStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApproveStatusDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ApproveStatusDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OvertimeAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OvertimeAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OvertimeHours)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OvertimeHours)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OvertimeAppliedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OvertimeAppliedDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.OvertimeId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

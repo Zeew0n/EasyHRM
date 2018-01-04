@@ -1,0 +1,826 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeDetailAdminViewModel
+@{
+    ViewBag.Title = "Employee Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link href="~/Content/EmployeeDetails.css" rel="stylesheet" />
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb"></ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Employee Details
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<ul class="tabs">
+    <li class="tab-link current" data-tab="Profile">Profile </li>
+    <li class="tab-link" data-tab="Family">Family Details </li>
+    <li class="tab-link" data-tab="Nominees">Nominees </li>
+    <li class="tab-link" data-tab="Skills">Skills</li>
+    <li class="tab-link" data-tab="Documents">Documents</li>
+    <li class="tab-link" data-tab="Service">Service Details</li>
+    @*<button id="cmd">Export PDF</button>
+        <button id="print">Print</button>*@
+</ul>
+<div class="no-print">
+
+    <div id="Profile" class="tab-content current panel-body box box-top-border">
+        <div class="profile-heading">
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Profile </strong>
+        </div>
+        <div class="row">
+            <div class="col-md-2 pull-left ">
+                @{
+                    if (Model.EmpDetails.PhotoName != "" && Model.EmpDetails.PhotoName != "profile.jpg")
+                    {
+                        <img src="~/Uploads/@Model.EmpDetails.Code/@Model.EmpDetails.PhotoName"
+                             alt="Profile photo of @Model.EmpDetails.Name" class="img-responsive ">
+                    }
+                    else
+                    {
+                        <img src="/img/emp_photos/profile.jpg"
+                             alt="Beehrm User " class="img-responsive img-circle">
+                    }
+                }
+                <div class="text-center">
+                    <h4 class="nomarginbtm">[ @Model.EmpDetails.Code ] @Model.EmpDetails.Name &nbsp;</h4>
+                </div>
+
+                <div class="text-center">
+                    <a href="/employee/edit/@Model.EmpDetails.Code" class="btn btn-primary">Edit</a>
+                </div>
+
+            </div>
+            <div class="col-md-10">
+                <table class="table table-bordered table-responsive">
+                    <tr>
+                        <td><strong>User Name</strong></td>
+                        <td><strong>Extension</strong></td>
+                        <td><strong>DOB</strong></td>
+                    </tr>
+                    <tr>
+                        <td>@Model.EmpDetails.Username</td>
+                        <td>@Model.EmpDetails.Contact</td>
+                        <td>
+                            @{
+                                if (Model.EmpDetails.DateOfBirth == "")
+                                {
+                                    <span>Not Given</span>
+                                }
+                                else
+                                {
+                                    @*@Convert.ToDateTime(Model.EmpDetails.DateOfBirth).ToString("d MMM, yyyy")*@
+                            var a = !String.IsNullOrEmpty(Convert.ToString(Model.EmpDetails.DateOfBirth)) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.EmpDetails.DateOfBirth)).ToString().Replace('/', '-') : null;
+                            <p> @a (@(Convert.ToString(Model.EmpDetails.DateOfBirth) == "" ? "" : Convert.ToDateTime(Model.EmpDetails.DateOfBirth).ToString("yyyy-MMM-dd")))</p>
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Marital status</strong></td>
+                        <td><strong>Marriage Anniversary</strong></td>
+                        <td><strong>Blood Group</strong></td>
+                    </tr>
+                    <tr>
+                        <td>@Model.EmpDetails.MaritalStatus</td>
+                        <td>
+                            @{
+                                if (Model.EmpDetails.MarriageAnniversary == "")
+                                {
+                                    <span>Not Given</span>
+                                }
+                                else
+                                {
+                                    @*@Convert.ToDateTime(Model.EmpDetails.MarriageAnniversary).ToString("d MMM, yyyy")*@
+                                    var a = !String.IsNullOrEmpty(Convert.ToString(Model.EmpDetails.MarriageAnniversary)) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.EmpDetails.MarriageAnniversary)).ToString().Replace('/', '-') : null;
+                                    <p> @a (@(Convert.ToString(Model.EmpDetails.MarriageAnniversary) == "" ? "" : Convert.ToDateTime(Model.EmpDetails.MarriageAnniversary).ToString("yyyy-MMM-dd")))</p>
+                                }
+                            }
+                        </td>
+                        <td>@Model.EmpDetails.BloodGroup</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pan no</strong></td>
+                        <td><strong>PF Number</strong></td>
+                        <td><strong>CIT Number</strong></td>
+                    </tr>
+                    <tr>
+                        <td>@Model.EmpDetails.PAN</td>
+                        <td>@Model.EmpDetails.PFNUmber</td>
+                        <td>@Model.EmpDetails.CITNumber</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ignore Attendance For Payroll</strong></td>
+                        <td><strong>Incapacitated</strong></td>
+                        <td><strong>Remote Area</strong></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @{
+                                if (Model.EmpDetails.AttendanceIgnore == "True")
+                                {
+                                    <label class="label label-success">
+                                        <i class="fa fa-minus-circle"></i>
+                                        True
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="label label-danger">
+                                        <i class="fa fa-minus-circle"></i>
+                                        False
+                                    </label>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                if (Model.EmpDetails.Incapacitated == "True")
+                                {
+                                    <label class="label label-success">
+                                        <i class="fa fa-minus-circle"></i>
+                                        True
+                                    </label>
+                                }
+                                else
+                                {
+                                    <label class="label label-danger">
+                                        <i class="fa fa-minus-circle"></i>
+                                        False
+                                    </label>
+                                }
+                            }
+                        </td>
+                        <td>@Model.EmpDetails.RemoteArea</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <br />
+        <div class="row">
+            <div class="col-md-6">
+                <div class="profile-heading">
+                    <i class="fa fa-fw fa-thumb-tack"></i> <strong>Contact Details </strong>
+                </div>
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+
+                        <span class="col-md-6"><strong>Mobile Number</strong></span>
+                        @if (Model.OtherDetails.MobileNumber == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.MobileNumber
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-6"><strong>Home Phone</strong></span>
+                        @if (Model.OtherDetails.HomePhone == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.HomePhone
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-6"><strong>Office Phone</strong> </span>
+                        @if (Model.OtherDetails.OfficePhone == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.OfficePhone
+                    </li>
+
+                    <li class="list-group-item">
+
+                        <span class="col-md-6"><strong>Emergency Contact Number</strong></span>
+                        @if (Model.OtherDetails.EmerContact == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.EmerContact
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-6"><strong>Personal Email</strong> </span>
+                        @if (Model.OtherDetails.Email == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.Email
+                    </li>
+
+                    <li class="list-group-item">
+
+                        <span class="col-md-6"><strong>Office Email</strong></span>
+                        @if (Model.OtherDetails.OfficeEmail == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.OfficeEmail
+                    </li>
+                </ul>
+
+            </div>
+            <div class="col-md-6">
+                <div class="profile-heading">
+                    <i class="fa fa-fw fa-thumb-tack"></i> <strong>Address Details </strong>
+                </div>
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="col-md-6"><strong>Permanent Address</strong> </span>
+                        @if (Model.OtherDetails.PermanentAddress == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.PermanentAddress
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-6"><strong>Temporary Adress</strong></span>
+                        @if (Model.OtherDetails.TempAddress == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.TempAddress
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-6"><strong>Emergency Adress</strong></span>
+                        @if (Model.OtherDetails.EmerAddress == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.EmerAddress
+                    </li>
+                </ul>
+
+
+
+            </div>
+        </div>
+
+
+    </div>
+    <div id="Family" class="tab-content panel-body box box-top-border">
+        <div class="profile-heading">
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Family Details </strong>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-2 pull-left ">
+                @{
+                    if (Model.EmpDetails.PhotoName != "" && Model.EmpDetails.PhotoName != "profile.jpg")
+                    {
+                        <img src="~/Uploads/@Model.EmpDetails.Code/@Model.EmpDetails.PhotoName"
+                             alt="Profile photo of @Model.EmpDetails.Name" class="img-responsive ">
+                    }
+                    else
+                    {
+                        <img src="/img/emp_photos/profile.jpg"
+                             alt="Beehrm User " class="img-responsive img-circle">
+                    }
+                }
+                <div class="text-center">
+                    <h4 class="nomarginbtm">[ @Model.EmpDetails.Code ] @Model.EmpDetails.Name &nbsp;</h4>
+                </div>
+            </div>
+            <div class="col-md-10">
+                @*<div class="pull-right">
+                    <a href="/Family/Add"><i class="fa fa-plus"></i>Add Family</a>
+                        </div>*@
+                <table class="table">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Date Of Birth
+                        </th>
+                        <th>
+                            Gender
+                        </th>
+
+                        <th>
+                            Relation
+                        </th>
+                        <th>
+                            Contact Number
+                        </th>
+                        <th>
+                            Contact Adress
+                        </th>
+
+                    </tr>
+
+                    @foreach (var item in Model.Familydetails)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Fname)
+                            </td>
+
+                            <td>
+                                @if (item.FDob != null)
+                                {
+                                    var dob = BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(item.FDob));
+                                    var dobeng = Convert.ToDateTime(item.FDob).ToString("yyyy-MMM-dd");
+                                    <p>@dob (@dobeng)</p>
+
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FGender)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FRelation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FContactNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FContactAddress)
+                            </td>
+
+                        </tr>
+                    }
+
+                </table>
+
+
+            </div>
+
+        </div>
+
+    </div>
+    <div id="Nominees" class="tab-content  panel-body box box-top-border">
+        <div class="profile-heading">
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Nominee Detail </strong>
+        </div>
+        <div class="row">
+            <div class="col-md-2 pull-left ">
+                @{
+                    if (Model.EmpDetails.PhotoName != "" && Model.EmpDetails.PhotoName != "profile.jpg")
+                    {
+                        <img src="~/Uploads/@Model.EmpDetails.Code/@Model.EmpDetails.PhotoName"
+                             alt="Profile photo of @Model.EmpDetails.Name" class="img-responsive ">
+                    }
+                    else
+                    {
+                        <img src="/img/emp_photos/profile.jpg"
+                             alt="Beehrm User " class="img-responsive img-circle">
+                    }
+                }
+                <div class="text-center">
+                    <h4 class="nomarginbtm">[ @Model.EmpDetails.Code ] @Model.EmpDetails.Name &nbsp;</h4>
+                </div>
+
+            </div>
+            <div class="col-md-10">
+
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="col-md-4"><strong>Name</strong></span>
+                        @if (Model.OtherDetails.NomineeName == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.NomineeName
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-4"><strong>Adress</strong></span>
+                        @if (Model.OtherDetails.NomineeAddress == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.NomineeAddress
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-4"><strong>Date Of Birth</strong></span>
+                        @*@if (Model.OtherDetails.NomineeDob == null || Model.OtherDetails.NomineeDob == "")
+                        {
+                            <p>Not Found</p>
+                        }*@
+                        @{
+                            var Ndob = !String.IsNullOrEmpty(Model.OtherDetails.NomineeDob) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.OtherDetails.NomineeDob)): null;
+                            var Ndobeng = Convert.ToString(Model.OtherDetails.NomineeDob) == "" ? "" : Convert.ToDateTime(Model.OtherDetails.NomineeDob).ToString("yyyy-MMM-dd");
+                            
+                            if (Ndob != null)
+                            {
+                                <p>@Ndob (@Ndobeng)</p>
+                            }
+                            else {
+                                <p>Not Found</p>
+                            }
+
+
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4"><strong>Relation</strong></span>
+                        @if (Model.OtherDetails.NomineeRelation == "")
+                        {
+                            <p>Not Found</p>
+                        }
+                        @Model.OtherDetails.NomineeRelation
+                    </li>
+                    <li class="list-group-item">
+
+                        <span class="col-md-4"><strong>Photo</strong></span>
+                        <span>
+                            @if (Model.OtherDetails.NomineePhoto == "")
+                            {
+                                <img src="/img/emp_photos/profile.jpg" style="height: 200px;"
+                                     alt="Beehrm User " class="img-responsive">
+                            }
+                            else
+                            {
+                                <img src="~/img/nom_photos/@Model.OtherDetails.NomineePhoto" style="height: 200px;"
+                                     alt="Profile photo of @Model.OtherDetails.NomineePhoto" class="img-responsive">
+                            }
+                        </span>
+
+                    </li>
+
+                </ul>
+
+
+
+            </div>
+
+        </div>
+    </div>
+    <div id="Skills" class="tab-content panel-body box box-top-border">
+        <div class="profile-heading">
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Employee Skills </strong>
+
+        </div>
+        <div class="row">
+            <div class="col-md-2 pull-left ">
+                @{
+                    if (Model.EmpDetails.PhotoName != "" && Model.EmpDetails.PhotoName != "profile.jpg")
+                    {
+                        <img src="~/Uploads/@Model.EmpDetails.Code/@Model.EmpDetails.PhotoName"
+                             alt="Profile photo of @Model.EmpDetails.Name" class="img-responsive ">
+                    }
+                    else
+                    {
+                        <img src="/img/emp_photos/profile.jpg"
+                             alt="Beehrm User " class="img-responsive img-circle">
+                    }
+                }
+                <div class="text-center">
+                    <h4 class="nomarginbtm">[ @Model.EmpDetails.Code ] @Model.EmpDetails.Name &nbsp;</h4>
+                </div>
+            </div>
+            <div class="col-md-10">
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Point
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model.Skill)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SkillName)
+                            </td>
+                            <td>
+                                <meter min="0" max="100" value="@item.EmpSkillPoint"></meter>
+                                @Html.DisplayFor(modelItem => item.EmpSkillPoint)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EmpSkillStatus)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+    <div id="Documents" class="tab-content panel-body box box-top-border">
+        <div class="profile-heading">
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Employee Skills </strong>
+        </div>
+        <div class="row">
+            <div class="col-md-2 pull-left ">
+                @{
+                    if (Model.EmpDetails.PhotoName != "" && Model.EmpDetails.PhotoName != "profile.jpg")
+                    {
+                        <img src="~/Uploads/@Model.EmpDetails.Code/@Model.EmpDetails.PhotoName"
+                             alt="Profile photo of @Model.EmpDetails.Name" class="img-responsive ">
+                    }
+                    else
+                    {
+                        <img src="/img/emp_photos/profile.jpg"
+                             alt="Beehrm User " class="img-responsive img-circle">
+                    }
+                }
+                <div class="text-center">
+                    <h4 class="nomarginbtm">[ @Model.EmpDetails.Code ] @Model.EmpDetails.Name &nbsp;</h4>
+                </div>
+            </div>
+            <div class="col-md-10">
+
+                <table class="table">
+                    <tr>
+
+                        <th>
+                            Document Category
+                        </th>
+                        @*<th>
+                                Verified
+                            </th>*@
+                        <th>
+                            Remarks
+                        </th>
+                        <th>
+                            Uploaded Date
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model.Documents)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CatTitle)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DocumentRemarks)
+                            </td>
+                            <td>
+                                @if (item.DocumentCreatedAt == null)
+                                {
+                                    <p>Not Given</p>
+                                }
+                                else {
+                                    var a = !String.IsNullOrEmpty(Convert.ToString(item.DocumentCreatedAt)) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(item.DocumentCreatedAt)).ToString().Replace('/', '-') : null;
+                                    <p> @a (@(Convert.ToString(item.DocumentCreatedAt) == "" ? "" : Convert.ToDateTime(item.DocumentCreatedAt).ToString("yyyy-MMM-dd")))</p>
+                                }
+                            </td>
+                            <td><a href="~/img/@item.DocumentTitle" download>Download</a></td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+    <div id="Service" class="tab-content  panel-body box box-top-border">
+        <div class="profile-heading">
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Service Information </strong>
+        </div>
+        <div class="row">
+            <div class="col-md-2 pull-left ">
+                @{
+                    if (Model.EmpDetails.PhotoName != "" && Model.EmpDetails.PhotoName != "profile.jpg")
+                    {
+                        <img src="~/Uploads/@Model.EmpDetails.Code/@Model.EmpDetails.PhotoName"
+                             alt="Profile photo of @Model.EmpDetails.Name" class="img-responsive ">
+                    }
+                    else
+                    {
+                        <img src="/img/emp_photos/profile.jpg"
+                             alt="Beehrm User " class="img-responsive img-circle">
+                    }
+                }
+
+                <div class="text-center">
+                    <h4 class="nomarginbtm">[ @Model.EmpDetails.Code ] @Model.EmpDetails.Name &nbsp;</h4>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+
+                    <div class="col-md-5">
+                        <strong>Current Status Data</strong>
+                        @if (Model.EmployeeCurrentJobHistory != null)
+                        {
+                            <table class="table">
+
+
+                                <tr>
+                                    <td><strong>Branch</strong></td>
+                                    <td>@Model.EmployeeCurrentJobHistory.OfficeName</td>
+
+                                </tr>
+
+                                <tr>
+                                    <td><strong>Department</strong></td>
+                                    <td>@Model.EmployeeCurrentJobHistory.DeptName</td>
+
+                                </tr>
+                                <tr>
+                                    <td><strong>Rank</strong></td>
+
+                                    <td>@Model.EmployeeCurrentJobHistory.RankName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Shift</strong></td>
+
+                                    <td>@Model.EmployeeCurrentJobHistory.ShiftId</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Designation</strong></td>
+
+                                    <td>@Model.EmployeeCurrentJobHistory.DesignationName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Level</strong></td>
+
+                                    <td>@Model.EmployeeCurrentJobHistory.LevelName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Job Type</strong></td>
+
+                                    <td>@Model.EmployeeCurrentJobHistory.JobTypeName</td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>Service Status</strong></td>
+
+                                    <td>@Model.EmployeeCurrentJobHistory.ServiceEventName (@Model.EmployeeCurrentJobHistory.ServiceEventSubName)</td>
+                                </tr>
+
+
+
+
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info"> No data found!!!!</div>
+                        }
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-5">
+                        <strong>Appointed Data</strong>
+                        @if (Model.EmployeeAppointJobHistory != null)
+                        {
+                            <table class="table">
+
+
+                                <tr>
+                                    <td><strong>Branch</strong></td>
+                                    <td>@Model.EmployeeAppointJobHistory.OfficeName</td>
+
+                                </tr>
+
+                                <tr>
+                                    <td><strong>Department</strong></td>
+                                    <td>@Model.EmployeeAppointJobHistory.DeptName</td>
+
+                                </tr>
+                                <tr>
+                                    <td><strong>Rank</strong></td>
+
+                                    <td>@Model.EmployeeAppointJobHistory.RankName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Shift</strong></td>
+
+                                    <td>@Model.EmployeeAppointJobHistory.ShiftId</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Designation</strong></td>
+
+                                    <td>@Model.EmployeeAppointJobHistory.DesignationName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Level</strong></td>
+
+                                    <td>@Model.EmployeeAppointJobHistory.LevelName</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Job Type</strong></td>
+
+                                    <td>@Model.EmployeeAppointJobHistory.JobTypeName</td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong>Service Status</strong></td>
+
+                                    <td>@Model.EmployeeAppointJobHistory.ServiceEventName (@Model.EmployeeAppointJobHistory.ServiceEventSubName)</td>
+                                </tr>
+
+
+
+
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">नियुक्तीको रेकड भेटिएन</div>
+
+                            <a href="/JobHistory/EmployeeNiyukti/@Model.EmpDetails.Code" class="btn btn-primary">नियुक्तीको रेकड राख्नुहोस् </a>
+                        }
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Content/jspdf.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('ul.tabs li').click(function () {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            });
+
+            var doc = new jsPDF();
+            var specialElementHandlers = {
+                '#print': function (element, renderer) {
+                    return true;
+                }
+            };
+
+            $('#cmd').click(function () {
+                doc.fromHTML($('#print').html(), 15, 15, {
+                    'width': 170,
+                    'elementHandlers': specialElementHandlers
+                });
+                doc.save('sample-file.pdf');
+            });
+
+            $("#print").click(function () {
+                //Hide all other elements other than printarea.
+                $("#printdiv").show();
+                window.print();
+                $("#printdiv").hide();
+            });
+        });
+
+    </script>
+}

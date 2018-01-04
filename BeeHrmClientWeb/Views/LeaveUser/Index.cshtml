@@ -1,0 +1,217 @@
+﻿@model BeeHrmClientWeb.Models.LeaveApplicationModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        
+                           
+                        <li><a href="/LeaveUser/LeaveApplistList" class="btn btn-primary"><i class="fa fa-plus"> </i>  Apply Leave</a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    My Leave Applications
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+  
+<div class="box box-top-border">
+    @if (Session["error"] != null)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["error"]
+        </div>
+    }
+    @if (Session["success"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["success"]
+        </div>
+    }
+    <div class="box-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.LeaveApplication.LeaveYearId, Model.LeaveApplication.LeaveYearList, "Select Please", new { @class = "form-control " })
+                </div>
+
+                <div class="col-md-2">
+                    <select class="form-control monthSelector" name="MonthId">
+                        <option value="0">All</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                 <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.LeaveApplication.LeaveStatus, Model.LeaveApplication.LeaveStatusList, new { @class = "form-control " })
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" value="SEARCH" class="btn btn-primary" />
+                </div>
+            </div>
+
+        }
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <table class="table">
+                        <tr>
+                            <th>SN</th>
+                            <th>Applied Date</th>
+                            <th>Leave Type</th>
+                            <th>Subject</th>
+                            <th>Recommend Status</th>
+                            <th>Approve Status </th>
+                            <th>StratDate</th>
+                            <th>EndDate</th>
+                            <th>Days</th>
+                            <th>Details</th>
+                        </tr>
+
+                        @foreach (var item in Model.LeaveApplicationDetails.Select((x, i) => new { Data = x, Index = i }))
+                        {
+                            <tr>
+                                <td>@(item.Index + 1)</td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Data.LeaveAppliedDate)*@
+                                    @{var a = !String.IsNullOrEmpty(item.Data.LeaveAppliedDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.Data.LeaveAppliedDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @a (@(Convert.ToString(item.Data.LeaveAppliedDate) == "" ? "" : Convert.ToDateTime(item.Data.LeaveAppliedDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                               <td>@Html.DisplayFor(modelItem => item.Data.LeaveTypeName) </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Data.LeaveSubject)
+                                </td>
+                                <td>
+
+                                    @{if (item.Data.RecommendStatus == 3)
+                                        {
+                                            <label class="label label-danger">Rejected</label>
+                                        }
+                                        else if (item.Data.RecommendStatus == 2)
+                                        {
+                                            <label class="label label-success">Approved</label>
+                                        }
+                                        else if (item.Data.RecommendStatus == 4)
+                                        {
+                                            <label class="label label-danger">Canceled</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-warning">Pending</label>
+                                        }
+                                    }
+
+                                </td>
+                                <td>
+
+                                    @{if (item.Data.LeaveStatus == 3)
+                                        {
+                                            <label class="label label-danger">Rejected</label>
+                                        }
+                                        else if (item.Data.LeaveStatus == 2)
+                                        {
+                                            <label class="label label-success">Approved</label>
+                                        }
+                                        else if (item.Data.LeaveStatus == 4)
+                                        {
+                                            <label class="label label-danger">Canceled</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-warning">Pending</label>
+                                        }
+                                    }
+
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Data.LeaveStartDate)*@
+                                    @{var startdate = !String.IsNullOrEmpty(item.Data.LeaveStartDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.Data.LeaveStartDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @startdate (@(Convert.ToString(item.Data.LeaveStartDate) == "" ? "" : Convert.ToDateTime(item.Data.LeaveStartDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Data.LeaveEndDate)*@
+                                    @{var enddate = !String.IsNullOrEmpty(item.Data.LeaveEndDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.Data.LeaveEndDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @enddate (@(Convert.ToString(item.Data.LeaveEndDate) == "" ? "" : Convert.ToDateTime(item.Data.LeaveEndDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Data.LeaveDays)</td>
+                                <td>
+                                    @Html.ActionLink("Details", "LeaveDetails", new { id = item.Data.LeaveId })
+                                </td>
+                            </tr>
+                                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".custom-select").customselect();
+            });
+    </script>
+}
+@{
+    if (Session["error"] != null)
+    {
+        Session.Remove("error");
+    }
+}

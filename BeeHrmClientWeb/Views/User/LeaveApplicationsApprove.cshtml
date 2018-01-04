@@ -1,0 +1,153 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.ViewModel.LeaveApplicationViewModel>
+@using BeeHRM.ApplicationService.ViewModel
+@{
+    ViewBag.Title = "Leave Applications Approve List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<YearViewModel> Years = (IEnumerable<YearViewModel>)ViewBag.Years;
+    int? year = DateTime.Now.Year;
+    int? month = DateTime.Now.Month;
+    if (ViewBag.YVM != null)
+    {
+        YearViewModel ym = (YearViewModel)ViewBag.YVM;
+        year = ym.YearName;
+        month = ym.MonthId;
+    }
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Approve Leave Application list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#tblLeaveYear').DataTable();
+        $(".monthSelector").val(@month);
+    </script>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <form action="/user/leaveapplications/approve" method="post">
+            <div class="row">
+                <div class="col-md-2">
+                    <select class="form-control" name="YearName">
+                        <option value="">All</option>
+                        @foreach (var item in Years)
+                        {
+                            <option @(year == item.YearName ? "selected" : "") value="@item.YearName">@item.YearName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control monthSelector" name="MonthId">
+                        <option value="">All</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" value="SEARCH" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="tblLeaveYear">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Applied By</th>
+                            <th>Subject</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Applied On</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @{
+                                        if (item.LeaveStatus == 1)
+                                        {
+                                            <span class="label label-warning">Pending</span>
+                                        }
+                                        else if (item.LeaveStatus == 2)
+                                        {
+                                            <span class="label label-success">Approved</span>
+                                        }
+                                        else if (item.LeaveStatus == 3)
+                                        {
+                                            <span class="label label-danger">Rejected</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Cancelled</span>
+                                        }
+                                    }
+                                </td>
+                                <td><strong><a href="/employee/@item.LeaveEmpCode">@item.AppliedBy</a></strong></td>
+                                <td>@item.LeaveSubject</td>
+                                <td>@item.LeaveTypeName</td>
+                                <td>@item.LeaveStartDate.ToString("dd MMM, yyyy")</td>
+                                <td>@item.LeaveEndDate.ToString("dd MMM, yyyy")</td>
+                                <td>@item.LeaveAppliedDate.ToString("dd MMM, yyyy")</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/user/leaveapplication/approve/@item.LeaveId" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

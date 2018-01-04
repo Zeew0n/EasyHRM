@@ -1,0 +1,557 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeDetailsViewModel
+@{
+    ViewBag.Title = "EmployeeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <style type="text/css">
+    .quick-link a.list-group-item {
+        font-weight: 600;
+    }
+
+    .quick-link .nav {
+        border: none;
+        font-size: 19px;
+        color: #FBC702;
+        font-weight: 600;
+        padding: 7px 10px;
+    }
+
+    #list-border-remove .badge {
+        color: black;
+        background-color: transparent;
+    }
+
+    #list-border-remove .list-group-item {
+        border: none;
+    }
+
+    .ribbon span {
+        border: 1px solid #faa;
+        color: #fff;
+        display: block;
+        font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        margin: 1px 0;
+        padding: 10px 41px;
+        text-align: center;
+        text-decoration: none;
+        text-shadow: 0 0 5px #444;
+    }
+
+    .nomarginbtm {
+        margin-bottom: 0 !important;
+    }
+
+    .ribbon-wrapper {
+        width: 350px;
+        height: 150px;
+        overflow: hidden;
+        position: absolute;
+        top: -18px;
+        left: -13px;
+    }
+
+    .ribbon-green {
+        font: bold 15px Sans-Serif;
+        color: #333;
+        border-radius: 40px 40px 1px 1px;
+        text-align: center;
+        text-shadow: rgba(255,255,255,0.5) 0px 1px 0px;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        position: relative;
+        padding: 7px 0;
+        left: -26px;
+        top: 49px;
+        width: 172px;
+        background-color: #BFDC7A;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#BFDC7A), to(#8EBF45));
+        background-image: -webkit-linear-gradient(top, #BFDC7A, #8EBF45);
+        background-image: -moz-linear-gradient(top, #BFDC7A, #8EBF45);
+        background-image: -ms-linear-gradient(top, #BFDC7A, #8EBF45);
+        background-image: -o-linear-gradient(top, #BFDC7A, #8EBF45);
+        color: #6a6340;
+        -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+    }
+
+    .ribbon-red {
+        font: bold 15px Sans-Serif;
+        color: #333;
+        border-radius: 40px 40px 1px 1px;
+        text-align: center;
+        text-shadow: rgba(166, 134, 134, 0.5) 0px 1px 0px;
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        position: relative;
+        padding: 7px 0;
+        left: -26px;
+        top: 49px;
+        width: 172px;
+        background-color: #a00 !important;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(#C22323), to(#CA4E4E));
+        background-image: -webkit-linear-gradient(top, #C22323, #CA4E4E);
+        background-image: -moz-linear-gradient(top, #C22323, #CA4E4E);
+        background-image: -ms-linear-gradient(top, #C22323, #CA4E4E);
+        background-image: -o-linear-gradient(top, #C22323, #CA4E4E);
+        color: #F4F4F4;
+        -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+    }
+
+    .ribbon-green:before, .ribbon-green:after {
+        content: "";
+        border-top: 3px solid #6e8900;
+        border-left: 3px solid transparent;
+        border-right: 3px solid transparent;
+        position: absolute;
+        bottom: -3px;
+    }
+
+    .ribbon-red:before, .ribbon-red:after {
+        content: "";
+        border-top: 3px solid #a00;
+        border-left: 3px solid transparent;
+        border-right: 3px solid transparent;
+        position: absolute;
+        bottom: -3px;
+    }
+
+    .ribbon-green:before {
+        left: 0;
+    }
+
+    .ribbon-green:after {
+        right: 0;
+    }
+
+    .ribbon-red:before {
+        left: 0;
+    }
+
+    .ribbon-red:after {
+        right: 0;
+    }
+</style>
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Details of Employee - @Model.Name
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-5 col-lg-3">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="avatar">
+                    <div class="text-center">
+                        <a href="#">
+                            @{
+                                if (Model.PhotoName != null)
+                                {
+                                    <img src="~/img/emp_photos/@Model.PhotoName"
+                                         alt="Profile photo of @Model.Name" class="img-responsive img-circle">
+                                }
+                                else
+                                {
+                                    <img src="http://hr.youngminds.com.np/uploads/employees/profile/e86dd2e73f4dbd33fc42e7303a18a431.jpg"
+                                         alt="Prakash Bhandari " class="img-responsive img-circle">
+                                }
+                            }
+                        </a>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="nomarginbtm">[ @Model.Code ] @Model.Name &nbsp;</h3>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group" id="list-border-remove">
+                <li class="list-group-item">
+                    <i class="fa fa-envelope-o"></i>
+                    <span><a href="#">@Model.Email</a></span>
+                </li>
+                <li class="list-group-item">
+                    <span class="">
+                        <i class="fa fa-fw fa-calendar-o"></i>
+                        @(!String.IsNullOrEmpty(Model.JoinDate) ? Convert.ToDateTime(Model.JoinDate).ToString("d MMM, yyyy") : "No Join Date") 
+                    </span> 
+                </li>
+            </ul>
+            <div class="list-group hidden-sm quick-link">
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">A</p>
+                    </div>
+                    <div class="col-md-10">
+                        @*<a href="#" class="list-group-item">Appraisal</a>*@
+                        @*<a href="#" class="list-group-item">
+                            Assigned Assets
+                        </a>*@
+                        <a class="list-group-item" href="/user/attendance"> Attendance </a>
+                        <a href="/user/applyattendance" class="list-group-item">Attendance Requests</a>
+                        <a href="/user/attendancerequest/recommendlist" class="list-group-item">Attendance Recommend</a>
+                        <a href="/user/attendancerequest/approvelist" class="list-group-item">Attendance Approve</a>
+                    </div>
+                </div>
+                @*<div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">E</p>
+                    </div>
+                    <div class="col-md-10">
+                        <a href="/education/@Model.Code"
+                           class="list-group-item">Education</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">V</p>
+                    </div>
+                    <div class="col-md-10">
+                        <a href="/visit/@Model.Code"
+                           class="list-group-item">Visits</a>
+                    </div>
+                </div>*@
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">L</p>
+                    </div>
+                    <div class="col-md-10">
+                        <a href="/user/leaveapplications" class="list-group-item">My Leave Applications</a>
+                        <a href="/user/leaveapplications/recommend" class="list-group-item">Leave Recommend</a>
+                        <a href="/user/leaveapplications/approve" class="list-group-item">Leave Approve</a>
+                    </div>
+                </div>
+                @*<div class="row">
+        <div class="col-md-2">
+            <p class="nav">C</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#" class="list-group-item">
+                Contact
+                Information
+            </a>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">D</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#"
+                class="list-group-item">Documents</a>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">E</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#"
+                class="list-group-item">Education</a>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">F</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#" class="list-group-item">
+                Finance
+                Information
+            </a>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">H</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#"
+                class="list-group-item">Hiring History</a>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">L</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#"
+                class="list-group-item">Leave Applications</a>
+            <a href="#"
+                class="list-group-item">Leave Encashment</a>
+            <a href="#"
+                class="list-group-item">Leave Rules</a>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">O</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#"
+                class="list-group-item">Official Visit History</a>
+            <a href="#"
+                class="list-group-item">Overtime History</a>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">P</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#"
+                class="list-group-item">Penalty History</a>
+            <a href="#"
+                class="list-group-item">Poll History</a>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">R</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#"
+                class="list-group-item">Reporting Line</a>
+
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">S</p>
+
+        </div>
+        <div class="col-md-10">
+            <a href="#" class="list-group-item">Skills</a>
+        </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-2">
+            <p class="nav">W</p>
+        </div>
+        <div class="col-md-10">
+            <a href="#"
+                class="list-group-item">Web Attendance</a>
+        </div>
+    </div>
+    <div class="clearfix"></div>*@
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Basic Information</strong>
+            </div>
+            <div class="panel-body basic">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="col-md-4">Username</span>
+                        @Model.Username
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Extension/Off. Contact</span>
+                        @Model.Contact
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Branch</span>
+                        @Model.OfficeName <span style="color:white">test</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Department</span>
+                        @Model.Department
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Group</span>
+                        @Model.Group <span style="color:white">test</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Rank</span>
+                        @Model.Rank
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Shift</span>
+                        @Model.Shift
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Designation</span>
+                        @Model.Designation
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Level</span>
+                        @Model.Level
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Service Status</span>
+                        @Model.ServiceStatus
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4"> Contract Expiry Date </span>
+                        @{
+                            if (Model.ContractExpiryDate == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                @Model.ContractExpiryDate
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Marital status</span>
+                        @Model.MaritalStatus
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Date of Birth</span>
+                        @{
+                            if (Model.DateOfBirth == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                               @Convert.ToDateTime(Model.DateOfBirth).ToString("d MMM, yyyy")
+                            }
+                        }
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Marriage Anniversary</span>
+                        @{
+                            if (Model.MarriageAnniversary == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                @Convert.ToDateTime(Model.MarriageAnniversary).ToString("d MMM, yyyy")
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Blood Group</span>
+                        @Model.BloodGroup
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Pan no</span>
+                        @Model.PAN
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">PF Number</span>
+                        @Model.PFNUmber
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">CIT Number</span>
+                        @Model.CITNumber
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Incapacitated</span>
+                        @{
+                            if (Model.Incapacitated == "True")
+                            {
+                                <label class="label label-success">
+                                    <i class="fa fa-minus-circle"></i>
+                                    True
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    <i class="fa fa-minus-circle"></i> 
+                                    False
+                                </label>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Ignore Attendance For Payroll</span>
+                        @{
+                            if (Model.AttendanceIgnore == "True")
+                            {
+                                <label class="label label-success">
+                                    <i class="fa fa-minus-circle"></i>
+                                    True
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    <i class="fa fa-minus-circle"></i>
+                                    False
+                                </label>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Remote Area</span>
+                        @Model.RemoteArea
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+

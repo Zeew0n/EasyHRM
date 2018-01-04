@@ -1,0 +1,188 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeSearchByRoles
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <link href="~/Scripts/multiselect/css/style.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+
+
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                <a href="/admin/employeebyroles"> <i class="fa fa-bars"></i> Employee List By Roles  </a>
+                            </span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                   Update Employees Roles
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+<div class="panel-body box box-top-border">
+    <form accept-charset="UTF-8" action="/admin/updateepmloyeesroles" method="POST">
+
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label> Select Roles (*)</label> 
+                
+                        @Html.DropDownListFor(m => m.RoleId, Model.RolesSelectList, new { @class = "form-control" })
+                    </div>
+
+                </div> 
+            <div class="clearfix"></div>     
+         <br clear="all" />
+            <div class="form-group " id="branch">
+                <label for="branch_id[]">Choose Employee (*)</label>
+
+                <div class="row">
+                    <div class="col-sm-5">
+                        @*@Html.DropDownListFor(m => m.HolidayOfficeId, Model.BranchSelectList, new { @class = "form-control" })*@
+                        <select id="search" class="form-control" size="8" multiple="multiple">
+
+                            @{
+                                int i = 0;
+                                foreach (var Str in Model.EmployeeSelectList)
+                                {
+                                    i++;
+                                    <option value="@Str.Value" data-position="@i">@Str.Text</option>
+                                }
+                            }
+
+                        </select>
+                    </div>
+
+                    <div class="col-sm-2">
+                        <br /> <br /> <br />
+                        <button type="button" id="search_rightAll" class="btn btn-block"><i class="glyphicon glyphicon-forward"></i></button>
+                        <button type="button" id="search_rightSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-right"></i></button>
+                        <button type="button" id="search_leftSelected" class="btn btn-block"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                        <button type="button" id="search_leftAll" class="btn btn-block"><i class="glyphicon glyphicon-backward"></i></button>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <select name="employees[]" id="search_to" class="form-control" size="8" multiple="multiple"></select>
+                        <snap class="text-danger"> @Html.ValidationMessage("SelectList", "", new { @class = "text-danger" })</snap>
+                    </div>
+                </div>
+            </div>     
+        </div>
+        <div class="box-footer">
+            <button class="btn btn-success" value="1" name="returnBack" type="submit">Update Roles</button>
+            
+        </div>
+    </form>
+</div>
+
+
+
+@section scripts{
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/multiselect/js/multiselect.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('.date').datetimepicker({
+                format: 'MM/DD/YYYY',
+                ignoreReadonly: true,
+
+            });
+            $('#multiselect').multiselect();
+
+            $('#search').multiselect({
+                search: {
+                    left: '<input type="text" name="q" class="form-control" placeholder="Search..." /> <br />',
+                    right: ' <input type="text" name="q" class="form-control" placeholder="Search..." /> <br />',
+                }
+            });
+            $('.multiselect').multiselect();
+            $('.js-multiselect').multiselect({
+                right: '#js_multiselect_to_1',
+                rightAll: '#js_right_All_1',
+                rightSelected: '#js_right_Selected_1',
+                leftSelected: '#js_left_Selected_1',
+                leftAll: '#js_left_All_1'
+            });
+            $("input[name='HolidayOfficeId']").click(function () {
+                if ($("input[name='HolidayOfficeId']:checked").val() === "0") {
+
+                    $('#branch').css({
+                        'opacity':0.3,
+                        'pointer-events': 'none',
+                        'cursor': 'none'
+                    });
+                }
+                if ($("input[name='HolidayOfficeId']:checked").val() === "1") {
+                    $('#branch').css({
+                        'opacity': 1,
+                        'pointer-events': 'auto',
+                        'cursor': 'pointer'
+                    });
+                }
+            });
+        });
+    </script>
+}

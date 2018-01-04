@@ -1,0 +1,260 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.EmpEducationDTO>
+
+@{
+    ViewBag.Title = "EducationList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <style type="text/css">
+        .quick-link a.list-group-item {
+            font-weight: 600;
+        }
+
+        .quick-link .nav {
+            border: none;
+            font-size: 19px;
+            color: #FBC702;
+            font-weight: 600;
+            padding: 7px 10px;
+        }
+
+        #list-border-remove .badge {
+            color: black;
+            background-color: transparent;
+        }
+
+        #list-border-remove .list-group-item {
+            border: none;
+        }
+
+        .ribbon span {
+            border: 1px solid #faa;
+            color: #fff;
+            display: block;
+            font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 1px 0;
+            padding: 10px 41px;
+            text-align: center;
+            text-decoration: none;
+            text-shadow: 0 0 5px #444;
+        }
+
+        .nomarginbtm {
+            margin-bottom: 0 !important;
+        }
+
+        .ribbon-wrapper {
+            width: 350px;
+            height: 150px;
+            overflow: hidden;
+            position: absolute;
+            top: -18px;
+            left: -13px;
+        }
+
+        .ribbon-green {
+            font: bold 15px Sans-Serif;
+            color: #333;
+            border-radius: 40px 40px 1px 1px;
+            text-align: center;
+            text-shadow: rgba(255,255,255,0.5) 0px 1px 0px;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            position: relative;
+            padding: 7px 0;
+            left: -26px;
+            top: 49px;
+            width: 172px;
+            background-color: #BFDC7A;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#BFDC7A), to(#8EBF45));
+            background-image: -webkit-linear-gradient(top, #BFDC7A, #8EBF45);
+            background-image: -moz-linear-gradient(top, #BFDC7A, #8EBF45);
+            background-image: -ms-linear-gradient(top, #BFDC7A, #8EBF45);
+            background-image: -o-linear-gradient(top, #BFDC7A, #8EBF45);
+            color: #6a6340;
+            -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+            -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+            box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        }
+
+        .ribbon-red {
+            font: bold 15px Sans-Serif;
+            color: #333;
+            border-radius: 40px 40px 1px 1px;
+            text-align: center;
+            text-shadow: rgba(166, 134, 134, 0.5) 0px 1px 0px;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            position: relative;
+            padding: 7px 0;
+            left: -26px;
+            top: 49px;
+            width: 172px;
+            background-color: #a00 !important;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#C22323), to(#CA4E4E));
+            background-image: -webkit-linear-gradient(top, #C22323, #CA4E4E);
+            background-image: -moz-linear-gradient(top, #C22323, #CA4E4E);
+            background-image: -ms-linear-gradient(top, #C22323, #CA4E4E);
+            background-image: -o-linear-gradient(top, #C22323, #CA4E4E);
+            color: #F4F4F4;
+            -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+            -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+            box-shadow: 0px 0px 3px rgba(0,0,0,0.3);
+        }
+
+        .ribbon-green:before, .ribbon-green:after {
+            content: "";
+            border-top: 3px solid #6e8900;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            position: absolute;
+            bottom: -3px;
+        }
+
+        .ribbon-red:before, .ribbon-red:after {
+            content: "";
+            border-top: 3px solid #a00;
+            border-left: 3px solid transparent;
+            border-right: 3px solid transparent;
+            position: absolute;
+            bottom: -3px;
+        }
+
+        .ribbon-green:before {
+            left: 0;
+        }
+
+        .ribbon-green:after {
+            right: 0;
+        }
+
+        .ribbon-red:before {
+            left: 0;
+        }
+
+        .ribbon-red:after {
+            right: 0;
+        }
+    </style>
+
+}
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('.delete').on('click', function () {
+            var res = confirm("Are you sure you want to delete?");
+            if (!res)
+            {
+                return false;
+            }
+        });
+    </script>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href="~/UserEmployee/AddEducation"><i class="fa fa-plus-circle"></i> Add</a></span><a href=" "> </a> </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Ranks
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+@Html.Partial("_partialpageUserProfileDetail")
+<div class="col-md-8 col-lg-9">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+        </div>
+        <div class="panel-body basic">
+            
+            <h3>Education</h3>
+            <table class="table">
+                <tr>
+                    <th>Degree <br>School/University</th>
+                    <th>Education Level</th>
+                    @*<th>Status</th>*@
+                    <th>Obtained Mark</th>
+                    @*<th>Options</th>*@
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DegreeName)
+                            <br />
+                            <span style="font-size: 12px;color:#756464;">
+                                @Html.DisplayFor(modelItem => item.UniversityName)
+                                <i style="padding:0 5px;" class="fa fa-calendar-o"></i>
+                                @*@Html.DisplayFor(modelItem => item.PassedDate)*@
+                                @{var date = !String.IsNullOrEmpty(item.PassedDate.ToString()) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(item.PassedDate)).ToString().Replace('/', '-') : null;
+                                }
+                                @if (@date != null)
+                                {
+                                    <t>@date (@(Convert.ToString(item.PassedDate) == "" ? "" : Convert.ToDateTime(item.PassedDate).ToString("yyyy-MMM-dd")))</t>
+                                }
+                                else {
+                                    <t></t>
+                                }
+                            </span>
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.EducationLevelName)</td>
+                        @*<td>@if(item.Stat)</td>*@
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ObtainedMark)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "/EditEducation", new { id = item.EduId })|
+                            @Html.ActionLink("Details", "/EducationDetail", new { id = item.EduId })
+                            @*@Html.ActionLink("Delete", item.EmpCode.ToString() + "/Delete", new { id = item.EduId }, new { @class = "delete" })*@
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

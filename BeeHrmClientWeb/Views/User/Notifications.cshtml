@@ -1,0 +1,119 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.NotificationsDTOs>
+
+@{
+    ViewBag.Title = "Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Notifications
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+<div  class="panel-body box box-top-border">
+    <ul>
+        @foreach (var row in ViewBag.res)
+{
+
+
+    <li class="list-group-item-info list-group ">
+        <a data-notification-id="376" class="notification-link" href="/notification/readnotification/@row.NotificationID">
+            
+            <div style="margin: 20px;" class="pull-right">
+                @{
+
+    if (!String.IsNullOrEmpty(row.ReadDate))
+    {
+        <span class="label label-success"> viewed</span>
+    }
+    else
+    {
+        <span class="label label-info"> Show</span>
+    }
+                }
+
+            </div>
+            <div style="margin-right: 10px" class="pull-left">
+                @{
+    if (!String.IsNullOrEmpty(row.EmpPhoto))
+    {
+        <img src="~/img/emp_photos/@row.EmpPhoto" alt="Profile of @row.EmpName" class="img img-responsive img-circle" style="height: 60px">
+    }
+    else
+    {
+        <img class="img img-responsive img-circle" style="height: 60px" src="~/img/emp_photos/profile.jpg" alt="Profile of @row.EmpName">
+    }
+}
+
+
+                
+            </div>
+            <h4>
+                @row.Subject
+                <small style="margin-left:15px">
+                    <i class="fa fa-clock-o">
+                        @{
+
+                            DateTime date1 = Convert.ToDateTime(row.Date);
+                            DateTime datenow = DateTime.Now.ToLocalTime();
+                            TimeSpan date2 = datenow - date1;
+
+                            int sec = Convert.ToInt32(date2.TotalMinutes);
+                            int day = 0;
+                            int hrs = 0;
+                            int min = 0;
+                            if ((sec / 60) > 24)
+                            {
+                                day = (sec / 60) / 24;
+                                hrs = (sec / 60) % 24;
+                                min = (sec % 60) % 24;
+                                ViewBag.time = day + "day  " + hrs + "hrs";
+                            }
+                            else
+                                if (sec > 60)
+                            {
+                                hrs = sec / 60;
+                                min = sec % 60;
+                                ViewBag.time = hrs + "hrs  " + min + "min";
+                            }
+                            else
+                            {
+                                min = sec;
+                                ViewBag.time = min + "min";
+                            }
+
+                        }
+                        @ViewBag.time ago
+                    </i>
+                </small>
+
+            </h4>
+            <p>@row.Message</p>
+        </a>
+    </li>
+
+            
+        }
+    </ul>
+</div>

@@ -1,0 +1,251 @@
+﻿@model BeeHRM.ApplicationService.DTOs.EmpTrainingDTO
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/Training/Index/@ViewBag.EmployeeDetail.Code" class="btn btn-success"><i class="fa fa-bars"></i> Back</a></span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Edit Training
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@if (TempData["Danger"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @TempData["Danger"]
+    </div>
+}
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+        </div>
+        <div class="panel-body basic">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4>Employee Training</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.EmpCode, new { htmlAttributes = new { @class = "form-control" } })
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingTitle, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TrainingTitle, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.TrainingTitle, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingFocus, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TrainingFocus, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.TrainingFocus, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LetterDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.LetterDateNP, new { htmlAttributes = new { @class = "form-control date" } })
+                            @Html.ValidationMessageFor(model => model.LetterDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TrainingStartDateNP, new { htmlAttributes = new { @class = "form-control date" } })
+                            @Html.ValidationMessageFor(model => model.TrainingStartDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TrainingEndDateNP, new { htmlAttributes = new { @class = "form-control date" } })
+                            @Html.ValidationMessageFor(model => model.TrainingEndDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingVisitStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TrainingVisitStartDateNP, new { htmlAttributes = new { @class = "form-control date" } })
+                            @Html.ValidationMessageFor(model => model.TrainingVisitStartDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingVisitEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TrainingVisitEndDateNP, new { htmlAttributes = new { @class = "form-control date" } })
+                            @Html.ValidationMessageFor(model => model.TrainingVisitEndDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingOrganization, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TrainingOrganization, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.TrainingOrganization, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NationalInternational, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.NationalInternational, Model.NationalInternationalList, "please select", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.NationalInternational, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingCountry, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.TrainingCountry, Model.CountryList, "please select", new { @class = "form-control custom-select" })
+                            @Html.ValidationMessageFor(model => model.TrainingCountry, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TrainingVenue, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TrainingVenue, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.TrainingVenue, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Office, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.Office, Model.OfficeList, "please select", new { @class = "form-control custom-select" })
+                            @Html.ValidationMessageFor(model => model.Office, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Designation, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.Designation, Model.DesignationList, "please select", new { @class = "form-control custom-select" })
+                            @Html.ValidationMessageFor(model => model.Designation, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Rank, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.Rank, Model.RankList, "please select", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Rank, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Sponsorship, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.Sponsorship, Model.SponsorshipList, "please select", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Sponsorship, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group" id="Toggle" style="display:none;">
+                        @Html.LabelFor(model => model.SponsorerOrganizationName, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.SponsorerOrganizationName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Sponsorship, "  Please Specify your Sponsor Organization Name", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Approver, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.Approver, Model.AssignedByList, "please select", new { @class = "form-control custom-select" })
+                            @Html.ValidationMessageFor(model => model.Approver, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Update" class="btn btn-default" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var Data = $('#Sponsorship').val();
+            if (Data == "O") {
+                $("#Toggle").show();
+            }
+            else {
+                $("#Toggle").hide();
+            }
+
+        });
+
+        $("#Sponsorship").change(function () {
+            var Data = $('#Sponsorship').val();
+            if (Data == "O") {
+                $("#Toggle").show();
+            }
+            else {
+                $("#Toggle").hide();
+            }
+
+        });
+    </script>
+}

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollAllowanceMasterDTO>
+
+@{
+    ViewBag.Title = "RetirementFunds";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Retirement Fund
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Error"]
+    </div>
+}
+<div class="box box-top-border">
+    <table class="table">
+        <tr>
+            <th>
+                Allowance Id
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AllowanceMasterId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AllowanceName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    @if (!item.ApplyToAllEmployee)
+                    { }
+                    @Html.ActionLink("Assign Employees", "AssignEmployees", new { id = item.AllowanceMasterId })
+                    |
+                    @Html.ActionLink("Edit", "RetirementFundsEdit", new { id = item.AllowanceMasterId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

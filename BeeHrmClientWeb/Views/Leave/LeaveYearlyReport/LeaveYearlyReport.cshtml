@@ -1,0 +1,177 @@
+﻿@model BeeHRM.ApplicationService.DTOs.LeaveYearlyReportWithFilter
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@if (TempData["Danger"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Danger"]
+    </div>
+}
+<style>
+    .Search{
+        margin-top: 23px;
+    }
+</style>
+<div class="box box-top-border">
+    <div class="box-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.EmployeeCode)
+                    @Html.DropDownListFor(model => model.EmployeeCode, Model.EmployeeSelectList,"Please select", new { @class = "form-control custom-select" })
+                    @Html.ValidationMessageFor(model => model.EmployeeCode, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.LeaveYearId)
+                    @Html.DropDownListFor(model => model.LeaveYearId, Model.LeaveYears, "Please select" , new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LeaveYearId, "", new { @class = "text-danger" })
+                </div>
+                <div class="col-md-4">
+                    <input type="submit" value="Search" class="btn btn-default Search" />
+                </div>
+            </div>
+        }
+        <br clear="all" />
+        <br clear="all" />
+        <div class="row">
+            <div id="error"></div>
+            <div class="col-md-12">
+                <table class="table table-hover table-bordered">
+                    <tr>
+                        <th></th>
+                        <th colspan="4" class="text-center">Received leave</th>
+                        <th colspan="4" class="text-center">Leave Taken/Encashed</th>
+                        <th colspan="4" class="text-center">Remaining Leave</th>
+                    </tr>
+                    <tr>
+                        <th>Month</th>
+                        <th>Home</th>
+                        <th>Sick</th>
+                        <th>Casual</th>
+                        <th>Exchange</th>
+                        <th>Home</th>
+                        <th>Sick</th>
+                        <th>Casual</th>
+                        <th>Exchange</th>
+                        <th>Home</th>
+                        <th>Sick</th>
+                        <th>Casual</th>
+                        <th>Exchange</th>
+                    </tr>
+                    @if (Model.LeaveYearlyReport.Count != 0)
+                    {
+                        <tr>
+                           <td colspan="9" class="text-center">Previous year leave balance</td>
+                            <td>@Model.LeaveYearlyReport[0].TakenHomeLeave</td>
+                            <td>@Model.LeaveYearlyReport[0].TakenSickLeave</td>
+                            <td>@Model.LeaveYearlyReport[0].TakenCasualLeave</td>
+                            <td>@Model.LeaveYearlyReport[0].TakenExchangeLeave</td>
+                        </tr>
+                    }
+                    @{
+
+                        decimal LeftHomeLeave = 0;
+                        decimal LeftSickLeave = 0;
+                        decimal LeftCasualLeave = 0;
+                        decimal LeftExchangeLeave = 0;
+
+                    }
+                    @for (int i = 1; i < Model.LeaveYearlyReport.Count; i++)
+                    {
+                        if (Model.LeaveYearlyReport[i].LeftHomeLeave > 0)
+                        {
+                            LeftHomeLeave = Model.LeaveYearlyReport[i].LeftHomeLeave;
+                        }
+                        if (Model.LeaveYearlyReport[i].LeftSickLeave > 0)
+                        {
+                            LeftSickLeave = Model.LeaveYearlyReport[i].LeftSickLeave;
+                        }
+                        if (Model.LeaveYearlyReport[i].LeftCasualLeave > 0)
+                        {
+                            LeftCasualLeave = Model.LeaveYearlyReport[i].LeftCasualLeave;
+                        }
+                        if (Model.LeaveYearlyReport[i].LeftExchangeLeave > 0)
+                        {
+                            LeftExchangeLeave = Model.LeaveYearlyReport[i].LeftExchangeLeave;
+                        }
+
+                       
+
+                        <tr>
+                            <td>@Model.LeaveYearlyReport[i].MonthName </td>
+                           <td>@Model.LeaveYearlyReport[i].GotHomeLeave</td>
+                            <td>@Model.LeaveYearlyReport[i].GotSickLeave</td>
+                            <td>@Model.LeaveYearlyReport[i].GotCasualLeave</td>
+                            <td>@Model.LeaveYearlyReport[i].GotExchangeLeave</td>
+
+    <td>@Model.LeaveYearlyReport[i].TakenHomeLeave</td>
+                           <td>@Model.LeaveYearlyReport[i].TakenSickLeave</td>
+    <td>@Model.LeaveYearlyReport[i].TakenCasualLeave</td>
+    <td>@Model.LeaveYearlyReport[i].TakenExchangeLeave</td>
+                            
+    <td>@LeftHomeLeave</td>
+    <td>@LeftSickLeave</td>
+    <td>@LeftCasualLeave</td>
+    <td>@LeftExchangeLeave</td>
+                                                    
+    @*<td>@Model.LeaveYearlyReport[i].LeftHomeLeave</td>
+    <td>@Model.LeaveYearlyReport[i].LeftSickLeave</td>
+    <td>@Model.LeaveYearlyReport[i].LeftCasualLeave</td>
+    <td>@Model.LeaveYearlyReport[i].LeftExchangeLeave</td>*@
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="col-md-6">
+                @if(Model.PayrollLeaveDeduction.Count != 0)
+                {
+                    <table class="table table-hover table-bordered">
+                        <tr>
+                            <th>Leave name</th>
+                            <th>Date</th>
+                            <th>Deduction type</th>
+                            <th>Deduction days</th>
+                        </tr>
+                        @foreach(var Item in Model.PayrollLeaveDeduction)
+                        {
+                            <tr>
+                                <td>@Item.LeaveName</td>
+                                <th>@Item.LeaveDate.ToShortDateString()</th>
+                                <td>@Item.DeductionType</td>
+                                <td>@Item.LeaveDays</td>
+                            </tr>
+                        }
+                    </table>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

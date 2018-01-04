@@ -1,0 +1,683 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BEA093E1-5160-4AF6-9BE4-E4CFF9998D8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BeeHRM.Repository</RootNamespace>
+    <AssemblyName>BeeHRM.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.87.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.87.1\lib\net40\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Data.Entity.Design.Extensibility, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity.Design" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Selectors" />
+    <Reference Include="System.identitymodel.services" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Entity.Design" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppConfig.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AppLicense.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ApprisalRegion.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Approver.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetRole.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUser.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserClaim.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AspNetUserLogin.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttDaily.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttEmployeeLog.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttendaceDaily.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttendaceDevice.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttendaceLog.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttendanceRequest.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Bank.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BusinessGroup.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Calender.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CalenderMonth.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Country.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="C__MigrationHistory.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Darbandi.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dbBeeHRMEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dbBeeHRMEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dbBeeHRMEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="dbBeeHRMEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dbBeeHRMEntities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Department.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DeptHead.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Designation.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="District.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentCategory.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EducationLevel.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Employee.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeAddress.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeBank.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeDetail.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeDocument.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeEducation.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeExperience.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeFamily.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeGradeUpdate.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeJobHistory.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeePrize.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeSkill.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeVisit.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmpTraining.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="emp_EmpOfficeId_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Enumerations.cs" />
+    <Compile Include="Ethnicity.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fiscal.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="fn_MyRoleBusinessGroups_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Grade.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Group.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Holiday.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="HolidayAssignedOffice.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Implementations\PredicateBuilder.cs" />
+    <Compile Include="Implementations\QueryHelper.cs" />
+    <Compile Include="Implementations\RepositoryBase.cs" />
+    <Compile Include="InsuranceCompany.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Interfaces\IRespository.cs" />
+    <Compile Include="Interfaces\IUnitOfWork.cs" />
+    <Compile Include="JobType.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveApplication.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveAssigned.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveEarned.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveMonthlyAssgnement.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveMonthlyProcess.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveRule.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveRuleDetail.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveType.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveYear.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveYearlyProcess.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Level.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Location.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LocationDistrict.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Message.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Module.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Notification.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Office.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OfficeHead.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OfficeType.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollAllowanceDetail.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollAllowanceMaster.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollArrear.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollAttendanceMonthly.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollConfig.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollEmployeeSetup.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollEmployeeTaxDetail.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollInsurancePremium.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollIntrestGain.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="payrollLeaveDay.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollLeaveDeduction.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollMonthDescription.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollOvertime.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollRemoteAllowance.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollRemoteSetup.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollSalaryDetailSheet.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollSalaryMasterSheet.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollSalaryTable.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollTaxDetail.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayrollTaxSetup.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PromotionType.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rank.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Religion.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RemoteArea.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportingGroup.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReportingGroupMember.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Role.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RolesAccess.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RolesBusinessGroupAccess.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Section.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceEventGroup.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ServiceEventSubGroup.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Shift.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShiftDay.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Skill.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SpGetDevice_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_ApproverByOffice_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceApprover_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceDailyByDateRange_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceDailyById_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceDaily_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceEntireYearReportSummary_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceEntireYearReport_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceRecommender_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceRequestListByParms_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceRequestList_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceTotalDaysReportsSummary_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_AttendanceTotalDaysReports_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_ControllerList_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_EmpAllCodes_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_EmployeeCurrentGradeUpdate_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_EmployeeDetailsById_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_EmployeeDetailsWithJobHistories_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_EmployeeDetails_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_EmployeeTransferUpdate_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_FiscalAdd_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_FiscalEdit_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GeneratePayrollNewVersion_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GetActiveYear_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GetChildMenuList_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GetDistrictsList_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_getEmployeelistByOfficeId_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GetPayrollSalaryTable_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GetStartAndEndDate_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GetUnassignedLeave_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_helpdiagrams_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_HolidayAssignedOficeList_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_HolidayList_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationApproveDetailById_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationDetailadmin_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationDetailById_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationDetail_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationEmployeeBalance_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationInsert_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationLeaveRemTable_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationsAdmin_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationsApprove_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationsRecommend_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationsUser_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApplicationValidLeaveType_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveApprover_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveRecommender_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveYearAdd_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_LeaveYearEdit_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_Myrecommender_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_MyRoleBusinessGroups_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_MyRoleOfficesList_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_NotificationSingle_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_Notification_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_SearchEmployeeByRoleId_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StoredProcedureVariable\BranchEmployee.cs" />
+    <Compile Include="StoredProcedureVariable\LeaveYearlyReport.cs" />
+    <Compile Include="StoredProcedureVariable\PayrollLeaveBalance.cs" />
+    <Compile Include="sysdiagram.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UnitOfWork\UnitOfWork.cs" />
+    <Compile Include="UserLoginLog.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="USP_GETEMPLOYEEDETAILS_Result.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vname.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_LeaveDeduction.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_LeaveTaken.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="V_LeaveTotalAssigned.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Zone.cs">
+      <DependentUpon>dbBeeHRMEntities.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="dbBeeHRMEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>dbBeeHRMEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="dbBeeHRMEntities.edmx.diagram">
+      <DependentUpon>dbBeeHRMEntities.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="dbBeeHRMEntities.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>dbBeeHRMEntities.edmx</DependentUpon>
+      <LastGenOutput>dbBeeHRMEntities.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="dbBeeHRMEntities.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>dbBeeHRMEntities.edmx</DependentUpon>
+      <LastGenOutput>dbBeeHRMEntities.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

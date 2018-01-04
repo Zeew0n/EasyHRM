@@ -1,0 +1,307 @@
+﻿@model BeeHRM.ApplicationService.Leave_Module.DTOs.LeaveApplicationDTOs
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><a href="~/LeaveUser/LeaveRecommendList" class="btn btn-success"><i class="fa fa-bar-chart"> </i>  Leave Recommend List</a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Recommend  Details
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="box box-top-border">
+    @if (Session["error"] != null)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["error"]
+        </div>
+    }
+    @if (Session["sucess"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["sucess"]
+        </div>
+    }
+    <div class="box-body">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(false)
+
+            <div class="row">
+
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <table class="table">
+                            <tr>
+                                <td colspan="2">
+                                    @if (!String.IsNullOrEmpty(Model.EmployeeDetail.EmpPhoto))
+                                    {
+                                        <img src="/img/emp_photos/900049download.jpg" alt="Profile of Amin Duwal" class="img-responsive" style="max-height:200px">
+                                        <p>[@Model.LeaveEmpCode @Model.EmployeeDetail.EmpName]</p>
+                                    }
+                                    else
+                                    {
+                                        <img src="/img/emp_photos/" alt="Profile of Amin Duwal" class="img-responsive" style="max-height:200px">
+                                        <p>[@Model.LeaveEmpCode @Model.EmployeeDetail.EmpName]</p>
+                                    }
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-9">
+                        <table class="table">
+                            <tr>
+                                <th>Name</th>
+                                <td>@Model.EmployeeDetail.EmpName</td>
+                                <th>Join Date</th>
+                                <td>
+                                    @*@Model.EmployeeDetail.EmpAppointmentDate.Value.ToString("yyyy-MMM-dd")*@
+                                    @{var appointmentdate = !String.IsNullOrEmpty(Model.EmployeeDetail.EmpAppointmentDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.EmployeeDetail.EmpAppointmentDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @appointmentdate (@(Convert.ToString(Model.EmployeeDetail.EmpAppointmentDate) == "" ? "" : Convert.ToDateTime(Model.EmployeeDetail.EmpAppointmentDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Applied Date</th>
+                                <td>
+                                    @*@Model.LeaveAppliedDate.ToString("yyyy-MMM-dd")*@
+                                    @{var applieddate = !String.IsNullOrEmpty(Model.LeaveAppliedDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.LeaveAppliedDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @applieddate (@(Convert.ToString(Model.LeaveAppliedDate) == "" ? "" : Convert.ToDateTime(Model.LeaveAppliedDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                                <th>Leave Type</th>
+                                <td>@Model.Leavetypes.LeaveTypeName</td>
+                            </tr>
+                            <tr>
+                                <th>Start Date</th>
+                                <td>
+                                    @*@Html.DisplayFor(x=>x.LeaveStartDate )*@
+                                    @{var startdate = !String.IsNullOrEmpty(Model.LeaveStartDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.LeaveStartDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @startdate (@(Convert.ToString(Model.LeaveStartDate) == "" ? "" : Convert.ToDateTime(Model.LeaveStartDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                                <th>End date</th>
+                                <td>
+                                    @*@Html.DisplayFor(x=>x.LeaveEndDate)*@
+                                    @{var enddate = !String.IsNullOrEmpty(Model.LeaveEndDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.LeaveEndDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @enddate (@(Convert.ToString(Model.LeaveEndDate) == "" ? "" : Convert.ToDateTime(Model.LeaveEndDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Subject</th>
+                                <td colspan="2">@Model.LeaveSubject</td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="4">@Model.LeaveDetails</td>
+
+                            </tr>
+                        </table>
+
+                        <h3>Recommender</h3>
+                        <table class="table table-responsive">
+                            <tr>
+                                <th>Name</th>
+                                <td>@Model.RecommenderDetails.EmpName</td>
+                                <th>Date</th>
+                                <td>
+                                    @if (Model.RecommendStatusDate != null)
+                                    {
+                                        @*@Html.DisplayFor(x => x.RecommendStatusDate)*@
+                                        <p>
+                                            @{var recomstatusdate = !String.IsNullOrEmpty(Model.RecommendStatusDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.RecommendStatusDate)).ToString().Replace('/', '-') : null;
+                                        }
+                                        @recomstatusdate (@(Convert.ToString(Model.RecommendStatusDate) == "" ? "" : Convert.ToDateTime(Model.RecommendStatusDate).ToString("yyyy-MMM-dd")))
+                                    </p>
+                                            }
+                                            else
+                                            {
+                                        <label class="label label-danger">
+                                            Not Approved
+                                        </label>
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    @if (Model.LeaveStatus == 1)
+                                    {
+                                        if (Model.RecommendStatus == 1)
+                                        {
+                                            <input type="radio" name="RecommendStatus" value="2" /> <label>Approve</label>
+                                            <input type="radio" name="RecommendStatus" value="3" /> <label>Reject</label>
+                                        }
+                                        else if (Model.RecommendStatus == 2)
+                                        {
+                                            <input type="radio" name="RecommendStatus" value="2" checked="checked" /> <label>Approve</label>
+                                            <input type="radio" name="RecommendStatus" value="3" /><label>Reject</label>
+                                        }
+                                        else
+                                        {
+                                            <input type="radio" name="RecommendStatus" value="2" /> <label>Approve</label>
+                                            <input type="radio" name="RecommendStatus" value="3" checked="checked" /><label>Reject</label>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <label class="label label-success">Approved</label>
+                                    }
+
+
+                                </td>
+                                <th>Message</th>
+                                <td>
+                                    @if (Model.LeaveStatus == 1)
+                                    {
+                                        @Html.TextAreaFor(x => x.RecommenderMessage, new { @class = "form-control" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextAreaFor(x => x.RecommenderMessage, new { @class = "form-control", @disabled = "disabled" })
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                        <h3>Approver</h3>
+                        <table class="table table-responsive">
+                            <tr>
+                                <th> Name</th>
+                                <td>@Model.ApproverDetails.EmpName</td>
+                                <th>Date</th>
+                                <td>
+                                    @if (Model.LeaveStatusDate != null)
+                                    {
+                                        @*@Html.DisplayFor(x => x.LeaveStatusDate)*@
+                                        <p>
+                                            @{var statusdate = !String.IsNullOrEmpty(Model.LeaveStatusDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.LeaveStatusDate)).ToString().Replace('/', '-') : null; }
+                                        @statusdate (@(Convert.ToString(Model.LeaveStatusDate) == "" ? "" : Convert.ToDateTime(Model.LeaveStatusDate).ToString("yyyy-MMM-dd")))
+                                    </p>
+                                    }
+
+                                    else
+                                    {
+                                                <label class="label label-danger">
+                                                    Not Approved Yet
+                                                </label>
+                                            }
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    @if (Model.LeaveStatus == 1)
+                                    {
+                                        <label class="label label-warning">Pending</label>
+                                    }
+                                    else
+                                    if (Model.LeaveStatus == 2)
+                                    {
+                                        <label class="label label-success">Approved</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="label label-danger">Rejected</label>
+                                    }
+
+                                </td>
+                                <th>Message</th>
+                                <td>
+                                    @Html.DisplayFor(x => x.ApproverMessage)
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <div>
+                            @if (Model.LeaveStatus == 1)
+                            {
+                                <input type="submit" value="Save" class="btn btn-info btn-sm" />
+                            }
+
+                            <a href="/LeaveUser/LeaveRecommendList" class="btn btn-info btn-sm">Back </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                @Html.HiddenFor(x => x.LeaveId)
+                @Html.HiddenFor(x => x.LeaveEmpCode)
+                @Html.HiddenFor(x => x.LeaveGUICode)
+                @Html.HiddenFor(x => x.LeaveStartDate)
+                @Html.HiddenFor(x => x.LeaveEndDate)
+                @Html.HiddenFor(x => x.LeaveAppliedDate)
+                @Html.HiddenFor(x => x.LeaveApproverEmpCode)
+                @Html.HiddenFor(x => x.RecommededEmpCode)
+                @Html.HiddenFor(x => x.LeaveYearId)
+                @Html.HiddenFor(x => x.LeaveDetails)
+                @Html.HiddenFor(x => x.LeaveDays)
+                @Html.HiddenFor(x => x.LeaveDaysPart)
+                @Html.HiddenFor(x => x.LeaveDaysType)
+                @Html.HiddenFor(x => x.LeaveSubject)
+                @Html.HiddenFor(x => x.ApproverMessage)
+                @Html.HiddenFor(x => x.LeaveStatus)
+                @Html.HiddenFor(x => x.LeaveStatusDate)
+                @Html.HiddenFor(x => x.LeaveTypeId)
+
+            </div>
+
+
+
+
+                                            }
+    </div>
+
+</div>
+
+
+
+@{
+    if (Session["error"] != null)
+    {
+        Session.Remove("error");
+    }
+    if (Session["sucess"] != null)
+    {
+        Session.Remove("sucess");
+    }
+}

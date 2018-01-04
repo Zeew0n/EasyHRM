@@ -1,0 +1,278 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.ViewModel.LeaveApplicationViewModel>
+@using BeeHRM.ApplicationService.ViewModel
+@{
+    ViewBag.Title = "Leave Applications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<YearViewModel> Years = (IEnumerable<YearViewModel>)ViewBag.Years;
+    int? year = DateTime.Now.Year;
+    int? month = DateTime.Now.Month;
+    if (ViewBag.YVM != null)
+    {
+        YearViewModel ym = (YearViewModel)ViewBag.YVM;
+        year = ym.YearName;
+        month = ym.MonthId;
+    }
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/user/leaveapplication/create"><i class="fa fa-plus-circle"></i> Add New Leave Application</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Application list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        .modal-header {   
+    padding: 5px;
+    border-bottom: 1px solid #a94442;
+}
+
+ @@media only screen and (min-width: 500px) {
+   .modal-dialog {
+    width: 500px;
+    margin: 30px auto;
+    top: 100px;
+}
+}
+        .modal-content {
+   
+    background-color: #eff5ff;  
+    -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+    box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}
+    </style>
+}
+
+
+@if (Session["LeaveDeleteStatus"] != null && Session["LeaveDeleteStatus"].ToString() == "Done")
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> The Leave has been deleted.
+    </div>
+    Session.Remove("LeaveDeleteStatus");
+}
+
+
+
+<div class="delerror"></div>
+<div class="box box-top-border">
+    <div class="box-body">
+        <form action="/user/leaveapplications" method="post" >
+            <div class="row">
+                <div class="col-md-2">
+                    <select class="form-control" name="YearName">
+                        <option value="">All</option>
+                        @foreach (var item in Years)
+                        {
+                            <option @(year == item.YearName ? "selected":"") value="@item.YearName">@item.YearName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control monthSelector" name="MonthId">
+                        <option value="">All</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" value="SEARCH" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="tblLeaveYear">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Recommendor</th>
+                            <th>Approver / Status</th>
+                            <th>Applied On</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.LeaveSubject</td>
+                                <td>@item.LeaveTypeName</td>
+                                <td>@item.LeaveStartDate.ToString("dd MMM, yyyy")</td>
+                                <td>@item.LeaveEndDate.ToString("dd MMM, yyyy")</td>
+                                <td>@item.RecommenderName
+                                    <br />
+                                    @{
+                                        if (item.RecommendStatus == 1)
+                                        {
+                                            <span class="label label-warning">Pending</span>
+                                        }
+                                        else if (item.RecommendStatus == 2)
+                                        {
+                                            <span class="label label-success">Approved</span>
+                                        }
+                                        else if (item.RecommendStatus == 3)
+                                        {
+                                            <span class="label label-danger">Rejected</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Cancelled</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @item.ApproverName
+                                    <br />
+                                    @{
+                                        if (item.LeaveStatus == 1)
+                                        {
+                                            <span class="label label-warning">Pending</span>
+                                        }
+                                        else if (item.LeaveStatus == 2)
+                                        {
+                                            <span class="label label-success">Approved</span>
+                                        }
+                                        else if (item.LeaveStatus == 3)
+                                        {
+                                            <span class="label label-danger">Rejected</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Cancelled</span>
+                                        }
+                                    }
+                                        
+                                </td>
+                                <td>@item.LeaveAppliedDate.ToString("dd MMM, yyyy")</td>
+                                @*<td>
+                                        <div class="btn-group">
+                                            <a href="/user/leaveapplication/delete/@item.LeaveId" class="btn btn-danger deleteLeaveType"><i class="fa fa-trash-o"></i></a>
+                                            <a href="/user/leave/detail/@item.LeaveId" class="btn btn-info"><i class="fa fa-eye"></i></a>
+                                        </div>
+                                   
+                                </td>*@
+                                <td>
+
+                                    <button class="btn-danger btn btn-xs" data-toggle="modal" data-target="#@item.LeaveId"><i class="fa fa-close"></i></button>
+                                    <div id="@item.LeaveId" class="modal fade" role="dialog">
+                                        <div class="modal-dialog">
+
+                                            <!-- Modal content-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    Confirm Your Action
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                                </div>
+                                                <div class="modal-body">
+                                                    <h6>Do you really want to delete this Request ?</h6>
+
+                                                    <button class="btn btn-success btn-sm" data-dismiss="modal" onclick="Delete(@item.LeaveId)"> Yes</button>
+                                                    <button class="btn btn-danger btn-sm" data-dismiss="modal"> No</button>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <a class="label-success label" href="/user/leave/detail/@item.LeaveId"><i class="fa fa-eye"></i> </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#tblLeaveYear').DataTable();        
+        $(".monthSelector").val(@month);
+
+    </script>
+
+<script type="text/javascript">        
+
+            function Delete(id) {
+
+                $.ajax({
+                    type: "post",
+                    url: "/user/leaveapplication/delete/" + id,
+                    ajaxasync: true,
+                    contentType: 'application/json; charset=utf-8',
+
+                    success: function (response) {
+                        console.log();
+                        if (response.Success) {
+                            location.reload();
+                        }
+                        else {
+                            var error = '<div class="alert alert-danger" ><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a> <b > <snap>Sorry !!</snap>  The leave cannot be deleted as it`s status has already changed. !!!</b></div>';
+                            $('.delerror').html(error);
+                        }
+
+                    },
+                    error: function () {
+                        console.log("error");
+                    }
+                });
+            }
+
+</script>
+
+}

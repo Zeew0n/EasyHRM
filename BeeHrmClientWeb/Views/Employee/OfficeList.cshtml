@@ -1,0 +1,149 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.OfficeDTOs>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link href="~/Content/DataTables/datatables.css" rel="stylesheet" />
+    <link href="~/Scripts/multiselect/css/style.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="panel panel-default" >
+    <div class="panel-body" >
+        <table  class="table table-responsive table-bordered " id="OfficeList">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OfficeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OfficeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.OfficeAddress)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OfficeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OfficeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OfficeAddress)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Assign approvers", "AssignApprovers", new { id=item.OfficeCode}) 
+                        </td>
+                    </tr>
+                }
+            </tbody>
+</table>
+    </div>
+</div>
+
+@section scripts{
+<script src="~/Content/DataTables/jQuery-2.2.3/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#OfficeList').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $(".datepicker").datepicker();
+
+        });
+
+
+    </script>
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+    @*<script src="/Scripts/jquery-2.2.3.js"></script>
+    <script src="/Scripts/jquery.validate.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="/Scripts/jquery.nanoscroller.js"></script>
+    <script src="/Content/scripts/ConfigurationCreate.js"></script>
+    <script src="/Scripts/BeehrmCustom.js"></script>
+
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="/Scripts/bootstrap.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#holiday').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $(".datepicker").datepicker();
+
+        });
+
+
+    </script>*@

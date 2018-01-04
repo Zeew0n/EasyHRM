@@ -1,0 +1,601 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9C475DAF-E30E-4021-9A14-7F72F564F828}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BeeHRM.ApplicationService</RootNamespace>
+    <AssemblyName>BeeHRM.ApplicationService</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.2.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.87.0.0, Culture=neutral, PublicKeyToken=fd1eb21b62ae805b, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.87.1\lib\net40\ClosedXML.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=1.0.2.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <HintPath>..\packages\CompareNETObjects.1.3.0.0\lib\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=3.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.3.5.8\lib\35\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\BeeHrmClientWeb\bin\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="Repository, Version=1.0.7.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Repository.1.0.7.8\lib\net45\Repository.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CommonMethods.cs" />
+    <Compile Include="Common\DataTableToEntityMapper.cs" />
+    <Compile Include="Common\ListWrapper.cs" />
+    <Compile Include="Common\SqlRepository.cs" />
+    <Compile Include="ConnectDb\DbConnectHelper.cs" />
+    <Compile Include="DTOs\AttDailyDTOs.cs" />
+    <Compile Include="DTOs\AttEmployeeLogDTO.cs" />
+    <Compile Include="DTOs\AttendanceDailyDTO.cs" />
+    <Compile Include="DTOs\AttendanceDeviceDTO.cs" />
+    <Compile Include="DTOs\AttendanceReportsDTO.cs" />
+    <Compile Include="DTOs\AttendanceRequestDTO.cs" />
+    <Compile Include="DTOs\BankDTO.cs" />
+    <Compile Include="DTOs\BusinessGroupDTO.cs" />
+    <Compile Include="DTOs\CountryDTO.cs" />
+    <Compile Include="DTOs\DarbandiDTO.cs" />
+    <Compile Include="DTOs\DepartmentDTO.cs" />
+    <Compile Include="DTOs\DesignationDTO.cs" />
+    <Compile Include="DTOs\DistrictDTO.cs" />
+    <Compile Include="DTOs\DocumentCategoryDTO.cs" />
+    <Compile Include="DTOs\EducationLevelDTO.cs" />
+    <Compile Include="DTOs\EmpEducationDTO.cs" />
+    <Compile Include="DTOs\EmployeeAddressDTO.cs" />
+    <Compile Include="DTOs\EmployeeBankDTO.cs" />
+    <Compile Include="DTOs\EmployeeDocumentDTO.cs" />
+    <Compile Include="DTOs\EmployeeDTO.cs" />
+    <Compile Include="DTOs\EmployeeFamilyDTO.cs" />
+    <Compile Include="DTOs\EmployeeJobHistoryDTO.cs" />
+    <Compile Include="DTOs\EmployeePrizeDTO.cs" />
+    <Compile Include="DTOs\EmployeeSkillsDTO.cs" />
+    <Compile Include="DTOs\EmployeeTrainingDTO.cs" />
+    <Compile Include="DTOs\EmployeeVisitDTO.cs" />
+    <Compile Include="DTOs\EmpTrainingDTO.cs" />
+    <Compile Include="DTOs\EthnicityDTO.cs" />
+    <Compile Include="DTOs\FiscalDTO.cs" />
+    <Compile Include="DTOs\GroupDTO.cs" />
+    <Compile Include="DTOs\HolidayDTOs.cs" />
+    <Compile Include="DTOs\InsuranceCompanyDTO.cs" />
+    <Compile Include="DTOs\JobTypeDTO.cs" />
+    <Compile Include="DTOs\LeaveApplicationDTO.cs" />
+    <Compile Include="DTOs\LeaveAssignedDTO.cs" />
+    <Compile Include="DTOs\LeaveEarnedDTO.cs" />
+    <Compile Include="DTOs\LeaveMonthlyProcessDTO.cs" />
+    <Compile Include="DTOs\LeaveRuleDetailDTO.cs" />
+    <Compile Include="DTOs\LeaveRuleDTO.cs" />
+    <Compile Include="DTOs\LeaveTypeDTO.cs" />
+    <Compile Include="DTOs\LeaveYearDTO.cs" />
+    <Compile Include="DTOs\LeaveYearlyDTO.cs" />
+    <Compile Include="DTOs\LevelDTO.cs" />
+    <Compile Include="DTOs\LoginDTOs.cs" />
+    <Compile Include="DTOs\ModuleActionDTO.cs" />
+    <Compile Include="DTOs\ModuleActionPermissionDTO.cs" />
+    <Compile Include="DTOs\ModuleDTOs.cs" />
+    <Compile Include="DTOs\ModuleTypeDTOs.cs" />
+    <Compile Include="DTOs\NotificationsDTOs.cs" />
+    <Compile Include="DTOs\OfficeDTOs.cs" />
+    <Compile Include="DTOs\OfficeTypeDTO.cs" />
+    <Compile Include="DTOs\PayrollAllowanceDetailDTO.cs" />
+    <Compile Include="DTOs\PayrollAllowanceMasterDTO.cs" />
+    <Compile Include="DTOs\PayrollArrearsDTO.cs" />
+    <Compile Include="DTOs\PayrollEmployeeTaxDetailDTO.cs" />
+    <Compile Include="DTOs\PayrollInsurancePremiumDTO.cs" />
+    <Compile Include="DTOs\PayrollIntrestGainDTO.cs" />
+    <Compile Include="DTOs\PayrollLeaveDeductionDTO.cs" />
+    <Compile Include="DTOs\PayrollMonthDescriptionDTO.cs" />
+    <Compile Include="DTOs\PayrollOvertimeDTO.cs" />
+    <Compile Include="DTOs\PayrollRemoteAllowancesDTO.cs" />
+    <Compile Include="DTOs\PayrollRemoteSetupDTO.cs" />
+    <Compile Include="DTOs\PayrollSalaryDetailSheetDTO.cs" />
+    <Compile Include="DTOs\PayrollSalaryMasterSheetDTO.cs" />
+    <Compile Include="DTOs\PayrollSalaryTableDTO.cs" />
+    <Compile Include="DTOs\RankDTO.cs" />
+    <Compile Include="DTOs\ReligionDTO.cs" />
+    <Compile Include="DTOs\RemoteAreasDTO.cs" />
+    <Compile Include="DTOs\RoleAccessDTOs.cs" />
+    <Compile Include="DTOs\RoleDTOs.cs" />
+    <Compile Include="DTOs\RolesAccessDTO.cs" />
+    <Compile Include="DTOs\RolesBusinessGroupAccessDTO.cs" />
+    <Compile Include="DTOs\RolesDTO.cs" />
+    <Compile Include="DTOs\RolesOfficeAccessDTO.cs" />
+    <Compile Include="DTOs\SectionDTO.cs" />
+    <Compile Include="DTOs\ServiceEventGroupDTO.cs" />
+    <Compile Include="DTOs\ServiceEventSubGroupDTO.cs" />
+    <Compile Include="DTOs\ShiftDayDTO.cs" />
+    <Compile Include="DTOs\ShiftDTO.cs" />
+    <Compile Include="DTOs\SkillDTO.cs" />
+    <Compile Include="DTOs\TaxDetailDTO.cs" />
+    <Compile Include="DTOs\TaxSetupDTO.cs" />
+    <Compile Include="DTOs\TenantDTO.cs" />
+    <Compile Include="DTOs\TestTableDTO.cs" />
+    <Compile Include="DTOs\UserInfoDTO.cs" />
+    <Compile Include="DTOs\UserLoginLogDTO.cs" />
+    <Compile Include="DTOs\UserRoleDTO.cs" />
+    <Compile Include="DTOs\UsersDTO.cs" />
+    <Compile Include="DTOs\UsersResponse.cs" />
+    <Compile Include="DTOs\UsersUserRoleRelDTO.cs" />
+    <Compile Include="DTOs\ZoneDTO.cs" />
+    <Compile Include="Helper\AuthenticationHelper.cs" />
+    <Compile Include="Helper\BeehrmHelper.cs" />
+    <Compile Include="Helper\CommonMethods.cs" />
+    <Compile Include="Helper\DataTableToEntityMapper.cs" />
+    <Compile Include="Helper\HtmlHelpers.cs" />
+    <Compile Include="Helper\SqlHelper.cs" />
+    <Compile Include="Implementations\AttendanceDailyService.cs" />
+    <Compile Include="Implementations\AttendanceDeviceService.cs" />
+    <Compile Include="Implementations\AttendanceLogService.cs" />
+    <Compile Include="Implementations\BankService.cs" />
+    <Compile Include="Implementations\BusinessGroupService.cs" />
+    <Compile Include="Implementations\CountryService.cs" />
+    <Compile Include="Implementations\DarbandiService.cs" />
+    <Compile Include="Implementations\DepartmentService.cs" />
+    <Compile Include="Implementations\DesignationService.cs" />
+    <Compile Include="Implementations\DocumentCategoryService.cs" />
+    <Compile Include="Implementations\EducationLevelService.cs" />
+    <Compile Include="Implementations\EmpEducationService.cs" />
+    <Compile Include="Implementations\EmpFamilyService.cs" />
+    <Compile Include="Implementations\EmployeeBankService.cs" />
+    <Compile Include="Implementations\EmployeeDocumentService.cs" />
+    <Compile Include="Implementations\EmployeeSkillService.cs" />
+    <Compile Include="Implementations\EmployeeFamilyService.cs" />
+    <Compile Include="Implementations\EmployeePrizeService.cs" />
+    <Compile Include="Implementations\EmployeeService.cs" />
+    <Compile Include="Implementations\EmployeeTrainingService.cs" />
+    <Compile Include="Implementations\EmployeeVisitService.cs" />
+    <Compile Include="Implementations\EthnicityService.cs" />
+    <Compile Include="Implementations\FiscalService.cs" />
+    <Compile Include="Implementations\GroupService.cs" />
+    <Compile Include="Implementations\HolidayServices.cs" />
+    <Compile Include="Implementations\InsuranceCompanyService.cs" />
+    <Compile Include="Implementations\InterestGainService.cs" />
+    <Compile Include="Implementations\JobHistoryService.cs" />
+    <Compile Include="Implementations\JobTypeService.cs" />
+    <Compile Include="Implementations\LeaveApplicationService.cs" />
+    <Compile Include="Implementations\LeaveAssignServices.cs" />
+    <Compile Include="Implementations\LeaveEarnedService.cs" />
+    <Compile Include="Implementations\LeaveRuleDetailService.cs" />
+    <Compile Include="Implementations\LeaveRuleService.cs" />
+    <Compile Include="Implementations\LeaveService.cs" />
+    <Compile Include="Implementations\LeaveTypeService.cs" />
+    <Compile Include="Implementations\LeaveYearService.cs" />
+    <Compile Include="Implementations\LevelService.cs" />
+    <Compile Include="Implementations\LoginService.cs" />
+    <Compile Include="Implementations\ModuleService.cs" />
+    <Compile Include="Implementations\NotificationService.cs" />
+    <Compile Include="Implementations\OfficeServices.cs" />
+    <Compile Include="Implementations\OfficeTypeService.cs" />
+    <Compile Include="Implementations\PayrollAllowanceMasterService.cs" />
+    <Compile Include="Implementations\PayrollArrearService.cs" />
+    <Compile Include="Implementations\PayrollGenerationService.cs" />
+    <Compile Include="Implementations\PayrollInsurancePremiumService.cs" />
+    <Compile Include="Implementations\PayrollLeaveDeductionService.cs" />
+    <Compile Include="Implementations\PayrollMonthDescriptionService.cs" />
+    <Compile Include="Implementations\PayrollOvertimeService.cs" />
+    <Compile Include="Implementations\PayrollRemoteAllowanceService.cs" />
+    <Compile Include="Implementations\PayrollReportService.cs" />
+    <Compile Include="Implementations\PayrollSalaryMasterSheetService.cs" />
+    <Compile Include="Implementations\RankService.cs" />
+    <Compile Include="Implementations\ReligionService.cs" />
+    <Compile Include="Implementations\RemoteAreaService.cs" />
+    <Compile Include="Implementations\ReportsServices.cs" />
+    <Compile Include="Implementations\RolesAccessService.cs" />
+    <Compile Include="Implementations\RolesBusinessGroupAccessService.cs" />
+    <Compile Include="Implementations\RolesService.cs" />
+    <Compile Include="Implementations\SectionService.cs" />
+    <Compile Include="Implementations\ServiceEventGroupService.cs" />
+    <Compile Include="Implementations\ServiceEventSubGroupService.cs" />
+    <Compile Include="Implementations\ShiftDayService.cs" />
+    <Compile Include="Implementations\ShiftService.cs" />
+    <Compile Include="Implementations\SkillService.cs" />
+    <Compile Include="Implementations\SpecialLeaveTypeService.cs" />
+    <Compile Include="Implementations\TaxDetailService.cs" />
+    <Compile Include="Implementations\TaxSetupService.cs" />
+    <Compile Include="Implementations\TenantService.cs" />
+    <Compile Include="Implementations\UserInfoService.cs" />
+    <Compile Include="Implementations\UserLoginLog.cs" />
+    <Compile Include="Implementations\UserRoleAccessService.cs" />
+    <Compile Include="Implementations\UserRoleService.cs" />
+    <Compile Include="Implementations\UserService.cs" />
+    <Compile Include="Interfaces\IAttendanceDailyService.cs" />
+    <Compile Include="Interfaces\IAttendanceDeviceService.cs" />
+    <Compile Include="Interfaces\IAttendanceLogService.cs" />
+    <Compile Include="Interfaces\IBankService.cs" />
+    <Compile Include="Interfaces\IBusinessGroupService.cs" />
+    <Compile Include="Interfaces\ICountryService.cs" />
+    <Compile Include="Interfaces\IDarbandiService.cs" />
+    <Compile Include="Interfaces\IDepartmentService.cs" />
+    <Compile Include="Interfaces\IDesignationService.cs" />
+    <Compile Include="Interfaces\IDocumentCategoryService.cs" />
+    <Compile Include="Interfaces\IEducationLevelService.cs" />
+    <Compile Include="Interfaces\IEmpEducationService.cs" />
+    <Compile Include="Interfaces\IEmpFamilyService.cs" />
+    <Compile Include="Interfaces\IEmployeeBankService.cs" />
+    <Compile Include="Interfaces\IEmployeeDocumentService.cs" />
+    <Compile Include="Interfaces\IEmployeeSkillService.cs" />
+    <Compile Include="Interfaces\IEmployeeFamilyService.cs" />
+    <Compile Include="Interfaces\IEmployeePrizeService.cs" />
+    <Compile Include="Interfaces\IEmployeeService.cs" />
+    <Compile Include="Interfaces\IEmployeeTrainingService.cs" />
+    <Compile Include="Interfaces\IEmployeeVisitService.cs" />
+    <Compile Include="Interfaces\IEthnicityService.cs" />
+    <Compile Include="Interfaces\IFiscalService.cs" />
+    <Compile Include="Interfaces\IGroupService.cs" />
+    <Compile Include="Interfaces\IHolidayServices.cs" />
+    <Compile Include="Interfaces\IInsuranceCompanyService.cs" />
+    <Compile Include="Interfaces\IInterestGainService.cs" />
+    <Compile Include="Interfaces\IJobHistoryService.cs" />
+    <Compile Include="Interfaces\IJobTypeService.cs" />
+    <Compile Include="Interfaces\ILayoutService.cs" />
+    <Compile Include="Interfaces\ILeaveApplicationService.cs" />
+    <Compile Include="Interfaces\ILeaveAssigned.cs" />
+    <Compile Include="Interfaces\ILeaveEarnedService.cs" />
+    <Compile Include="Interfaces\ILeaveRuleDetailService.cs" />
+    <Compile Include="Interfaces\ILeaveRuleService.cs" />
+    <Compile Include="Interfaces\ILeaveService.cs" />
+    <Compile Include="Interfaces\ILeaveTypeService.cs" />
+    <Compile Include="Interfaces\ILeaveYearService.cs" />
+    <Compile Include="Interfaces\ILevelService.cs" />
+    <Compile Include="Interfaces\ILoginService.cs" />
+    <Compile Include="Interfaces\IModulServices.cs" />
+    <Compile Include="Interfaces\INotification.cs" />
+    <Compile Include="Interfaces\IOfficeServices.cs" />
+    <Compile Include="Interfaces\IOfficeTypeService.cs" />
+    <Compile Include="Interfaces\IPayrollAllowanceMasterService.cs" />
+    <Compile Include="Interfaces\IPayrollArrearService.cs" />
+    <Compile Include="Interfaces\IPayrollGenerationService.cs" />
+    <Compile Include="Interfaces\IPayrollInsurancePremiumService.cs" />
+    <Compile Include="Interfaces\IPayrollLeaveDeductionService.cs" />
+    <Compile Include="Interfaces\IPayrollMonthDescriptionService.cs" />
+    <Compile Include="Interfaces\IPayrollOvertimeSerivce.cs" />
+    <Compile Include="Interfaces\IPayrollRemoteAllowanceService.cs" />
+    <Compile Include="Interfaces\IPayrollReportService.cs" />
+    <Compile Include="Interfaces\IPayrollSalaryMasterSheetService.cs" />
+    <Compile Include="Interfaces\IRankService.cs" />
+    <Compile Include="Interfaces\IReligionService.cs" />
+    <Compile Include="Interfaces\IRemoteAreaService.cs" />
+    <Compile Include="Interfaces\IReportsServices.cs" />
+    <Compile Include="Interfaces\IRolesAccessService.cs" />
+    <Compile Include="Interfaces\IRolesBusinessGroupAccessService.cs" />
+    <Compile Include="Interfaces\IRolesOfficeAccessService.cs" />
+    <Compile Include="Interfaces\IRolesService.cs" />
+    <Compile Include="Interfaces\ISectionService.cs" />
+    <Compile Include="Interfaces\IServiceEventService.cs" />
+    <Compile Include="Interfaces\IServiceEventSubGroupService.cs" />
+    <Compile Include="Interfaces\IShiftDayService.cs" />
+    <Compile Include="Interfaces\IShiftService.cs" />
+    <Compile Include="Interfaces\ISkillService.cs" />
+    <Compile Include="Interfaces\ISpecialLeaveTypeService.cs" />
+    <Compile Include="Interfaces\ITaxDetailService.cs" />
+    <Compile Include="Interfaces\ITaxSetupService.cs" />
+    <Compile Include="Interfaces\ITenantService.cs" />
+    <Compile Include="Interfaces\ITestTableServices.cs" />
+    <Compile Include="Interfaces\IUserInfoService.cs" />
+    <Compile Include="Interfaces\IUserLoginLog.cs" />
+    <Compile Include="Interfaces\IUserRoleAccessService.cs" />
+    <Compile Include="Interfaces\IUserRoleServices.cs" />
+    <Compile Include="Interfaces\IUserService.cs" />
+    <Compile Include="Leave Module\DTOs\EmployeeDTOs.cs" />
+    <Compile Include="Leave Module\DTOs\LeaveApplicationDTOs.cs" />
+    <Compile Include="Leave Module\DTOs\LeaveAssignedDTOs.cs" />
+    <Compile Include="Leave Module\DTOs\LeaveBalance.cs" />
+    <Compile Include="Leave Module\DTOs\LeaverulesDetailsDtos.cs" />
+    <Compile Include="Leave Module\DTOs\LeaveRulesDTOs.cs" />
+    <Compile Include="Leave Module\DTOs\LeaveTypesDTOs.cs" />
+    <Compile Include="Leave Module\DTOs\LeaveYearlyProcessDTOs.cs" />
+    <Compile Include="Leave Module\DTOs\LeaveYearsDTOs.cs" />
+    <Compile Include="Leave Module\DTOs\RecommenderDTO.cs" />
+    <Compile Include="Leave Module\GlobalSelectLists\DynamicSelectList.cs" />
+    <Compile Include="Leave Module\GlobalSelectLists\IDynamicSelectList.cs" />
+    <Compile Include="Leave Module\GlobalSelectLists\StaticSelectList.cs" />
+    <Compile Include="Leave Module\Helper\LeaveValidateHelper.cs" />
+    <Compile Include="Leave Module\Helper\NepaliDate.cs" />
+    <Compile Include="Leave Module\Helper\NepaliDateDataArray.cs" />
+    <Compile Include="Leave Module\Mapper\LeaveApplicationMapper.cs" />
+    <Compile Include="Leave Module\Mapper\LeaveAssiginMapper.cs" />
+    <Compile Include="Leave Module\Mapper\LeaveBalanceMapper.cs" />
+    <Compile Include="Leave Module\Mapper\LeaveRuleDetailsMapper.cs" />
+    <Compile Include="Leave Module\Mapper\LeaveRulesMapper.cs" />
+    <Compile Include="Leave Module\Mapper\LeaveTypesMapper.cs" />
+    <Compile Include="Leave Module\Mapper\LeaveYearProcessMapper.cs" />
+    <Compile Include="Leave Module\Mapper\LeaveYearsMapper.cs" />
+    <Compile Include="Leave Module\Serivices\Implementation\GeneralServices.cs" />
+    <Compile Include="Leave Module\Serivices\Implementation\LeaveAddAdminServices.cs" />
+    <Compile Include="Leave Module\Serivices\Implementation\LeaveAddUserServices.cs" />
+    <Compile Include="Leave Module\Serivices\Implementation\LeaveApplicationServices.cs" />
+    <Compile Include="Leave Module\Serivices\Implementation\LeaveSetupservices.cs" />
+    <Compile Include="Leave Module\Serivices\Interface\ILeaveAddAdminServices.cs" />
+    <Compile Include="Leave Module\Serivices\Interface\ILeaveAddUserServices.cs" />
+    <Compile Include="Leave Module\Serivices\Interface\ILeaveApplicationServices.cs" />
+    <Compile Include="Leave Module\Serivices\Interface\ILeaveSetupservices.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestFormatters\AttDailyRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\AttendanceDeviceRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\AttendanceRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\BankRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\BusinessGroupRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\DarbandiRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\DepartmentRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\DesignationRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\DocumentCategoryRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EducationLevelRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmpEducationRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmpFamilyRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeAddressRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeBankRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeDocumentRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeSkillRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeFamilyRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeJobHistoryRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeePrizeRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeTrainingRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmployeeVisitRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EmpTrainingRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\EthnicityRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\FiscalRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\HolidayRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\InsuranceCompanyRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\JobTypeRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LeaveApplicationRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LeaveAssignRequestFormatters.cs" />
+    <Compile Include="RequestFormatters\LeaveEarnedRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LeaveMonthlyProcessRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LeaveRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LeaveRuleDetailRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LeaveRuleRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LeaveTypeRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LeaveYearRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\LevelRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\ModuleMapRequestFormtter.cs" />
+    <Compile Include="RequestFormatters\NotificationRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\OfficeRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\OfficeTypeRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollAllowanceDetailRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollAllowanceMasterRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollArrearsRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollEmployeeTaxDetailRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollInsuranceRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollInterestGainResponseFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollLeaveDeductionRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollMonthDescriptionRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollOvertimeRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollRemoteAllowancesRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollSalaryDetailSheetRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollSalaryMasterSheetRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\PayrollSalaryTableRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\RankRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\RolesAccessRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\RolesBusinessGroupAccessRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\RolesRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\SectionRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\ServiceEventSubGroupServiceRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\ShiftDayRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\ShiftRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\SkillRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\TaxDetailRequestFormatter.cs" />
+    <Compile Include="RequestFormatters\TaxSetupRequestFormatter.cs" />
+    <Compile Include="ResponseFormatters\AttEmployeeDailyLogResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\AttendanceDeviceResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\BankResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\BusinessGroupResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\CountryResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\DocumentCategoryResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EducationLevelResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmpEducationResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmpFamilyResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeAddressResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeBankResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeDocumentResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeSkillResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeFamilyResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeJobHistoryResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeePrizeResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeTrainingResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmployeeVisitResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EmpTrainingResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\EthnicityResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\FiscalResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\GeneralResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\HolidayResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\AttDailyResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\AttendanceDailyResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\DepartmentResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\DesignationResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\GroupResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\InsuranceCompanyResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\JobTypeResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\LeaveApplicationResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\LeaveEarnedResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\LeaveResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\LeaveRuleDetailResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\LeaveRuleResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\LeaveTypeResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\LeaveYearResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\LevelResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\ModuleResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\NotificationResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\OfficeResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\OfficeTypeResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollAllowanceDetailResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollAllowanceMasterResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollArrearsResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollEmployeeTaxDetailResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollInsuranceResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollInterestGainResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollLeaveDeductionResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollMonthDescriptionResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollOvertimeResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollRemoteAllowancesResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollSalaryDetailSheetResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollSalaryMasterSheetResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\PayrollSalaryTableResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\RankResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\ReligionResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\RemoteAreaResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\RoleAccessResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\RolesBusinessGroupAccessResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\RolesResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\SectionResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\ServiceEventGroupResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\ServiceEventSubGroupServiceResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\ShiftDayResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\ShiftResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\SkillReponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\TaxDetailResponseFormatter.cs" />
+    <Compile Include="ResponseFormatters\TaxSetupResponseFormatter.cs" />
+    <Compile Include="ViewModel\ApproverList.cs" />
+    <Compile Include="ViewModel\AssignedEmployees.cs" />
+    <Compile Include="ViewModel\AttendanceDailyViewModel.cs" />
+    <Compile Include="ViewModel\AttendanceEntireYearSummaryViewModel.cs" />
+    <Compile Include="ViewModel\AttendanceEntireYearViewModel.cs" />
+    <Compile Include="ViewModel\AttendanceFilterViewModel.cs" />
+    <Compile Include="ViewModel\AttendanceLogViewModel.cs" />
+    <Compile Include="ViewModel\AttendanceReportDateViewModel.cs" />
+    <Compile Include="ViewModel\AttendanceRequestsListViewModel.cs" />
+    <Compile Include="ViewModel\AttendanceSearchViewModel.cs" />
+    <Compile Include="ViewModel\DailyAttendanceFilterViewModel.cs" />
+    <Compile Include="ViewModel\DepartmentListViewModel.cs" />
+    <Compile Include="ViewModel\DistrictViewModel.cs" />
+    <Compile Include="ViewModel\DropDownListViewmodelcs.cs" />
+    <Compile Include="ViewModel\EmpAllCodesVIewmodels.cs" />
+    <Compile Include="ViewModel\EmployeeCodeName.cs" />
+    <Compile Include="ViewModel\EmployeeDetailAdminViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeDetailsMenuViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeDetailsViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeDocumentViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeEditViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeExcelVoewModel.cs" />
+    <Compile Include="ViewModel\EmployeeExperinceViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeFamilyViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeJobHistoryViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeKaazViwModel.cs" />
+    <Compile Include="ViewModel\EmployeeListViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeSearchByRoles.cs" />
+    <Compile Include="ViewModel\EmployeeSkillViewModel.cs" />
+    <Compile Include="ViewModel\HolidayDetailsViewModel.cs" />
+    <Compile Include="ViewModel\HolidayOfficesViewModel.cs" />
+    <Compile Include="ViewModel\JobHistoryViewModel.cs" />
+    <Compile Include="ViewModel\LeaveApplicationAddViewModel.cs" />
+    <Compile Include="ViewModel\LeaveApplicationRecommendDetailViewModel.cs" />
+    <Compile Include="ViewModel\LeaveApplicationViewModel.cs" />
+    <Compile Include="ViewModel\LeaveAssignDetailViewModel.cs" />
+    <Compile Include="ViewModel\LeaveAssignedViewModel.cs" />
+    <Compile Include="ViewModel\LeaveBalanceViewModel.cs" />
+    <Compile Include="ViewModel\LeaveRuleAddViewModel.cs" />
+    <Compile Include="ViewModel\LeaveStatusChangeViewModel.cs" />
+    <Compile Include="ViewModel\LeaveStatViewModel.cs" />
+    <Compile Include="ViewModel\LeaveYearlyReportViewModel.cs" />
+    <Compile Include="ViewModel\NepaliMonthsViewModel.cs" />
+    <Compile Include="ViewModel\NotificationsViewModel.cs" />
+    <Compile Include="ViewModel\PayrollReportViewModel.cs" />
+    <Compile Include="ViewModel\PayrollSalaryViewModel.cs" />
+    <Compile Include="ViewModel\ShiftDetailViewModel.cs" />
+    <Compile Include="ViewModel\YearViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converter\" />
+    <Folder Include="Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BeeHRM.Repository\BeeHRM.Repository.csproj">
+      <Project>{bea093e1-5160-4af6-9be4-e4cff9998d8a}</Project>
+      <Name>BeeHRM.Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

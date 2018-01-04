@@ -1,0 +1,136 @@
+﻿
+<div class="row">
+    <div class="col-sm-12 col-md-5 col-lg-3">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="avatar">
+                    <div class="text-center">
+                        <a href="#">
+                            @{
+                                if (ViewBag.EmployeeDetail.PhotoName != null)
+                                {
+                                    <img src="~/img/emp_photos/@ViewBag.EmployeeDetail.PhotoName"
+                                         alt="Profile photo of @ViewBag.EmployeeDetail.Name" class="img-responsive img-circle">
+                                }
+                                else
+                                {
+                                    <img src="/img/emp_photos/profile.jpg"
+                                         alt="Beehrm User " class="img-responsive img-circle">
+                                }
+                            }
+                        </a>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="nomarginbtm">[ @ViewBag.EmployeeDetail.Code ] @ViewBag.EmployeeDetail.Name &nbsp;</h3>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group" id="list-border-remove">
+                <li class="list-group-item">
+                    <i class="fa fa-envelope-o"></i>
+                    <span><a href="#">@ViewBag.EmployeeDetail.Email</a></span>
+                </li>
+                <li class="list-group-item">
+                    <span class="">
+                        <i class="fa fa-fw fa-calendar-o"></i>
+                        @(!String.IsNullOrEmpty(ViewBag.EmployeeDetail.JoinDate) ? Convert.ToDateTime(ViewBag.EmployeeDetail.JoinDate).ToString("d MMM, yyyy") : "No Join Date")
+                        
+                    </span>
+                </li>
+            </ul>
+            <div class="list-group hidden-sm quick-link">
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">A</p>
+                    </div>
+                    <div class="col-md-10">
+                        @*<a href="#" class="list-group-item">Appraisal</a>*@
+                        @*<a href="#" class="list-group-item">
+                    Assigned Assets
+                </a>*@
+                        <a href="/admin/attendance/@ViewBag.EmployeeDetail.Code" class="list-group-item">Attendance</a>
+                        <a href="/admin/updateattendances/@ViewBag.EmployeeDetail.Code" class="list-group-item">Update Attendance</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">E</p>
+                    </div>
+                    <div class="col-md-10">
+                        <a href="#"
+                           class="list-group-item">Employee Events</a>
+                    
+                        <a href="/transfer/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">सरुवा</a>
+
+
+                        <a href="/kajmakhataune/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">काज मा खटाउने</a>
+
+
+                        @*<a href="#"
+                           class="list-group-item">कायम मुकायम मु करर</a>*@
+
+
+                        <a href="/badhuwa/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">बढुवा</a>
+
+
+                        <a href="/punishment/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">बिभागीय कारबाही र सजाय</a>
+
+                        <a href="/abakas/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">अवकास</a>
+                        
+                        <a href="/history/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">History</a>
+
+                        <a href="/education/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">Education</a>
+
+                        <a href="/admin/assignroles/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">Employee Roles</a>
+
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">L</p>
+                    </div>
+                    <div class="col-md-10">
+                        <a href="/prize/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">Leave</a>
+
+                        <a href="/employee/leave/balance/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">Leave Balance</a>
+
+                        <a href="/admin/leaveassign/detail/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">Leave Assign</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">P</p>
+                    </div>
+                    <div class="col-md-10">
+                        <a href="/prize/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">Prize</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">T</p>
+                    </div>
+                    <div class="col-md-10">
+                        <a href="/training/@ViewBag.EmployeeDetail.Code"
+                           class="list-group-item">Training</a>
+                    </div>
+                </div>
+                  
+                </div>
+            </div>
+        </div>
+    

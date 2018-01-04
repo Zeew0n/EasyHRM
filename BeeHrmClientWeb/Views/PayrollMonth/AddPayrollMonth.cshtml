@@ -1,0 +1,141 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollMonthDescriptionDTO
+
+@{
+    ViewBag.Title = "AddPayrollMonth";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href="~/PayrollMonth/Index" class="btn btn-success"><i class="fa fa-bars"></i> Back to list</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Create payroll months
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@if (TempData["Danger"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Danger"]
+    </div>
+}
+<div class="box box-top-border">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.FyId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+
+                    @Html.DropDownListFor(model => model.FyId, new SelectList(Model.Fiscals, "Value", "Text"))
+
+                    @Html.ValidationMessageFor(model => model.FyId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">Salary Month</label>
+                <div class="col-md-6">
+                    <select name="MonthIndex" class="form-control" required>
+
+                        <option value="">Please Choose</option>
+                        @{
+                            for (int m = 1; m <= 12; m++)
+                            {
+                                <option value="@m"> @m </option>
+                            }
+
+                        }
+
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">English Month Name</label>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.MonthNameEnglish, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MonthNameEnglish, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Nepali Month Name</label>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.MonthNameNepali, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MonthNameNepali, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">English Start Date</label>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">English End Date</label>
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.WorkingDays, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+                    @Html.EditorFor(model => model.WorkingDays, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.WorkingDays, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-primary" /> <a href="/PayrollMonth/Index" class="btn btn-danger">Cancel</a>
+                </div>
+            </div>
+        </div>
+                            }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        $('#StartDate').datetimepicker({ format: 'YYYY-MM-DD' });
+        $('#EndDate').datetimepicker({ format: 'YYYY-MM-DD' });
+    </script>
+}

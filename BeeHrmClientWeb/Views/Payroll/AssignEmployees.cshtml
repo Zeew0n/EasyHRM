@@ -1,0 +1,133 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollAllowanceMasterDTO
+
+@{
+    ViewBag.Title = "AssignEmployees";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Html.ActionLink("Back to List", "PayrollAllowances")</span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                   Assign Employees
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div>
+    <hr />
+    <table class="table">
+        <tr>
+            <th class="text-center">@Html.DisplayNameFor(model => model.AllowanceName)</th>
+            <td class="text-center">@Html.DisplayFor(model => model.AllowanceName)</td>
+
+            <th class="text-center">@Html.DisplayNameFor(model => model.EarningDeduction)</th>
+            <td class="text-center">@Html.DisplayFor(model => model.EarningDeduction)</td>
+
+            @*<th class="text-center">@Html.DisplayNameFor(model => model.IsAlwaysAplicable)</th>
+            <td class="text-center">@Html.DisplayFor(model => model.IsAlwaysAplicable)</td>*@
+
+        </tr>
+        @*<tr>
+            <th class="text-center">@Html.DisplayNameFor(model => model.IsPerDayDeductable)</th>
+            <td class="text-center">@Html.DisplayFor(model => model.IsPerDayDeductable)</td>
+            <th class="text-center">&nbsp;</th>
+             <td class="text-center">&nbsp;</td>
+            <th class="text-center">&nbsp;</th>
+            <td class="text-center">&nbsp;</td>
+
+            <th class="text-center">&nbsp;</th>
+            <td class="text-center">&nbsp;</td>       
+        </tr>*@
+       <tr>     
+            <th class="text-center">@Html.DisplayNameFor(model => model.SameForAllEmployee)</th>
+            <td class="text-center">@Html.DisplayFor(model => model.SameForAllEmployee)</td>
+            <th></th>
+            <td></td>
+            <th></th>
+            <td></td>
+        </tr>
+    </table>
+</div>
+<div class="box-body table-responsive">
+    <form name="AssignEmployee" acton="#" method="post">
+        <input type="text" name="Id" value="@Model.AllowanceMasterId" style="display:none;">
+        <table id="salariesTable" class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-center">SN</th>
+                    <th class="text-left">Name</th>
+                    <th class="text-center">Enable/Disable</th>
+                    <th class="text-center">Percentage/Value</th>
+                    <th class="text-center">Value</th>
+                </tr>
+                @foreach (var str in Model.AssignedEmployees)
+                {
+                    <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-left">@str.EmployeeName</th>
+                        @{
+                            string Value = "";
+                            string Checked = null;
+                            string Id = "InputText" + @str.EmployeeCode;
+                            string Selected = "";
+                            string SelectedA = "";
+                            string SelectedP = "";
+                        }
+                        @if (str.Selected == true) { Value = str.EmployeeCode.ToString(); Checked = "checked"; }
+                        @if (str.PercentageAmount == "A") { SelectedA = "selected"; } 
+                        @if (str.PercentageAmount == "P") { SelectedP = "selected"; }
+                        <th class="text-center"><input name="SelectedEmployees" type="text" id="@Id" value="@Value" style="display:none;" /><input type="checkbox" checked="@Checked" id="@str.EmployeeCode" onclick="SetSelectedValue(this.id)"></th>
+                        <th class="text-center">
+                            <select name="PercentageAmount">
+                                <option @SelectedA value="A">Amount</option>
+                                <option @SelectedP value="P">Percentage (%)</option>
+                            </select>
+                        </th>
+                        <th class="text-center">
+                            @if(!Model.SameForAllEmployee)
+                            { 
+                            <input name="Value" value="@str.Value" type="text" />
+                            }else
+                            {
+                            <input name="Value" value="@Model.Value" type="text" readonly style="display:none">
+                                <text>@Model.Value</text>
+                            }
+                        </th>
+                    </tr>
+                }
+            </thead>
+            <tbody></tbody>
+        </table>
+        <input type="submit">
+    </form>
+</div>
+<script>
+    function SetSelectedValue(Id)
+    {
+        if ($("#" + Id).prop('checked')) {
+            $("#InputText" + Id).val(Id);
+        } else {
+            $("#InputText" + Id).val('');
+        }
+    }
+</script>
+
+

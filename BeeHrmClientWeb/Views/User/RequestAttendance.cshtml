@@ -1,0 +1,354 @@
+﻿@{
+    ViewBag.Title = "Request Attendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+
+        .text-danger {
+            color: rgba(241, 47, 47, 0.94);
+            font-weight: 600;
+        }
+    </style>
+
+
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/user/attendancerequest/selfattlist" class="btn btn-success"><i class="fa fa-bars"></i>  View Requested List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Request Attendance
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+@{
+    if (Session["attendance_request"] != null)
+    {
+        <div class="alert alert-success fade in" style="margin-top:18px;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+            <strong>Success!</strong> @Session["attendance_request"]
+        </div>
+    }
+
+}
+
+
+<div class="box box-top-border">
+    <div class="box-body table-responsive" style="overflow:hidden">
+        <div class="row">
+            <div class="con-lg-6 col-md-8 col-sm-12">
+                <form method="POST" action="/user/applyattendance" accept-charset="UTF-8" data-toggle="validator" id="myForm">
+                    <fieldset>
+                        <div class="form-group">
+
+                            <input type="checkbox" id="dualday" /> <label for="req_type">Dual Day</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="req_type">Request Type</label>
+                            <select class="form-control" name="RequestType" id="requesttype">
+                                <option value="">Select Attendance Type</option>
+                                <option value="CheckIn">CheckIn</option>
+                                <option value="CheckOut">CheckOut</option>
+                                <option value="EntireDay">EntireDay</option>
+                            </select>
+                            <snap class="text-danger" id="rqsttype"> @Html.ValidationMessage("RequestType", "", new { @class = "text-danger" })</snap>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="req_login_time">Recommender (*)</label>
+                            <select name="RecommendarEmpCode" class="form-control">
+                                <option value=""> Select Recommender </option>
+                                @foreach (var row in ViewBag.Recommande)
+
+                                {
+                                    <option value="@row.EmpCode"> @row.EmpName</option>
+                                }
+
+                            </select>
+                            <snap class="error">@Html.ValidationMessage("RecommendarEmpCode", "", new { @class = "text-danger" })</snap>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="req_login_time">Approver(*)</label>
+                            <select name="ApproverEmpCode" class="form-control">
+                                <option value="">  Select  Approver </option>
+                                @foreach (var row in ViewBag.Approver)
+
+                                {
+                                    <option value="@row.EmpCode"> @row.EmpName</option>
+                                }
+
+                            </select>
+                            <snap class="error">@Html.ValidationMessage("ApproverEmpCode", "", new { @class = "text-danger" })</snap>
+
+                        </div>
+
+                        <div class="form-group" id="CheckIn">
+                            <label for="req_login_time">Inform CheckIn Time (*)</label>
+                            <div class="row">
+
+                                <div class="col-md-8">
+                                    <div class='input-group date'>
+                                        <input class="form-control datepicker CheckIn" placeholder="CheckIn date" id="date" name="CheckInDateNP" type="text">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4">
+
+                                    <div class='input-group time'>
+                                        <input class="form-control timepicker" placeholder="Check In Time" id="timechkin" name="CheckInTime" type="text">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <snap class="text-danger" id="chckinerror"></snap>
+                        </div>
+                        <div class="form-group" id="CheckOut">
+                            <label for="req_logout_time">Inform CheckOut Time (*)</label>
+                            <div class="row">
+
+                                <div class="col-md-8">
+                                    <div class='input-group date'>
+                                        <input class="form-control datepicker CheckOut" placeholder="CheckOut date" id="date1" name="CheckOutDateNP" type="text">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+
+                                    </div>
+
+                                </div>
+                                <div class="col-md-4">
+
+                                    <div class='input-group time'>
+                                        <input class="form-control " id="timechkout" placeholder="Check Out time" name="CheckOutTime" type="text">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <snap class="text-danger" id="chckouterror"></snap>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="desc">Description(*)</label>
+                            <textarea class="form-control danger" placeholder="Enter attendance  request description" name="RequestDescription" cols="50" rows="10" id="desc"></textarea>
+                            <snap class="error">@Html.ValidationMessage("RequestDescription", "", new { @class = "text-danger" })</snap>
+                        </div>
+                        <div class="panel-footer">
+                            <input type="submit" value="Save" class="btn btn-success" id="validate">
+                            <a href="/user/attendancerequest/selfattlist" class="btn btn-success">Cancel </a>
+
+                        </div>
+                    </fieldset>
+                </form>
+
+            </div>
+            <div class="con-lg-6 col-md-6 col-sm-12"></div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.time').datetimepicker({
+                format: 'HH:mm:ss'
+            });
+
+            $('#requesttype').change(function () {
+                var vadl = $('#requesttype').val();
+                if (vadl == 'CheckIn') {
+                    $('#CheckIn').show();
+                    $('#CheckOut').hide();
+                    $("#rqsttype").text("");
+                }
+                else
+                    if (vadl == 'CheckOut') {
+                        $('#CheckOut').show();
+                        $('#CheckIn').hide();
+                        $("#rqsttype").text("");
+
+                    }
+                if (vadl == "EntireDay") {
+
+                    $('#CheckOut').show();
+                    $('#CheckIn').show();
+                    $("#rqsttype").text("");
+                }
+                else {
+                    if (vadl == "Entire day") {
+
+                        $('#CheckOut').show();
+                        $('#CheckIn').show();
+                        $("#rqsttype").text("Please select Request Type");
+                    }
+                }
+
+            });
+
+            $('#validate').click(function () {
+                var ddv = $('#requesttype').val();
+
+                if (ddv == 'EntireDay') {
+                    var ckeckin = $('.CheckIn').val();
+                    var ckeckout = $('.CheckOut').val();
+                    var CheckIntym = $('#timechkin').val();
+                    var CheckOuttym = $('#timechkout').val();
+                    if ($('#dualday').prop('checked')) {
+
+                        if (ckeckin <= ckeckout) {
+                            return true
+                        }
+                        else {
+                            $("#chckinerror").text("CheckIn Date should be smaller than Checkout date");
+                            return false;
+
+                        }
+                    }
+                    else
+                        if (ckeckin === ckeckout) {
+                            return true;
+                        }
+                        else {
+                            $("#chckinerror").text("Check In and Check out date must be same ");
+                            return false;
+                        }
+
+                }
+                if (ddv === 'CheckIn') {
+                    if ($('.CheckIn').val() === "" || $('#timechkin').val() === "") {
+
+                        $("#chckinerror").text("Please Insert Date and time");
+                        return false;
+
+                    }
+
+                }
+                if (ddv === 'CheckOut') {
+                    if ($('.CheckOut').val() === "" || $('#timechkout').val() === "") {
+                        $("#chckouterror").text("Please Insert Date and Time");
+                        return false;
+                    }
+
+
+                }
+
+                if (ddv === "") {
+                    $("#rqsttype").text("Please select Request Type");
+                    return false;
+                }
+
+
+
+
+            });
+
+
+
+
+        });
+        $(document).ready(function () {
+            $('#date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#date1').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+
+
+
+
+
+    </script>
+
+}

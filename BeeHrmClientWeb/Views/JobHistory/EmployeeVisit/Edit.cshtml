@@ -1,0 +1,161 @@
+﻿@model BeeHRM.ApplicationService.DTOs.EmployeeVisitDTO
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    
+<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/visit/@ViewBag.EmployeeDetail.Code"><i class="fa fa-bars"></i> Back</a></span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Edit Visit
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+        </div>
+        <div class="panel-body basic">
+            <h3>Employee Visit</h3>
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VisitCoutryId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.HiddenFor(model => model.VisitId)
+                        @Html.HiddenFor(model => model.VisitEmpCode)
+                        <div class="col-md-10">
+                            @{
+                                List<SelectListItem> countryList = new List<SelectListItem>();
+                                foreach (var row in ViewBag.CountryList)
+                                {
+                                    countryList.Add(new SelectListItem
+                                    {
+                                        Text = row.CountryName,
+                                        Value = row.CountryId.ToString()
+                                    });
+                                }
+
+                            }
+                            @*@Html.EditorFor(model => model.VisitCoutryId, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.VisitCoutryId, "", new { @class = "text-danger" })*@
+                            @Html.DropDownListFor(model => model.VisitCoutryId, countryList, "Select Country", new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VisitCity, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.VisitCity, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.VisitCity, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VisitStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.VisitStartDate, new { htmlAttributes = new { @class = "form-control date" } })
+                            @Html.ValidationMessageFor(model => model.VisitStartDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VisitEndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.VisitEndDate, new { htmlAttributes = new { @class = "form-control date" } })
+                            @Html.ValidationMessageFor(model => model.VisitEndDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmpDesignationId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @{ List<SelectListItem> designationList = new List<SelectListItem>();
+                                foreach (var row in ViewBag.DesignationList)
+                                {
+                                    designationList.Add(new SelectListItem
+                                    {
+                                        Text = row.DsgName,
+                                        Value = row.DsgId.ToString()
+                                    });
+                                }
+
+                            }
+                            @*@Html.EditorFor(model => model.EmpDesignationId, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.EmpDesignationId, "", new { @class = "text-danger" })*@
+                            @Html.DropDownListFor(model => model.EmpDesignationId, designationList, "Select Designation", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Update" class="btn btn-primary" />
+                        </div>
+                    </div>
+                    </div>
+                    }
+                </div>
+    </div>
+</div>
+@section scripts{
+<script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+<script src="~/Scripts/jquery.dialogBox.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.date').on('click', function () {
+                $('.date').datetimepicker({
+                    format: 'MM/DD/YYYY',
+                    ignoreReadonly: true,
+                    maxDate: 'now'
+                });
+            });
+
+        });
+    </script>
+    
+}

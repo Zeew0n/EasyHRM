@@ -1,0 +1,131 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.Leave_Module.DTOs.LeaveBalance>
+
+@{
+    ViewBag.Title = "LeaveApplistList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+
+                <h2 class="font-light m-b-xs">
+                    Leave Apply Details
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="box box-top-border">
+    @if (Session["error"] != null)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["error"]
+        </div>
+    }
+    @if (Session["success"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["success"]
+        </div>
+    }
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <table class="table">
+                        <tr>
+                            <th>SN</th>
+                            <th>Leave Name</th>
+                            <th>Leave Type</th>
+                            <th>Prev. Year</th>
+                            <th>This Year</th>
+                            <th>Total Taken/Encashed</th>
+                            <th>Balance</th>
+                            <th>Apply</th>
+
+                        </tr>
+                        @if (Model != null)
+                        {
+                            foreach (var item in Model.Select((x, i) => new { Data = x, Index = i }))
+                            {
+                                <tr>
+                                    <td>
+                                        @(item.Index + 1)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Data.LeaveTypeName)
+                                    </td>
+                                    <td>General</td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Data.PrevYearBalance)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Data.ThisYearEarned)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Data.TotalTaken)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Data.Leave_Balance)
+                                    </td>
+                                    <td>
+                                        @if (item.Data.Leave_Balance > 0)
+                                        {
+                                            @Html.ActionLink("Apply Leave", "Create", new { EmpCode = item.Data.EmpCode, levid = item.Data.LeaveTypeId},new { @class = "btn btn-success" })
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-danger"><i class="fa fa-close"></i> Not Assigned </label>
+
+                                        }</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="alert-danger"> No Data Avaiable ..</td>
+                            </tr>
+                        }
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@{
+    if (Session["error"] != null)
+    {
+        Session.Remove("error");
+    }
+    if (Session["sucess"] != null)
+    {
+        Session.Remove("sucess");
+    }
+}

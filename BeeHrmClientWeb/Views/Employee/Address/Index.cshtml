@@ -1,0 +1,138 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.EmployeeAddressDTO>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@section PageHeader{
+
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <a href="~/address/Create/@ViewBag.EmployeeDetail.Code" class="btn btn-success"><i class="fa fa-plus-circle"></i>  Create</a>
+                            @*<span>
+                                <i class="fa fa-plus-circle"></i>   @Html.ActionLink("Add New", "Create", new { @Id = ViewBag.EmployeeDetail.Code, @class="btn btn-success" })
+
+                            </span>*@
+                        </li>
+                    </ol>
+                </div>
+
+                <h2 class="font-light m-b-xs">
+                    Employee Address
+                </h2>
+            </div>
+        </div>
+    </div>
+
+}
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmployeeCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HouseNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WardNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VDC)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.District)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Zone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.State)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Country)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LandMark)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AddressType)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.HouseNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WardNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VDC)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.District1.DistrictName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Zone1.ZoneName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.State)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Country1.CountryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LandMark)
+                        </td>
+                        <td>
+                            @if (@item.AddressType == "P")
+                            {
+                                <text>Permanent</text>
+                            }
+                            @if (@item.AddressType == "T")
+                {
+                                <text>Permanent</text>
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

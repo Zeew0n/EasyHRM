@@ -1,0 +1,116 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.EmployeeVisitDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Visits
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        $('.delete').on('click', function () {
+            var res = confirm("Are you sure you want to delete?");
+            if (!res)
+            {
+                return false;
+            }
+        });
+
+    </script>
+}
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+        </div>
+        <div class="panel-body basic">
+            <div class="pull-right">
+                <a href="/visit/@ViewBag.EmployeeDetail.Code/create" class="btn btn-sm btn-primary">Add More</a>
+            </div>
+            <h3>Visits</h3>
+            <table class="table">
+                <tr>
+                    <th>
+                       @Html.DisplayNameFor(model => model.VisitCity), @Html.DisplayNameFor(model => model.VisitCoutryId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VisitStartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.VisitEndDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.EmpDesignationId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CreatedAt)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        
+                        <td>
+                           @Html.DisplayFor(modelItem => item.VisitCity), @Html.DisplayFor(modelItem => item.CountryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VisitStartDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VisitEndDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DesgName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", item.VisitEmpCode+"/VisitEdit", new {  id=item.VisitId }) |
+                            @Html.ActionLink("Delete", item.VisitEmpCode+"/VisitDelete", new {  id=item.VisitId },new { @class = "delete"})
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

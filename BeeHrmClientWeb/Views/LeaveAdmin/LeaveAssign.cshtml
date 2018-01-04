@@ -1,0 +1,127 @@
+﻿@model BeeHRM.ApplicationService.Leave_Module.DTOs.LeaveAssignedDTOs
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i>@Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+
+                <h2 class="font-light m-b-xs">
+                    Leave Assignment
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+    @if (Session["error"] != null)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["error"]
+        </div>
+    }
+    @if (Session["success"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["success"]
+        </div>
+    }
+    <div class="box-body">
+        <div class="row">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(false)
+
+                <div class="form-horizontal">
+                    @if (Model.LeaveAssignedList.Count != 0)
+                    {
+                        @Html.HiddenFor(x => x.AssignEmpCode)
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    @Html.HiddenFor(x => x.AssignEmpCode)
+                                    @Html.DisplayNameFor(x => x.LeaveAssignedList[0].MonthName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.LeaveAssignedList[0].HomeLeaveBalance)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.LeaveAssignedList[0].SickLeaveBalance)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.LeaveAssignedList[0].CasualLeaveBalance)
+                                </th>
+                            </tr>
+                            @for (int i = 0; i < Model.LeaveAssignedList.Count; i++)
+                            {
+                                bool Display = false;
+                                int colspan = 3;
+                                if (Model.LeaveAssignedList[i].LeaveGainedMonth <= 1)
+                                {
+                                    Display = true;
+                                    colspan = 1;
+                                }
+                                <tr>
+                                    <td>
+
+                                        @Html.HiddenFor(x => x.LeaveAssignedList[i].MonthId)
+                                        @Html.HiddenFor(x => x.LeaveAssignedList[i].LeaveGainedMonth)
+                                        @Html.DisplayFor(x => x.LeaveAssignedList[i].MonthName)
+                                    </td>
+
+                                    <td colspan=@colspan>
+                                        @Html.TextBoxFor(x => x.LeaveAssignedList[i].HomeLeaveBalance)
+                                    </td>
+
+                                    @if (i <= 1)
+                                    {
+                                        <td>
+                                            @Html.TextBoxFor(x => x.LeaveAssignedList[i].SickLeaveBalance)
+                                        </td>
+                                    }
+                                    @if(i >0 && i <= 1) { 
+                                        <td>
+                                            @Html.TextBoxFor(x => x.LeaveAssignedList[i].CasualLeaveBalance)
+                                        </td>
+                                    }
+
+
+                                </tr>
+                            }
+                        </table>
+                    }
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-8">
+                            <input type="submit" value="Update" class="btn btn-success" />
+                            
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@{
+    if (Session["error"] != null)
+    {
+        Session.Remove("error");
+    }
+}

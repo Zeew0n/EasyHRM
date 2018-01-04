@@ -1,0 +1,388 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.EmployeeDTO>
+
+@{
+    ViewBag.Title = "AssignApprovers";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<h2>AssignApprovers</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpUserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpPassword)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpOfficeId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpLevelId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpRankId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpShiftId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpDeptId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpRoleId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpSectionId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpDesgId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpTypeId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpBgId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpJobTypeId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpLeaveRuleId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpDeptHead)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpOfficeHead)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpEmail)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpPhoto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpGender)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpMaritalStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpIncapacitated)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpCreatedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpContractExpiryDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpAttendanceIgnore)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpPayroll)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpJobHistoryId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpSalaryScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpGradeSalary)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpDearnessSalary)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpTimeScale)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JoinDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpServiceEventGroupId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ResponseMessage)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OfficeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DeptName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DsgName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GroupName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BgName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RankName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FacultyName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DegreeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Division)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SectionName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DistrictName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EthnicityName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpDob)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpAppointmentDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpDisplayCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpCurrentRankAppDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OfficeParentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.JobTypeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpTAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpMobileNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmpRemoteType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RoleName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpUserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpPassword)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpOfficeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpLevelId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpRankId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpShiftId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpDeptId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpRoleId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpSectionId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpDesgId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpTypeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpBgId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpJobTypeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpLeaveRuleId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpDeptHead)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpOfficeHead)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpEmail)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpPhoto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpGender)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpMaritalStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpIncapacitated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpCreatedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpContractExpiryDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpAttendanceIgnore)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpPayroll)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpJobHistoryId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpSalaryScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpGradeSalary)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpDearnessSalary)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpTimeScale)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.JoinDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpServiceEventGroupId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ResponseMessage)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OfficeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DeptName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DsgName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GroupName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BgName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contact)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RankName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FacultyName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DegreeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Division)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SectionName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DistrictName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EthnicityName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpDob)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpAppointmentDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpDisplayCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpCurrentRankAppDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OfficeParentId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.JobTypeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpTAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpMobileNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpRemoteType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RoleName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

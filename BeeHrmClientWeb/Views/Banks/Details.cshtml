@@ -1,0 +1,43 @@
+﻿@model BeeHRM.Repository.Bank
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Bank</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.BankName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankAddedDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankAddedDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.BankId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,29 @@
+.navbar-custom {
+    background-color:#2196F3;
+    border-radius: 0px;
+}
+.navbar-nav > li > a, a:focus, a:hover {
+    color: #2196F3
+}
+.nav > li > a:hover, .nav > li > a:focus {
+    text-decoration: none;
+    background-color: #2196F3;
+}
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+    background-color: #2196F3;
+    border-color: #337ab7;
+}
+.menusBg{
+    background: #F5F5F5;
+}
+.menusColor li a {
+    color: #34495e;
+}
+.menusColor li a:hover {
+    color: #000;
+    background: rgba(255,255,255,1);
+}
+
+.box.box-top-border {
+    border-top-color: #2196F3;
+}

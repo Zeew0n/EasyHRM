@@ -1,0 +1,574 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.ViewModel.DailyAttendanceFilterViewModel>
+@{
+    ViewBag.Title = "Attendance Daily ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var date1 = "";
+    if (ViewBag.date != null)
+    {
+        date1 = ViewBag.date.ToString("MM/dd/yyyy");
+    }
+
+    var officeid = "";
+    if (ViewBag.officeid != null)
+    {
+        officeid = ViewBag.officeid.ToString();
+    }
+
+    var desgid = "";
+    if (ViewBag.Desgid != null)
+    {
+        desgid = ViewBag.Desgid.ToString();
+    }
+
+    var deprtId = "";
+    if (ViewBag.deprtId != null)
+    {
+        deprtId = ViewBag.Desgid.ToString();
+    }
+
+    var empcode = "";
+    if (ViewBag.empdoce != null)
+    {
+        empcode = ViewBag.empdoce.ToString();
+    }
+
+    var emptype = "";
+    if (ViewBag.emptype != null)
+    {
+        emptype = ViewBag.emptype.ToString();
+    }
+    var i = 0;
+    var j = 0;
+    var k = 0;
+    var l = 0;
+    var m = 0;
+    var n = 0;
+
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Daily Employee Attendance Status
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<form action="/empattendancestatus" method="post">
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <select name="officeid" class="form-control">
+                        <option value=""> ----Select Office Name----</option>
+                        @foreach (var row in ViewBag.ddlOfficeTypeList)
+
+                        {
+                            <option @(officeid == row.OfficeId.ToString() ? "selected" : "") value="@row.OfficeId"> @row.OfficeName</option>
+                        }
+
+                    </select>
+
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <select class="form-control" name="DsgId">
+                        <option value=""> ----Select Designation -----</option>
+                        @foreach (var row in ViewBag.ddlDesignationList)
+                        {
+                            <option @(desgid == row.DsgId.ToString() ? "selected" : "") value="@row.DsgId"> @row.DsgName</option>
+
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <input class="form-control" placeholder="Enter employee Code" type="text" value="@empcode" name="EmpCode">
+
+                </div>
+                <div class="col-lg-3 col-md-3">
+                   
+                    <div class='input-group date'>
+                        <input type='text' class="form-control" placeholder="Filter date " name="searchdate" required="required" value='@date1' />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 pull-right">
+                    <input type="submit" class="btn btn-success " value="Filter" />
+                    <a c class="btn btn-success " href="/attmonthlyreport">Export</a>
+                </div>
+               
+            </div>
+        </div>
+        <br />
+    </div>
+   
+</form>
+<br />
+<div class="box box-top-border">
+
+    <div class="box-body">
+
+
+
+        <ul class="tabs">
+            <li class="tab-link current" data-tab="Present">Present </li>
+            <li class="tab-link" data-tab="Absent">Absent </li>
+            <li class="tab-link" data-tab="Leave">Leave</li>
+            <li class="tab-link" data-tab="Officalvisit">Offical Visit</li>
+            <li class="tab-link" data-tab="lateentry">Late Entry</li>
+            <li class="tab-link" data-tab="earlyexit">Early Exit</li>
+        </ul>
+
+        <div id="Present" class="tab-content current">
+            <div class="well" id="tabular">
+                <h3> Present </h3>
+                <table class="table table-hover" id="attendanceTable">
+                    <thead>
+                        <tr>
+                            <th>Sn </th>
+                            <th>Date</th>
+                            <th>EmpCode</th>
+                            <th>Name </th>
+                            <th>Branch</th>
+                            <th>Designation</th>
+                            <th>Check In</th>
+                            <th>CheckOut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model)
+                        {
+                            bool status =Convert.ToBoolean(row.IsAbsent == "" ? "false" :row.IsAbsent);
+
+                            if (status==false)
+                            {
+                                i = i + 1;
+                        <tr>
+                            <td>@i</td>
+                            <td>@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd")</td>
+                            <td>@row.code</td>
+                            <td>@row.EmpName</td>
+                            <td>@row.OfficeName</td>
+                            <td>@row.DsgName</td>
+                            <td>
+
+                                @{
+                                    if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                    {
+                                <p>@Convert.ToDateTime(row.AttCheckIn).ToString("hh:mm:ss")</p>
+                                        }
+                                }
+                            </td>
+                            <td>
+
+
+                                @{
+                                    if (row.AttCheckOut != null && row.AttCheckOut != "")
+                                    {
+                                <p>@Convert.ToDateTime(row.AttCheckOut).ToString("hh:mm:ss")</p>
+                                        }
+                                }
+
+
+
+                            </td>
+
+
+
+
+
+
+                        </tr>
+                                            }
+
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <div id="Absent" class="tab-content">
+            <div class="well" id="tabular">
+                <h3> Absent </h3>
+                <table class="table table-hover" id="absent">
+                    <thead>
+                        <tr>
+                            <th>Sn </th>
+                            <th>Date</th>
+                            <th>EmpCode</th>
+                            <th>Name </th>
+                            <th>Branch</th>
+                            <th>Designation</th>
+                            <th> Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var row in Model)
+                        {
+                            bool status = Convert.ToBoolean(row.IsAbsent == "" ? "false" : row.IsAbsent);
+
+                            if (status == true)
+                            {
+                                j = j + 1;
+
+                        <tr>
+                            <td>@j</td>
+                            <td>@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd")</td>
+                            <td>@row.code</td>
+                            <td>@row.EmpName</td>
+                            <td>@row.OfficeName</td>
+                            <td>@row.DsgName</td>
+                            <td> <b> Absent</b> </td>
+                        </tr>
+                            }
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="Leave" class="tab-content">
+            <div class="well" id="tabular">
+                <h3> Leave </h3>
+                <table class="table table-hover" id="hello">
+                    <thead>
+                        <tr>
+                            <th>Sn </th>
+                            <th>Date</th>
+                            <th>EmpCode</th>
+                            <th>Name </th>
+                            <th>Branch</th>
+                            <th>Designation</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model)
+                        {
+
+                            if (row.Isleave != null && row.Isleave != "")
+                            {
+                                k = k + 1;
+                        <tr>
+                            <td>@k</td>
+                            <td>@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd")</td>
+                            <td>@row.code</td>
+                            <td>@row.EmpName</td>
+                            <td>@row.OfficeName</td>
+                            <td>@row.DsgName</td>
+                            <td> <b> On Leave</b></td>
+                        </tr>
+                            }
+
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <div id="Officalvisit" class="tab-content">
+            <div class="well" id="tabular">
+                <h3> On Offical Visit </h3>
+                <table class="table table-hover" id="officalvisit">
+                    <thead>
+                        <tr>
+                            <th>Sn </th>
+                            <th>Date</th>
+                            <th>EmpCode</th>
+                            <th>Name </th>
+                            <th>Branch</th>
+                            <th>Designation</th>
+                            <th>Check </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model)
+                        {
+
+                            if (row.IsOfficialVisit != null && row.IsOfficialVisit != "")
+                            {
+                                l = l + 1;
+                        <tr>
+                            <td>@l</td>
+                            <td>@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd")</td>
+                            <td>@row.code</td>
+                            <td>@row.EmpName</td>
+                            <td>@row.OfficeName</td>
+                            <td>@row.DsgName</td>
+                            <td> <b>Offical Visit </b></td>
+                        </tr>
+                            }
+
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+        <div id="lateentry" class="tab-content">
+            <div class="well" id="tabular">
+                <h3> Late Entry </h3>
+                <table class="table table-hover" id="lateentry1">
+                    <thead>
+                        <tr>
+                            <th>Sn </th>
+                            <th>Date</th>
+                            <th>EmpCode</th>
+                            <th>Name </th>
+                            <th>Branch</th>
+                            <th>Designation</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Late Entry</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model)
+                        {
+                            if (row.EmpCode != null || row.EmpCode != 0)
+                            {
+                                if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                {
+                                    DateTime? checkin = Convert.ToDateTime(row.AttCheckIn);
+                                    TimeSpan? starttime = TimeSpan.Parse(row.AttShiftStart);
+                                    TimeSpan? delayallow = TimeSpan.Parse(row.ShiftDelayAllow);
+                                    TimeSpan? diff = FormatLateEntry(checkin, starttime);
+
+                                    if (-delayallow > diff)
+                                    {
+                                        m = m + 1;
+                                        <tr>
+                                            <td>@m</td>
+                                            <td>@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd")</td>
+                                            <td>@row.code</td>
+                                            <td>@row.EmpName</td>
+                                            <td>@row.OfficeName</td>
+                                            <td>@row.DsgName</td>
+                                            <td>
+                                                @{
+                                                    if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                                    {
+                                                        <p>@Convert.ToDateTime(row.AttCheckIn).ToString("HH:mm:ss")</p>
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (row.AttCheckIn != null && row.AttCheckOut != "")
+                                                    {
+                                                        <p>@Convert.ToDateTime(row.AttCheckOut).ToString("HH:mm:ss")</p>
+                                                    }
+                                                }
+                                            </td>
+                                            <td> <p class="label label-danger">@(-diff)</p></td>
+                                        </tr>
+                                                                }
+
+                                                            }
+
+                                                        }
+                                                    }
+
+                    </tbody>
+
+
+                </table>
+            </div>
+        </div>
+        <div id="earlyexit" class="tab-content">
+            <div class="well" id="tabular">
+                <h3> Early Exit </h3>
+                <table class="table table-hover" id="earlyexit1">
+                    <thead>
+                        <tr>
+                            <th>Sn </th>
+                            <th>Date</th>
+                            <th>EmpCode</th>
+                            <th>Name </th>
+                            <th>Branch</th>
+                            <th>Designation</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Early Exit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model)
+                        {
+
+                            if (row.AttCheckOut != null && row.AttCheckOut != "")
+                            {
+                                DateTime? checkout = Convert.ToDateTime(row.AttCheckOut);
+                                TimeSpan? endtime = TimeSpan.Parse(row.AttShiftEnd);
+                                TimeSpan? delayallow = TimeSpan.Parse(row.ShiftDelayAllow);
+                                TimeSpan? diff = FormatEarlyExit(checkout, endtime);
+
+                                if ((-delayallow) > diff)
+                                {
+                                    n = n + 1;
+                                    <tr>
+                                        <td>@n</td>
+                                        <td>@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd")</td>
+                                        <td>@row.code</td>
+                                        <td>@row.EmpName</td>
+                                        <td>@row.OfficeName</td>
+                                        <td>@row.DsgName</td>
+                                        <td>
+                                            @{
+                                                if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                                {
+                                                    <p>@Convert.ToDateTime(row.AttCheckIn).ToString("HH:mm:ss")</p>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @{
+                                                if (row.AttCheckIn != null && row.AttCheckOut != "")
+                                                {
+                                                    <p>@Convert.ToDateTime(row.AttCheckOut).ToString("HH:mm:ss")</p>
+                                                }
+                                            }
+                                        </td>
+                                        <td> <p class="label label-danger">@(-diff)</p></td>
+                                    </tr>
+                                                        }
+
+                                                    }
+                                                }
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+            $(document).ready(function () {
+                $('.date').datetimepicker({
+                    format: 'MM/DD/YYYY',
+                    ignoreReadonly: true,
+                    maxDate: 'now'
+                });
+
+            $('#attendanceTable').DataTable();
+            $('#absent').DataTable();
+            $('#hello').DataTable();
+            $('#officalvisit').DataTable();
+            $('#lateentry1').DataTable();
+            $('#earlyexit1').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $(".datepicker").datepicker({ maxDate: '0' });
+            $('ul.tabs li').click(function () {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            })
+
+        });
+
+    </script>
+}
+@functions{
+        public TimeSpan? FormatLateEntry(DateTime? date, TimeSpan? shiftStart)
+        {
+            TimeSpan ret = new TimeSpan();
+            TimeSpan? checkInTime = date != null ? TimeSpan.Parse(date.Value.ToString("HH:mm:ss")) : ret;
+            TimeSpan? lateTime = shiftStart - checkInTime;
+            if (lateTime == TimeSpan.Parse("10:00:00"))
+            {
+                return TimeSpan.Parse("00:00:00");
+            }
+            return lateTime;
+        }
+
+        public TimeSpan? FormatEarlyExit(DateTime? checkOut, TimeSpan? shiftEnd)
+        {
+            TimeSpan? checkOutTime = checkOut != null ? TimeSpan.Parse(checkOut.Value.ToString("HH:mm:ss")) + TimeSpan.Parse("00:00:00") : new TimeSpan();
+            TimeSpan? earlyExit = checkOutTime - shiftEnd;
+            if (earlyExit == TimeSpan.Parse("-18:00:00"))
+            {
+                return TimeSpan.Parse("00:00:00");
+            }
+            return earlyExit;
+        }
+
+
+
+}
+
+
+
+
+

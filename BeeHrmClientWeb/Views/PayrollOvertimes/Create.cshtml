@@ -1,0 +1,185 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollOvertimeDTO
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var a = Model;
+
+    var EmpCode = "";
+    if (ViewBag.EmpCode != null)
+    {
+        EmpCode = ViewBag.EmpCode.ToString();
+    }
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("Index","PayrollOvertimes")' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Overtime
+                    <small>Add New</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                <label>Employee</label>
+                                <select name="EmpCode" class="form-control custom-select" id="empcode" required="required">
+                                    <option value=""> ----Select Employee----</option>
+                                    @foreach (var row in ViewBag.ddlEmployeeList)
+                                    {
+                                        if (row.Value != null)
+                                        {
+                                            <option @(EmpCode == row.Value.ToString() ? "selected" : "") value="@row.Value"> @row.Text</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.OvertimeDate, htmlAttributes: new { @class = "control-label col-md-12" })
+                            </div>
+                            @*<div class="form-group">
+                                @Html.LabelFor(model => model.OvertimeDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                                </div>*@
+                            <div class="form-group">
+                                @Html.EditorFor(model => model.OvertimeDateNP, new { htmlAttributes = new { @class = "form-control date", placeholder = "Enter a Overtime Date" } })
+                                @Html.ValidationMessageFor(model => model.OvertimeDate, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.EditorFor(model => model.Details, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ApprovedById, "Approver", htmlAttributes: new { @class = "control-label col-md-2" })
+
+                                <select id="approverList" name="ApprovedById" class="form-control"></select>
+
+                                @*@Html.DropDownListFor(model => model.ApprovedById, Model.ApproverList, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ApprovedById, "", new { @class = "text-danger" })*@
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ApproveStatusDate, htmlAttributes: new { @class = "control-label col-md-12" })
+                            </div>
+                            <div class="form-group">
+                                @Html.EditorFor(model => model.ApproveStatusDateNP, new { htmlAttributes = new { @class = "form-control date", @placeholder = "Enter a Overtime Approve Date" } })
+                                @Html.ValidationMessageFor(model => model.ApproveStatusDate, "", new { @class = "text-danger" })
+                            </div>
+
+                            @*<div class="form-group">
+                                    @Html.LabelFor(model => model.OvertimeAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    @Html.EditorFor(model => model.OvertimeAmount, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.OvertimeAmount, "", new { @class = "text-danger" })
+                                </div>*@
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.OvertimeHours, htmlAttributes: new { @class = "control-label col-md-2" })
+                                @Html.EditorFor(model => model.OvertimeHours, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.OvertimeHours, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.OvertimeAppliedDate, htmlAttributes: new { @class = "control-label col-md-12" })
+                            </div>
+                            <div class="form-group">
+                                @Html.EditorFor(model => model.OvertimeAppliedDateNP, new { htmlAttributes = new { @class = "form-control date", @placeholder = "Enter a Overtime Applied Date" } })
+                                @Html.ValidationMessageFor(model => model.OvertimeAppliedDate, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ApproveStatus, htmlAttributes: new { @class = "control-label col-md-3" })
+                                @Html.CheckBoxFor(model => model.ApproveStatus)
+                            </div>
+                            <div class="box-footer">
+                                <input type="submit" name="action:Create" value="Save" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script type="text/javascript">
+        $("#empcode").change(function () {
+            var empcode = $("#empcode").val();
+
+            $.post("@Url.Action("ApproverList", "PayrollOvertimes")", { empcode: empcode }, function (data) {
+                $("#approverList").html('<option value="0">Please Select</option>');
+                $.each(data, function () {
+
+                    $("#approverList").append($("<option />").val(this.Value).text(this.Text));
+                });
+            });
+        });
+
+
+        $(document).ready(function () {
+            $('.date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $(".custom-select").customselect();
+        });
+    </script>
+}

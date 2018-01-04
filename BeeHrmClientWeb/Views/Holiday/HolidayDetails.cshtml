@@ -1,0 +1,180 @@
+﻿
+@model BeeHRM.ApplicationService.ViewModel.HolidayDetailsViewModel
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/Holiday" class="btn btn-success"><i class="fa fa-bars"></i> Holiday List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">Holiday Details</h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+
+        .badge {
+            background-color: #fff;
+            color: #222;
+        }
+    </style>
+}
+
+
+          
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="panel panel-default">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <span class="pull-right"> <b> @Model.HolidayTitle </b></span>
+                                    <strong>Holiday Title</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@*@Model.HolidayDate.ToString("d MMM, yyyy")*@
+                                        @{var date = !String.IsNullOrEmpty(Model.HolidayDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.HolidayDate)).ToString().Replace('/', '-') : null;
+                                        }
+                                        @if (@date != null)
+                                        {
+                                            <p>@date (@(Convert.ToString(Model.HolidayDate) == "" ? "" : Convert.ToDateTime(Model.HolidayDate).ToString("yyyy-MMM-dd")))</p>
+                                        }
+                                        else {
+                                            <p></p>
+                                        }
+                                    </span>
+                                    <strong>Holiday Date</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.EthnicityName</span>
+                                    <strong>Ethnic Group</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.ReligionName</span>
+                                    <strong>Religion</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.HolidayGender</span>
+                                    <strong>Gender</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <p class="list-group-item-heading"><strong>Holiday Description</strong></p>
+                                    <br>
+                                    <p class="list-group-item-text">@Model.HolidayDescription</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@{
+                                        if (Model.HolidayStatus == true)
+                                        {
+                                            <span class="label label-primary">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">Inactive</span>
+                                        }
+                                    }</span>
+                                    <strong>Holiday Status </strong>
+                                </li>
+                                @*<li class="list-group-item">
+                                    <span class="pull-right">@{
+                                        if (Model.HolidayYearlyOccourence == true)
+                                        {
+                                            <span class="label label-primary">Yes</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-danger">No</span>
+                                        }
+                                    }
+
+                                    </span>
+                                    <strong>Holiday YearlyOccourence </strong>
+                                </li>*@
+                                <li class="list-group-item">
+                                    <strong>Holiday Office</strong>
+                                        @{
+                                        if (Model.HolidayOfficeId==0)
+                                        {
+                                           <b>All Offices</b>
+                                            }
+                                            else
+                                            {
+                                                <ul  class="list-group">
+                                                    @foreach(var item in Model.OfficesList )
+                                                    {
+                                                        <li class="list-group-item">@item.OfficeName</li>
+                                                    }
+                                                </ul>
+                                            }
+                                        }
+
+                                
+                               
+                            </li>
+                                
+
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+
+ 

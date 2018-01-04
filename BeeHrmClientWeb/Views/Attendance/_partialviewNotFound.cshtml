@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "EmployeeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+<div class="wrapper container-fluid" id="wrapper">
+    <div id="sidebar-wrapper" class="menusBg menusColor">
+        <ul class="sidebar-nav">
+            @foreach (var item in ViewBag.SideBar)
+            {
+            <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+            }
+        </ul>
+    </div>
+</div>
+}
+<h1>@ViewBag.Error</h1>

@@ -1,0 +1,238 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollLeaveDeductionInformation
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        
+                        <li class="active">
+                            @if (ViewBag.AllowCreate == true)
+                            {
+                                <span>
+                                    <a href="/PayrollLeaveDeduction/Add" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New Leave Encashment</a>
+                                </span>
+                            }
+                        </li>
+                    </ol>
+                </div>
+
+                <h2 class="font-light m-b-xs">
+                    Payroll Leave Encashment List
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        .modal-header {
+            padding: 5px;
+            border-bottom: 1px solid #a94442;
+        }
+
+        @@media only screen and (min-width: 500px) {
+            .modal-dialog {
+                width: 500px;
+                margin: 30px auto;
+                top: 100px;
+            }
+        }
+
+        .modal-content {
+            background-color: #eff5ff;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        }
+    </style>
+}
+
+
+@if (Session["LeaveDeleteStatus"] != null && Session["LeaveDeleteStatus"].ToString() == "Done")
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> The Leave has been deleted.
+    </div>
+    Session.Remove("LeaveDeleteStatus");
+}
+
+@if (Session["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @Session["Success"].ToString()
+    </div>
+    Session.Remove("Success");
+}
+
+
+<div class="delerror"></div>
+<div class="box box-top-border">
+    <div class="box-body">
+
+        
+        
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <div class="col-md-3">
+                    @Html.DropDownListFor(model => model.LeaveYearId, Model.YearSelectList, "Select Please", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.LeaveYearId, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-md-2">
+                    <select class="form-control monthSelector" name="MonthId">
+                        <option value="0">Select Month</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    @Html.DropDownListFor(model => model.EmpId, Model.EmployeeCodeSelectlist, "Select Employee", new { @class = "form-control custom-select" })
+                </div>
+
+                <div class="col-md-2">
+                    <input type="submit" value="SEARCH" class="btn btn-primary" />
+                </div>
+            </div>
+
+        }
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="tblLeaveYear">
+                    <thead>
+                        <tr>
+                            <th>Emp Name</th>
+                            <th>Leave Type</th>
+                            <th>Leave Days</th>
+                            <th>Date</th>
+                            <th>IsCashment</th>
+                            <th>Details</th>
+                            <th>Options</th>
+                       </tr>
+                        </thead>
+                    <tbody>
+                        @foreach (var item in Model.PayrollLeaveDeductionList)
+                        {
+                            <tr>
+                               <td>
+                                    @Html.DisplayFor(modelItem => item.Employee.EmpName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LeaveType.LeaveTypeName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LeaveDays)
+                                </td>
+                                <td>
+                                    @*@Convert.ToDateTime(item.LeaveDate).ToString("dd MMM, yyyy")*@
+                                    @{var date = !String.IsNullOrEmpty(item.LeaveDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.LeaveDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @date (@(Convert.ToString(item.LeaveDate) == "" ? "" : Convert.ToDateTime(item.LeaveDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                                <td>
+                                @{
+                                    if (item.isEncashed)
+                                        {
+                                            <span class="label label-success">Cashed</span>
+                                    }
+                                    else
+                                    { <span class="label label-warning">Pending</span>
+                                    }
+                                }
+
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Details)
+                                </td>
+                                <td>
+@if (ViewBag.AllowEdit == true)
+{
+                                 <!--   <a class="label-success label" href="/PayrollLeaveDeduction/Update/@item.DeductionId"><i class="fa fa-edit"></i> </a>--> } &nbsp 
+                                   @if (item.isEncashed == false)
+                                   {
+                                       if (ViewBag.AllowEdit == true)
+                                       {
+                                    <a class="label-success label confirm_delete" href="/PayrollLeaveDeduction/Delete/@item.DeductionId"><i class="fa fa-trash-o"></i> </a>
+                                       }
+                                   } </td>
+                            </tr>
+                        }
+                        </tbody>
+
+                </table>
+              
+            
+                    
+
+
+
+
+                             
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+<script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+<link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $('#tblLeaveYear').DataTable();
+        @*$(".monthSelector").val(@month);*@
+        $(document).ready(function () {
+            $(".custom-select").customselect();
+        });
+    </script>
+
+
+
+}
+
+

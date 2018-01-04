@@ -1,0 +1,127 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollSalaryTableDTO
+
+@{
+    ViewBag.Title = "GeneratePayroll";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@if(TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Error"]
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        @*<li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Html.ActionLink("Back to List", "PayrollAllowances")</span><a href="#"></a></li>*@
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Generate payroll
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.SalaryConfirmed)
+        <div class="form-group">
+            @Html.LabelFor(model => model.FyId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.FyId,Model.FiscalYearList,  new { @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.FyId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PayrollMonthId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.PayrollMonthId,Model.MonthSelectList ,new { @class = "form-control"  })
+                @Html.ValidationMessageFor(model => model.PayrollMonthId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none;">
+            @Html.LabelFor(model => model.CreatorId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CreatorId, new { @class = "form-control", @Value= Session["EmpCode"]  })
+                @Html.ValidationMessageFor(model => model.CreatorId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OfficeId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.OfficeId,@Model.OfficeList, new { @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.OfficeId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" style="display:none">
+            @Html.LabelFor(model => model.BgId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BgId,new { @class = "form-control" } )
+                @Html.ValidationMessageFor(model => model.BgId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Details, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Details, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @if(!Model.SalaryConfirmed)
+        { 
+            if(ViewBag.UpdateExisting == "true"){
+            <div class="form-group" style="">
+                @Html.LabelFor(model => model.UpdateExisting, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.UpdateExisting)
+                        @Html.ValidationMessageFor(model => model.UpdateExisting, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            }
+        }
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Generate" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+@*@Html.ActionLink("hgcv", "GetSendSMS", "Payroll")*@
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

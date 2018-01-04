@@ -1,0 +1,458 @@
+﻿
+@{
+    ViewBag.Title = "RecommenderList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    var i = 0;
+
+
+    var officeid = "";
+    if (ViewBag.officeid != null)
+    {
+        officeid = ViewBag.officeid.ToString();
+    }
+
+    var empcode = "";
+    if (ViewBag.code != null)
+    {
+        empcode = ViewBag.code.ToString();
+    }
+
+    //var startdate = "";
+    //if (ViewBag.startdate != null)
+    //{
+    //    startdate = ViewBag.startdate.ToString("yyyy-MM-dd");
+    //}
+    int? approvestatus = null;
+    if (ViewBag.approvestatus != null)
+    {
+        approvestatus = ViewBag.approvestatus;
+    }
+    int? recommendstatus = null;
+    if (ViewBag.recommendstatus != null)
+    {
+        recommendstatus = ViewBag.recommendstatus;
+    }
+
+    //var enddate = "";
+    //if (ViewBag.enddate != null)
+    //{
+    //    enddate = ViewBag.enddate.ToString("yyyy-MM-dd");
+    //}
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@model IEnumerable<BeeHRM.ApplicationService.ViewModel.AttendanceRequestsListViewModel>
+
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+@{
+    if (Session["recommend_status_chaged"] != null)
+    {
+        <div class="alert alert-success fade in" style="margin-top:18px;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+            <strong>@Session["recommend_status_chaged"]</strong>
+        </div>
+
+    }
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+
+
+
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Recommend- Attendence Request List
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+@{
+    if (Session["recommend-status_message"] != null)
+    {
+        <div class="alert alert-success fade in" style="margin-top:18px;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+            <strong>@Session["recommend-status_message"]</strong>
+
+        </div>
+
+        Session.Remove("recommend-status_message");
+    }
+
+
+    Session.Remove("recommend-status_message");
+
+
+}
+<div class="clearfix">
+    <br />
+</div>
+
+<div class="container-fluid">
+    <div class="row ">
+        <div class="panel panel-default box box-top-border">
+            <div class="panel-body">
+                <div class="box-body row">
+                    <form action="/user/attendancerequest/recommendlist" method="post">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select name="OfficeId" class="form-control custom-select" id="officelist">
+                                    <option value="">  Office List </option>
+                                    @foreach (var row in ViewBag.OfficeList)
+
+                                    {
+
+                                        <option @(officeid == row.OfficeId.ToString() ? "selected" : "") value="@row.OfficeId"> @row.OfficeName</option>
+                                    }
+
+                                </select>
+
+                            </div>
+                            <div class="col-md-3">
+                                <select name="EmpCodes" class="form-control custom-select">
+                                    <option value="">  Employee List </option>
+                                    @foreach (var row in ViewBag.emplist)
+
+                                    {
+
+
+                                        <option @(empcode == row.EmpCode.ToString() ? "selected" : "") value="@row.EmpCode"> @row.EmpName</option>
+
+                                    }
+
+                                </select>
+
+                            </div>
+                            <div class="form-group col-md-3 ">
+                                <input type='text' class="form-control" name="startdateNP" value="@ViewBag.startdate" id="date" placeholder="Start date" required />
+                            </div>
+                            <div class="form-group col-md-3 ">
+                                <input type='text' class="form-control" name="enddateNP" value="@ViewBag.enddate" id="date1" placeholder="End Date" required />
+                            </div>
+                        </div>
+
+                        <div class="clearfix"> <br /> </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <select name="ApproverStatus" class="form-control">
+                                    <option value="">Select Approved Status</option>
+                                    @if (approvestatus != null)
+                                    {
+                                        if (approvestatus == 1)
+                                        {
+                                            <option value="1" selected>Pending</option>
+                                            <option value="2">Approved</option>
+                                            <option value="3">Rejected</option>
+                                        }
+                                        else
+        if (approvestatus == 2)
+                                        {
+                                            <option value="2" selected>Approved</option>
+                                            <option value="3">Rejected</option>
+                                            <option value="1">Pending</option>
+
+                                        }
+                                        else
+        if (approvestatus == 3)
+                                        {
+                                            <option value="3" selected>Rejected</option>
+                                            <option value="1">Pending</option>
+                                            <option value="2">Approved</option>
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        <option value="1">Pending</option>
+                                        <option value="2">Approved</option>
+                                        <option value="3">Rejected</option>
+
+                                    }
+
+
+
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select name="RecommendSatus" class="form-control">
+                                    <option value="">Select Recommend Status</option>
+                                    @if (recommendstatus != null)
+                                    {
+                                        if (recommendstatus == 1)
+                                        {
+                                            <option value="1" selected>Pending</option>
+                                            <option value="2">Approved</option>
+                                            <option value="3">Rejected</option>
+                                        }
+                                        else
+        if (recommendstatus == 2)
+                                        {
+                                            <option value="2" selected>Approved</option>
+                                            <option value="3">Rejected</option>
+                                            <option value="1">Pending</option>
+
+                                        }
+                                        else
+        if (recommendstatus == 3)
+                                        {
+                                            <option value="3" selected>Rejected</option>
+                                            <option value="1">Pending</option>
+                                            <option value="2">Approved</option>
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        <option value="1">Pending</option>
+                                        <option value="2">Approved</option>
+                                        <option value="3">Rejected</option>
+
+                                    }
+
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="submit" class="btn btn-success" value="Search" />
+                            </div>
+                        </div>
+
+
+
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <br />
+        </div>
+        <div class="box box-green well box box-top-border">
+            <div class="box-body table-responsive">
+                <div id="divToPrint">
+
+
+
+
+                    <table class="table table-bordered" id="attendanceTable">
+                        <thead>
+
+                            <tr>
+                                <th>S.N</th>
+                                <th>Request Date</th>
+                                <th>Name</th>
+                                <th>Designation</th>
+                                <th>Request Type</th>
+                                <th>Recommend Status</th>
+                                <th>Approve Satus </th>
+                                <th>Option</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lst in Model)
+                            {
+                                i = i + 1;
+
+                                <tr>
+                                    <td>@i</td>
+                                    <td>
+                                        @{
+                                            var a = BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(lst.RequestDate)).ToString().Replace('/', '-');
+                                        }
+                                        @a (@(lst.RequestDate == "" ? "" : Convert.ToDateTime(lst.RequestDate).ToString("yyyy-MMM-dd")))
+
+                                    </td>
+                                    <td>@lst.EmpName</td>
+                                    <td>@lst.Designation</td>
+                                    <td>@lst.RequestType</td>
+
+
+                                    <td>
+                                        @{
+                                            if (lst.RecommendStatus.ToString() == "1")
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                            else
+if (lst.RecommendStatus.ToString() == "2")
+                                            {
+                                                <label class="label label-success">Approve</label>
+                                            }
+                                            else
+if (lst.RecommendStatus.ToString() == "3")
+                                            {
+                                                <label class="label label-danger">Rejected</label>
+                                            }
+                                            else
+if (lst.RecommendStatus.ToString() == "4")
+                                            {
+                                                <label class="label label-danger">Cancelled</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                        }
+                                        <br />
+                                        @{
+                                            var recommentedDate = "";
+                                            if (lst.RecommendeDate != null && lst.RecommendeDate != "")
+                                            {
+                                                recommentedDate = !String.IsNullOrEmpty(lst.RecommendeDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(lst.RecommendeDate)).ToString().Replace('/', '-') : null;
+                                                <p>@recommentedDate (@(lst.RecommendeDate == "" ? "" : Convert.ToDateTime(lst.RecommendeDate).ToString("yyyy-MMM-dd")))</p>
+
+                                            }
+
+                                            else
+                                            {
+                                                <p></p>
+                                            }
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @{ if (lst.ApproveStatus.ToString() == "1")
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                            else
+        if (lst.ApproveStatus.ToString() == "2")
+                                            {
+                                                <label class="label label-success">Approve</label>
+                                            }
+                                            else
+      if (lst.ApproveStatus.ToString() == "3")
+                                            {
+                                                <label class="label label-danger">Rejected</label>
+                                            }
+                                            else
+   if (lst.ApproveStatus.ToString() == "4")
+                                            {
+                                                <label class="label label-danger">Cancelled</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                        }
+                                        <br />
+                                        @{
+                                            var approveDate = "";
+                                            if (lst.ApproveDate != null && lst.ApproveDate != "")
+                                            {
+
+                                                approveDate = !String.IsNullOrEmpty(lst.ApproveDate) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(lst.ApproveDate)).ToString().Replace('/', '-') : null;
+                                                <p>@approveDate (@(lst.ApproveDate == "" ? "" : Convert.ToDateTime(lst.ApproveDate).ToString("yyyy-MMM-dd")))</p>
+                                            }
+                                            else
+                                            {
+                                                <p></p>
+                                            }
+                                        }
+                                    </td>
+
+                                    <td><a class="btn btn-success" href="/user/attendancerequest/recommend/@lst.RequestId"> <i class="fa fa-eye"></i></a></td>
+                                </tr>
+
+                                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#date1').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#attendanceTable').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+
+        });
+
+    </script>
+}
+
+

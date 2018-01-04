@@ -1,0 +1,56 @@
+﻿@model BeeHRM.Repository.PayrollRemoteAllowance
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>PayrollRemoteAllowance</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RARankId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RARankId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RARemoteId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RARemoteId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteAllowance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RemoteAllowance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RAType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RAType)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

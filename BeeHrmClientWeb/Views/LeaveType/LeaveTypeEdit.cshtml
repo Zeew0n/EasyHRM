@@ -1,0 +1,157 @@
+﻿@model BeeHRM.ApplicationService.DTOs.LeaveTypeDTO
+@{
+    ViewBag.Title = "LeaveTypeEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/leavetype" class="btn btn-success"><i class="fa fa-bars"></i> View Leavetype List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Edit - @Model.LeaveTypeName
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-8">
+                <form method="POST" action="/leavetype/edit" accept-charset="UTF-8">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" value="@Model.LeaveTypeId" name="LeaveTypeId" />
+                    <div class="box-body">
+                        <div class="form-group ">
+                            <label for="label">Label(*)</label>
+                            <input class="form-control" placeholder="Enter leave type label" value="@Model.LeaveTypeName" name="LeaveTypeName" type="text" id="label">
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.LeaveTypeName)</span>
+                        </div>
+                        <div class="form-group ">
+                            <label for="desc">Description</label>
+                            <input class="form-control" placeholder="Enter leave type description" value="@Model.LeaveTypeDescription" name="LeaveTypeDescription" type="text" id="desc">
+                        </div>
+                        <div class="form-group ">
+                            <label for="number_of_time">Is one time or yearly?</label><br>
+                            <label><input checked="checked" name="NumberOfTime" type="radio" value="0" @(Model.NumberOfTime == 0 ? "checked" : "") > Yearly</label>
+                            <label style="margin-left:10px;"><input name="NumberOfTime" type="radio" value="1" @(Model.NumberOfTime == 1 ? "checked" : "")> One Time (Entire job Period)</label>
+                        </div>
+                        <div class="form-group ">
+                            <label for="is_cashable">Is Payable</label>
+                            <select class="form-control" id="is_cashable" name="IsPayable">
+                                <option value="True" @(Model.IsPayable == true ? "selected" : "")>Payable</option>
+                                <option value="False" @(Model.IsPayable == false ? "selected" : "")>Non-Payable</option>
+                            </select>
+                        </div>
+                        <div class="form-group ">
+                            <label for="is_cashable">Is Cashable</label>
+                            <select class="form-control" id="is_cashable" name="IsCashable">
+                                <option value="True" @(Model.IsCashable == true ? "selected" : "")>Cashable</option>
+                                <option value="False" @(Model.IsCashable == false ? "selected" : "")>Non-Cashable</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="max_cashable">Max Cashable</label>
+                            <input class="form-control" name="MaxCashable" type="text" value="@Model.MaxCashable" id="max_cashable">
+                            <span>0=not cashable and >0 is cashable days.Note cashable leave doesn't apply for one time leave.</span>
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.MaxCashable)</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="marritial_status">Applicable Maritial Status</label>
+                            <select class="form-control" id="MaritalStatus" name="MaritalStatus">
+                                <option value="B" @(Model.MaritalStatus == "B" ? "selected" : "")>Both</option>
+                                <option value="M" @(Model.MaritalStatus == "M" ? "selected" : "")>Married</option>
+                                <option value="U" @(Model.MaritalStatus == "U" ? "selected" : "")>Un-Married</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Applicable Gender</label>
+                            <select class="form-control" id="Gender" name="Gender">
+                                <option value="B" @(Model.Gender == "B" ? "selected" : "")>Both</option>
+                                <option value="M" @(Model.Gender == "M" ? "selected" : "")>Male</option>
+                                <option value="F" @(Model.Gender == "F" ? "selected" : "")>Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group ">
+                            <label for="is_tranferable">Is Transferable</label>
+                            <select class="form-control" id="is_tranferable" name="IsTransferable">
+                                <option value="True" @(Model.IsTransferable == true ? "checked" : "")>Transferable</option>
+                                <option value="False" @(Model.IsTransferable == false ? "checked" : "")>Non-Transferable</option>
+                            </select>
+                        </div>
+                        <div class="form-group ">
+                            <label for="max_transferable">Maximum Transferable</label>
+                            <input class="form-control" name="MaxTransferable" type="text" value="@Model.MaxTransferable" id="max_transferable">
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.MaxTransferable)</span>
+                        </div>
+                        <div class="form-group ">
+                            <label for="leave_apply_before">Leave Apply Before Days</label>
+                            <input class="form-control" name="LeaveApplyBefore" type="text" value="@Model.LeaveApplyBefore" id="leave_apply_before">
+                            <span>Apply leave before days(0= No Restriction)</span>
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.LeaveApplyBefore)</span>
+
+                        </div>
+                        <div class="form-group ">
+                            <label for="leave_qty_monthly">Number of Leave Days in a Month</label>
+                            <input class="form-control" name="MonthlyQty" type="text" value="@Model.MonthlyQty" id="leave_qty_monthly">
+                            <span>Number of leave days allowed in a month(0= No Restriction)</span>
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.MonthlyQty)</span>
+
+                        </div>
+                        <div class="form-group ">
+                            <label for="is_tranferable">Leave Type Assignment</label>
+                            <select class="form-control" id="is_tranferable" name="LeaveTypeAssignment">
+                                <option value="Assigned" @(Model.LeaveTypeAssignment == "Assigned" ? "selected" : "")>Assigned</option>
+                                <option value="Unassigned" @(Model.LeaveTypeAssignment == "Unassigned" ? "selected" : "")>Unassigned</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <input type="submit" name="Update" value="Update" class="btn btn-success">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

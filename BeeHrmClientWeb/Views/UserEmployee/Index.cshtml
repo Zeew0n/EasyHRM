@@ -1,0 +1,238 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeDetailsViewModel
+@{
+    ViewBag.Title = "EmployeeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Details of Employee - @Model.Name
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    @Html.Partial("_partialpageUserProfileDetail")
+    <div class="col-md-8 col-lg-9">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>User Basic Information</strong>
+            </div>
+            <div class="panel-body basic">
+
+                <table class="table table-bordered table-responsive">
+                    <tr>
+                        <td><strong>User Name</strong></td>
+                        <td><strong>Extension</strong></td>
+                        <td><strong>DOB</strong></td>
+                    </tr>
+                    <tr>
+                        <td>@Model.Username</td>
+                        <td>@Model.Contact</td>
+                        <td>
+                            @{
+                            if (Model.DateOfBirth == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                @*@Convert.ToDateTime(Model.DateOfBirth).ToString("d MMM, yyyy")*@
+                        var date = !String.IsNullOrEmpty(Model.DateOfBirth.ToString()) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.DateOfBirth)).ToString().Replace('/', '-') : null;
+                        <t>@date (@(Convert.ToString(Model.DateOfBirth) == "" ? "" : Convert.ToDateTime(Model.DateOfBirth).ToString("yyyy-MMM-dd")))</t>
+                            } }
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Marital status</strong></td>
+                    <td><strong>Marriage Anniversary</strong></td>
+                    <td><strong>Blood Group</strong></td>
+                </tr>
+                <tr>
+                    <td>@Model.MaritalStatus</td>
+                    <td>
+                        @{
+                        if (Model.MarriageAnniversary == "")
+                        {
+                            <span>Not Given</span>
+                        }
+                        else
+                        {
+                            @*@Convert.ToDateTime(Model.MarriageAnniversary).ToString("d MMM, yyyy")*@
+                    var date = !String.IsNullOrEmpty(Model.MarriageAnniversary.ToString()) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.MarriageAnniversary)).ToString().Replace('/', '-') : null;
+                    <t>@date (@(Convert.ToString(Model.MarriageAnniversary) == "" ? "" : Convert.ToDateTime(Model.MarriageAnniversary).ToString("yyyy-MMM-dd")))</t>
+                        }
+                    }
+                </td>
+                <td>@Model.BloodGroup</td>
+            </tr>
+            <tr>
+                <td><strong>Pan no</strong></td>
+                <td><strong>PF Number</strong></td>
+                <td><strong>CIT Number</strong></td>
+            </tr>
+            <tr>
+                <td>@Model.PAN</td>
+                <td>@Model.PFNUmber</td>
+                <td>@Model.CITNumber</td>
+            </tr>
+            <tr>
+                <td><strong>Ignore Attendance For Payroll</strong></td>
+                <td><strong>Incapacitated</strong></td>
+                <td><strong>Remote Area</strong></td>
+            </tr>
+            <tr>
+                <td>
+                    @{
+                        if (Model.AttendanceIgnore == "True")
+                        {
+                            <label class="label label-success">
+                                <i class="fa fa-minus-circle"></i>
+                                True
+                            </label>
+                        }
+                        else
+                        {
+                            <label class="label label-danger">
+                                <i class="fa fa-minus-circle"></i>
+                                False
+                            </label>
+                        }
+                    }
+                </td>
+                <td>
+                    @{
+                        if (Model.Incapacitated == "True")
+                        {
+                            <label class="label label-success">
+                                <i class="fa fa-minus-circle"></i>
+                                True
+                            </label>
+                        }
+                        else
+                        {
+                            <label class="label label-danger">
+                                <i class="fa fa-minus-circle"></i>
+                                False
+                            </label>
+                        }
+                    }
+                </td>
+                <td>@Model.RemoteArea</td>
+            </tr>
+        </table>
+
+    </div>
+
+
+</div>
+</div>
+<div class="col-md-8 col-lg-9">
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Service Information </strong>
+        </div>
+
+        <div class="panel-body basic">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Current Status Data</th>
+                        <th>Appointed Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.EmployeeAppointmentDetail)
+                    {
+                        <tr>
+                            <td><strong>Date</strong></td>
+                            <td></td>
+                            @{
+                                var datetime = item.AppointDate.Split(' ');
+                                var date = datetime[0];
+                            }
+                            <td>@date</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Branch</strong></td>
+                            <td>@Model.OfficeName</td>
+                            <td>@item.AppointBranch</td>
+                        </tr>
+                            <tr>
+                                <td><strong>Department</strong></td>
+                                <td>@Model.Department</td>
+                                <td>@item.AppointDepartment</td>
+                            </tr>
+                            @*<tr>
+                                    <td><strong>Group</strong></td>
+                                    <td>@Model.Group</td>
+                                    <td>@item.AppointGroup</td>
+                                </tr>*@
+                                <tr>
+                                    <td><strong>Rank</strong></td>
+                                    <td>@Model.Rank</td>
+                                    <td>@item.AppointRank</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Shift</strong></td>
+                                    <td>@Model.Shift</td>
+                                    <td>@item.AppointShift</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Designation</strong></td>
+                                    <td>@Model.Designation</td>
+                                    <td>@item.AppointDesignation</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Level</strong></td>
+                                    <td>@Model.Level</td>
+                                    <td>@item.AppointLevel</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Service Status</strong></td>
+                                    <td>@Model.ServiceStatus</td>
+                                    <td>@item.AppointService</td>
+                                </tr>
+                                }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+
+

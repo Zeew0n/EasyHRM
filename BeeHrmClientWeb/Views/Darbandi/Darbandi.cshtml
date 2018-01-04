@@ -1,0 +1,115 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.DarbandiDTO>
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('.dataTable').DataTable();
+    </script>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        @if (ViewBag.AllowCreate)
+                        {
+                            <li class="active"><span><a href="~/Darbandi/Create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add</a></span> </li>
+                        }
+                        
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Darbandi
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well box">
+                    <div class="box-body table-responsive">
+                        <table class="table table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Branch</th>
+                                    <th>Designation</th>
+                                    <th>No. of Darbandi</th>
+                                    <th>Type</th>
+                                    <th>Approved On</th>
+                                    
+                                    <th class="text-right">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var i = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @i
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.OfficeName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DesgName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DarbandiNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DarbandiType)
+                                        </td>
+                                        <td>
+                                            @*@Html.DisplayFor(modelItem => item.DarbandiDate)*@
+                                            @{var date = !String.IsNullOrEmpty(item.DarbandiDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.DarbandiDate)).ToString().Replace('/', '-') : null;
+                                            }
+                                            @if (@date != null)
+                                            {
+                                                <p>@date (@(Convert.ToString(item.DarbandiDate) == "" ? "" : Convert.ToDateTime(item.DarbandiDate).ToString("yyyy-MMM-dd")))</p>
+                                            }
+                                            else {
+                                                <p></p>
+                                            }
+                                        </td>
+                                       
+                                        <td class="text-right action">
+                                            @if (ViewBag.AllowEdit)
+                                            {
+                                                <a href="/Darbandi/Edit/@item.DarbandiId" class="btn btn-success"><i class="fa fa-edit"></i></a>
+                                            }
+                                            
+                                        </td>
+                                    </tr>
+                                        i++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

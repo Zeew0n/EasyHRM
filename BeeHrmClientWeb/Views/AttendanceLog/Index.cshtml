@@ -1,0 +1,181 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.AttendanceLogViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var logEmpCode = "";
+    if (ViewBag.logEmpCode != null)
+    {
+        logEmpCode = ViewBag.logEmpCode.ToString();
+    }
+
+    var logDateNP = "";
+    if (ViewBag.logDateNP != null)
+    {
+        logDateNP = ViewBag.logDateNP;
+    }
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Attendance Log
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="box box-top-border">
+        <div class="panel-body">
+            <div class="box-body row">
+                <form action="/Attendancelog" method="post">
+
+                    <div class="form-group  col-md-3">
+                        @* @Html.DropDownListFor(model => model.logEmpCode, Model.EmployeeSelectList, new { @class = "form-control custom-select", @id = "emplist" })*@
+
+
+                        <select name="logEmpCode" class="form-control custom-select" id="branchlist" required="required">
+                            <option value=""> ----Select Employee----</option>
+                            @foreach (var row in ViewBag.ddlEmployeeList)
+                            {
+                                if (row.Value != null)
+                                {
+                                    <option @(logEmpCode == row.Value.ToString() ? "selected" : "") value="@row.Value"> @row.Text</option>
+                                }
+
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3 ">
+                        <input type='text' class="form-control nepali-calendar" placeholder="Date" name="logDateNP" required="required" id="from-nepali-calendar" value="@logDateNP" />
+                    </div>
+                    <button type="submit" class="btn btn-success">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <br />
+    </div>
+    <div class="box box-top-border">
+        <div class="box-body table-responsive">
+            <div id="divToPrint">
+                @if (ViewBag.attendanceloglist != null)
+                {
+
+                    int i = 0;
+
+                    <table class="table table-bordered" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>S.N</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                @*<th>Log Type</th>*@
+                                <th>In Out Mode</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @foreach (var row in ViewBag.attendanceloglist)
+                            {
+                                i = i + 1;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>
+                                        @if (logDateNP != null)
+                                        {
+                                            var logdateeng = Convert.ToDateTime(row.logDate).ToString("yyyy-MMM-dd");
+                                            <p>@logDateNP (@logdateeng)</p>
+                                        }
+                                    </td>
+
+                                    <td>@Convert.ToDateTime(row.logTime).ToString("hh:mm:ss tt")</td>
+                                    @*<td>@row.logTypeId</td>*@
+                                    <td>
+                                        @if (@row.logMethodId == 1)
+                                        {
+                                            <p>Checkout</p>
+                                        }
+                                        else {
+                                            <p>Checkin</p>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+
+}
+
+@section scripts {
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <script type="text/javascript">
+        //$(document).ready(function () {
+        //    $('.date').datetimepicker({
+        //        format: 'MM/DD/YYYY',
+        //        ignoreReadonly: true,
+        //        maxDate: 'now'
+        //    });
+        //});
+
+        //$('#attendanceTable').DataTable();
+        //$('.dataTables_filter').css('float', 'right');
+
+        $(document).ready(function () {
+
+            $('.nepali-calendar').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+
+            $(".custom-select").customselect();
+
+        });
+
+    </script>
+}

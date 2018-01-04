@@ -1,0 +1,76 @@
+﻿
+<div class="col-sm-12 col-md-5 col-lg-3">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="avatar">
+                <div class="text-center">
+                    <a href="#">
+                        @{
+                            if (ViewBag.EmployeeDetail.PhotoName != null)
+                            {
+                                <img src="~/img/emp_photos/@ViewBag.EmployeeDetail.PhotoName"
+                                     alt="Profile photo of @ViewBag.EmployeeDetail.Name" class="img-responsive img-circle">
+                            }
+                            else
+                            {
+                                <img src="/img/emp_photos/profile.jpeg"
+                                     alt="Beehrm User " class="img-responsive img-circle">
+                            }
+                        }
+                    </a>
+                </div>
+                <div class="text-center">
+                    <h3 class="nomarginbtm">[ @ViewBag.EmployeeDetail.Code ] @ViewBag.EmployeeDetail.Name &nbsp;</h3>
+                </div>
+            </div>
+        </div>
+        <ul class="list-group" id="list-border-remove">
+            <li class="list-group-item">
+                <i class="fa fa-envelope-o"></i>
+                <span><a href="#">@ViewBag.EmployeeDetail.Email</a></span>
+            </li>
+            <li class="list-group-item">
+                <span class="">
+                    <strong>Join Date</strong>
+                    <i class="fa fa-fw fa-calendar-o"></i>
+                    @{var date = !String.IsNullOrEmpty(ViewBag.EmployeeDetail.JoinDate.ToString()) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(ViewBag.EmployeeDetail.JoinDate)).ToString().Replace('/', '-') : null;
+                    }
+                    @if (@date != null)
+                    {
+                        <t>@date (@(Convert.ToString(ViewBag.EmployeeDetail.JoinDate) == "" ? "" : Convert.ToDateTime(ViewBag.EmployeeDetail.JoinDate).ToString("yyyy-MMM-dd")))</t>
+                    }
+                    else {
+                        <t></t>
+                    }
+                    
+                    @*@(!String.IsNullOrEmpty(ViewBag.EmployeeDetail.JoinDate) ? Convert.ToDateTime(ViewBag.EmployeeDetail.JoinDate).ToString("d MMM, yyyy") : "No Join Date")*@
+                </span>
+            </li>
+        </ul>
+        <div class="list-group hidden-sm quick-link">
+            <div class="row">
+                @*<div class="col-md-2">
+                        <p class="nav">A</p>
+                    </div>*@
+                <div class="col-md-12">
+                    @*<a href="#" class="list-group-item">Appraisal</a>*@
+                    @*<a href="#" class="list-group-item">
+                            Assigned Assets
+                        </a>*@
+                    <a class="list-group-item" href="/UserEmployee/Address"> Address </a>
+                    <a href="/UserEmployee/FamilyDetail" class="list-group-item">Family Detail</a>
+                    <a href="/UserEmployee/Nominee" class="list-group-item">Nominee</a>
+                    <a href="/UserEmployee/Award" class="list-group-item">Award</a>
+                    <a class="list-group-item" href="/UserEmployee/Education"> Education </a>
+                    @*<a href="/UserEmployee/Experince" class="list-group-item">Experince</a>*@
+                    <a href="/UserEmployee/Skill" class="list-group-item">Skills</a>
+                    <a href="/UserEmployee/History" class="list-group-item">Service History</a>
+                    <a href="/UserEmployee/Training" class="list-group-item">Training</a>
+                    <a href="/UserEmployee/Documents" class="list-group-item">Documents</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,94 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollRemoteAllowancesDTO
+
+@{
+    ViewBag.Title = "PayrollRemoteAllowancesCreate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("Index","PayrollRemoteAllowances")' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Rank
+                    <small>Add New</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RARankId, "Rank")
+                                    @Html.DropDownListFor(model => model.RARankId, Model.RankList,new { @class = "form-control" } )
+                                    @Html.ValidationMessageFor(model => model.RARankId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RARemoteId, "Payroll Remote Allowance")
+                                    @Html.DropDownListFor(model => model.RARemoteId, Model.RemoteList,new { @class = "form-control" } )
+                                    @Html.ValidationMessageFor(model => model.RARemoteId, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RemoteAllowance, "Remote Allowance")
+                                    @Html.EditorFor(model => model.RemoteAllowance, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.RemoteAllowance, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RAType, "Remote Allowance Type")
+
+                                @Html.DropDownListFor(model => model.RAType, new List<SelectListItem>
+                                    {
+                                        new SelectListItem{ Text="Local", Value = "L" },
+                                        new SelectListItem{ Text="OutSider", Value = "O" },
+                                     }, new { @class = "form-control" }) 
+                                    @Html.ValidationMessageFor(model => model.RAType, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="box-footer">
+                                <input type="submit" value="Save" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

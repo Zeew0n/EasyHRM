@@ -1,0 +1,139 @@
+﻿@model BeeHRM.ApplicationService.DTOs.FiscalDTO
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("FiscalYear","Configurations")' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Fiscal Year
+                    <small>Add New</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FyName)
+
+                                @Html.EditorFor(model => model.FyName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FyName, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FyStartDate)
+
+                                @Html.EditorFor(model => model.FyStartDate, new { htmlAttributes = new { @class = "form-control date" } })
+                                @Html.ValidationMessageFor(model => model.FyStartDate, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @*@Html.LabelFor(model => model.FyEndDate)*@
+                                @Html.EditorFor(model => model.FyEndDate, new { htmlAttributes = new { @class = "form-control date" } })
+                                @Html.ValidationMessageFor(model => model.FyEndDate, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FyStartDateNp)
+                                @Html.EditorFor(model => model.FyStartDateNp, new { htmlAttributes = new { @class = "form-control date" } })
+                                @Html.ValidationMessageFor(model => model.FyStartDateNp, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FyEndDateNp)
+
+                                @Html.EditorFor(model => model.FyEndDateNp, new { htmlAttributes = new { @class = "form-control date" } })
+                                @Html.ValidationMessageFor(model => model.FyEndDateNp, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FyCurrent)
+                                @Html.EditorFor(model => model.FyCurrent)
+                                @Html.ValidationMessageFor(model => model.FyCurrent, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="box-footer">
+                                <input type="submit" name="action:Create" value="Save" class="btn btn-success" />
+                                <input type="submit" name="action:CreateClose" value="Save & Close" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+    </script>
+}

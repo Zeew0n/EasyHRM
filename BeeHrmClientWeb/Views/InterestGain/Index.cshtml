@@ -1,0 +1,134 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollIntrestGainDTO>
+
+@{
+    ViewBag.Title = "Interest Gain";
+
+    var OfficeId = "";
+    var EmpCode = "";
+    if (ViewBag.OfficeId != null)
+    {
+        OfficeId = ViewBag.OfficeId.ToString();
+    }
+    if (ViewBag.EmpCode != null)
+    {
+        EmpCode = ViewBag.EmpCode.ToString();
+    }
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><a href="/InterestGain/Import" class="btn btn-success"><i class="fa fa-plus"></i> Interest Gain Import</a></li>
+
+                        @*<li class="active"><a href="/PayrollAllowance/PayrollAllowancesCreate" class="btn btn-success"><i class="fa fa-plus"></i> Add New</a></li>*@
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Employee Interest Gain
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+    <div class="panel-body">
+        <div class="box-body row">
+            <form action="/InterestGain/Index" method="post">
+
+                <div class="form-group  col-md-3">
+                    @* @Html.DropDownListFor(model => model.logEmpCode, Model.EmployeeSelectList, new { @class = "form-control custom-select", @id = "emplist" })*@
+                    <select name="EmpId" class="form-control custom-select" id="">
+                        <option value=""> ----Select Employee----</option>
+                        @foreach (var row in ViewBag.EmpList)
+                        {
+                            if (row.Value != null)
+                            {
+                                <option @(EmpCode == row.Value.ToString() ? "selected" : "") value="@row.Value"> @row.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group  col-md-3">
+                    <select name="OfcId" class="form-control custom-select" id="branchlist">
+                        <option value=""> ----Select Office----</option>
+                        @foreach (var row in ViewBag.OfficeList)
+                        {
+                            if (row.Value != null)
+                            {
+                                <option @(OfficeId == row.Value.ToString() ? "selected" : "") value="@row.Value"> @row.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix">
+    <br />
+</div>
+
+<div class="box box-top-border">
+    <table class="table">
+        <tr>
+            <th>S.N</th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmpCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmployeeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InterestGain)
+            </th>
+        </tr>
+        @{int i = 1; }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmpCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmployeeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InterestGain)
+                </td>
+                @*<td>
+                        <a href="/PayrollEmployeeAllowance/AssignEmployees/@item.AllowanceMasterId" class="btn btn-success" target="_blank">Assign For Employee</a>
+                        <a href="/PayrollAllowance/PayrollAllowancesEdit/@item.AllowanceMasterId" class="btn btn-success">Edit</a>
+
+
+                    </td>*@
+            </tr>
+            i++;
+        }
+
+    </table>
+</div>

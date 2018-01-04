@@ -1,0 +1,141 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeFamilyViewModel
+
+@{
+    ViewBag.Title = "EditFamily";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("FamilyDetail","UserEmployee")'><i class="fa fa-bars" aria-hidden="true"></i>View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Family Detail
+                    <small>Edit</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.FamilyId)
+
+                            @*<div class="form-group">
+                                    @Html.LabelFor(model => model.EmpCode, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.EditorFor(model => model.EmpCode, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.EmpCode, "", new { @class = "text-danger" })
+                                </div>*@
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Fname, "Name", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.EditorFor(model => model.Fname, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Fname, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FDob, "Date Of Birth", htmlAttributes: new { @class = "control-label col-md-12" })
+                            </div>
+                            <div class="form-group">
+                                @Html.EditorFor(model => model.FDobNP, new { htmlAttributes = new { @class = "form-control date", @placeholder = "Enter a Date of Birth" } })
+                                @Html.ValidationMessageFor(model => model.FDob, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FGender, "Gender", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @*@Html.EditorFor(model => model.FGender, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FGender, "", new { @class = "text-danger" })*@
+                                @Html.DropDownListFor(model => model.FGender, new List<SelectListItem> {
+                           new SelectListItem { Text ="Male" , Value="Male"},
+                           new SelectListItem {Text="Female", Value="Female" },
+                           new SelectListItem { Text="Other", Value="Other"}
+                       },
+
+                           new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.FGender, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FRelation, "Relation", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.EditorFor(model => model.FRelation, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FRelation, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FContactNumber, "Contact Number", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.EditorFor(model => model.FContactNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FContactNumber, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FContactAddress, "Contact Address", htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.EditorFor(model => model.FContactAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.FContactAddress, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="box-footer">
+                                <input type="submit" name="action:Create" value="Save" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+}
+@section scripts{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+    </script>
+
+}

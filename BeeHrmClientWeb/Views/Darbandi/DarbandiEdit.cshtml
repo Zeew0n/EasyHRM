@@ -1,0 +1,159 @@
+﻿@model BeeHRM.ApplicationService.DTOs.DarbandiDTO
+
+@{
+    ViewBag.Title = "DarbandiEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+<link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/moment-datepicker/datepicker.css" rel="stylesheet" />
+}
+@section scripts{
+<script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Content/datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $('.date').nepaliDatePicker({
+            npdMonth: true,
+            npdYear: true,
+            npdYearCount: 10 // Options | Number of years to show
+        });
+    </script>
+}
+
+
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("Darbandi","Configurations")' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Darbandi
+                    
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.success
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @{
+                                    List<SelectListItem> listforOffice = new List<SelectListItem>();
+                                    foreach (var row in ViewBag.officeList)
+                                    {
+                                        listforOffice.Add(new SelectListItem
+                                        {
+                                            Text = row.OfficeName,
+                                            Value = row.OfficeId.ToString()
+                                        });
+                                    }
+
+                                }
+                                @Html.LabelFor(model => model.DarbandiDesgId, "Branch(*)")
+                                @Html.DropDownListFor(model => model.DarbandiOfficeId, listforOffice,  new { @class = "form-control" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @{
+                                    List<SelectListItem> listForDesignations = new List<SelectListItem>();
+                                    foreach (var row in ViewBag.desgList)
+                                    {
+                                        listForDesignations.Add(new SelectListItem
+                                        {
+                                            Text = row.DsgName,
+                                            Value = row.DsgId.ToString()
+                                        });
+                                    }
+
+                                }
+                                @Html.LabelFor(model => model.DarbandiOfficeId, "Designation")
+                                @Html.DropDownListFor(model => model.DarbandiDesgId, listForDesignations, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DarbandiNumber, "No. of Darbandi")
+                                @Html.EditorFor(model => model.DarbandiNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.DarbandiNumber, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DarbandiType, "Darbandi type")
+                                @{
+                                    List<SelectListItem> listForDarbandiType = new List<SelectListItem>();
+                                    listForDarbandiType.Add(new SelectListItem
+                                    {
+                                        Text = "Add",
+                                        Value = "Add"
+                                    });
+                                    listForDarbandiType.Add(new SelectListItem
+                                    {
+                                        Text = "Subtract",
+                                        Value = "Sub"
+                                    });
+
+                                }
+                                @Html.DropDownListFor(model => model.DarbandiType, listForDarbandiType, new { @class = "form-control" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DarbandiDate, "Approved On")
+                                @Html.EditorFor(model => model.DarbandiDateNP, new { htmlAttributes = new { @class = "form-control date" } })
+                                @Html.ValidationMessageFor(model => model.DarbandiDate, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DarbandiRemarks, "Description")
+
+                                @Html.EditorFor(model => model.DarbandiRemarks, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.DarbandiRemarks, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="box-footer">
+                                <input type="submit" value="Save" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                    }

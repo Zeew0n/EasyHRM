@@ -1,0 +1,176 @@
+﻿@model BeeHRM.ApplicationService.DTOs.EmployeeFamilyDTO
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/Family/Index/@Model.EmpId" class="btn btn-success"><i class="fa fa-bars"></i> View Employee Family List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    ADD EMPLOYEE FAMILY
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <span class="error-label">
+                @Html.ValidationSummary()
+            </span>
+            <div class="">
+                @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Full Name</label>
+                                <div class="form-group">
+                                    @Html.HiddenFor(model => model.EmpId)
+                                    @Html.EditorFor(model => model.Fname, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Fname, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="FDob">Date Of Birth</label>
+
+                                <div class='form-control-group'>
+                                    @Html.EditorFor(model => model.FDobNP, new { htmlAttributes = new { @class = "form-control date" } })
+                                    @*<span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>*@
+                                    @*@Html.ValidationMessageFor(model => model.FDobNP, "", new { @class = "text-danger" })*@
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Gender</label>
+                                <div class="form-group">
+                                    @Html.DropDownListFor(model => model.FGender, new List<SelectListItem> {
+                           new SelectListItem { Text ="Male" , Value="Male"},
+                           new SelectListItem {Text="Female", Value="Female" },
+                           new SelectListItem { Text="Other", Value="Other"}
+                       },
+
+                           new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.FGender, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Relation</label>
+                                <div class="form-group">
+                                    @Html.EditorFor(model => model.FRelation, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FRelation, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Contact Number</label>
+
+                                <div class="form-group">
+                                    @Html.EditorFor(model => model.FContactNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FContactNumber, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Address</label>
+                                <div class="form-group">
+                                    @Html.EditorFor(model => model.FContactAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.FContactAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+
+                    <div class="box-footer">
+                        <div class="col-md-10">
+                            <input type="submit" value="Save" id="btnSubmit" class="btn btn-success" />
+                            @Html.ActionLink("Cancel", "Index", "Family",
+                   new { @id = Model.EmpId }, new { @class = "btn btn-success" })
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+    </script>
+}

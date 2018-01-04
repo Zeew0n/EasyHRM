@@ -1,0 +1,600 @@
+﻿@model BeeHrmClientWeb.Models.UpdateAttendanceSearchModel
+@{
+    int i = 1;
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+
+        h3 {
+            border: none !important;
+            padding: 10px;
+        }
+    </style>
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Update Attendance
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container-fluid">
+    <div class="row ">
+        <div class="panel panel-default box box-top-border">
+            <div class="panel-body">
+                <div class="box-body row">
+                    <form action="/UpdateAttendance/index/@Model.Empcode" method="post">
+                        <div class="row">
+                        </div>
+                        <input type="hidden" name="EmpCode" value="@Model.Empcode" />
+                        <div class="form-group col-md-3 ">
+                            <input type='text' class="form-control" id="date" name="SearchStartdateNP" value="@ViewBag.sdate" placeholder="Start date" required />
+                        </div>
+                        <div class="form-group col-md-3 date">
+                            <input type='text' class="form-control" id="date2" name="SeacrchEnddateNP" value="@ViewBag.edate" placeholder="End Date" required />
+                        </div>
+                        <div class="col-md-3">
+                            <input type="submit" class="btn btn-success" value="Search" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-body box box-top-border">
+
+
+
+    <div id="divToPrint">
+        <div class="list">
+            <div class="col-xs-12">
+
+                <div class="box well well">
+                    <div class="box-body">
+                        <div class="media">
+                            <div class="col-md-2 pull-left">
+                                @{
+                                    if (HttpContext.Current.Session["ProfilePhoto"].ToString() != "")
+                                    {
+                                        <img src="~/Uploads/@Model.Empcode/@HttpContext.Current.Session["ProfilePhoto"].ToString()" alt="Profile of @ViewBag.Name" class="img-responsive">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Uploads/profile.jpg" alt="Profile of @ViewBag.Name" class="img-responsive">
+                                    }
+                                }
+                            </div>
+                            <div class="media-body">
+                                <div class="col-md-6">
+                                    <div class="profile-user-info profile-user-info-striped">
+
+
+                                        <div class="profile-info-list">
+                                            <div class="profile-info-name">
+                                                <label for="Branch">Name</label>
+
+                                            </div>
+                                            <div class="profile-info-value">
+                                                <span class="ng-binding">
+                                                    @Model.Name
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-list">
+                                            <div class="profile-info-name">
+                                                <label for="Branch">Branch</label>
+
+                                            </div>
+                                            <div class="profile-info-value">
+                                                <span class="ng-binding">
+                                                    @Model.Branch
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-list">
+                                            <div class="profile-info-name">
+                                                <label for="Department">Department</label>
+                                            </div>
+                                            <div class="profile-info-value">
+                                                <span class="ng-binding">
+                                                    @Model.Department
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-list">
+                                            <div class="profile-info-name">
+                                                <label for="Group">Group</label>
+                                            </div>
+                                            <div class="profile-info-value">
+                                                <span class="ng-binding">
+                                                    @Model.Group
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="profile-user-info profile-user-info-striped">
+                                        <div class="profile-info-list">
+                                            <div class="profile-info-name">
+                                                <label for="Branch">Empcode</label>
+
+                                            </div>
+                                            <div class="profile-info-value">
+                                                <span class="ng-binding">
+                                                    @Model.Empcode
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-list">
+                                            <div class="profile-info-name">
+                                                <label for="Branch">Shift</label>
+                                            </div>
+                                            <div class="profile-info-value">
+                                                <span class="ng-binding">
+                                                    @Model.Shift
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-list">
+                                            <div class="profile-info-name">
+                                                <label for="Department">Designation</label>
+                                            </div>
+                                            <div class="profile-info-value">
+                                                <span class="ng-binding">
+                                                    @Model.Designation
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="profile-info-list">
+                                            <div class="profile-info-name">
+                                                <label for="Group">Level</label>
+                                            </div>
+                                            <div class="profile-info-value">
+                                                <span class="ng-binding">
+                                                    @Model.Level
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="list">
+            <div class="col-xs-12">
+
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-bars" aria-hidden="true"></i> My  Attendance  </h3>
+                </div>
+
+
+
+
+                @if (Model.AttendanceList == null)
+                {
+                    <div class="alert alert-danger fade in">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                        <strong> @ViewBag.Error</strong>
+                    </div>
+                }
+                else
+                {
+                    <table class="table table-responsive table-bordered " id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th class="text-center">Day</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">CheckIn Time</th>
+                                <th class="text-center">CheckOut Time</th>
+                                <th class="text-center">Work Hours</th>
+                                <th class="text-center">Late Entry</th>
+                                <th class="text-center">Early Exit</th>
+                                <th class="text-center">Option</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in Model.AttendanceList)
+                            {
+
+                                var id = "#" + row.Attid;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@{var a = BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(row.AttDate)).ToString().Replace('/', '-');
+                                    }
+                                    @a (@Convert.ToDateTime(row.AttDate).ToString("yyyy-MMM-dd"))</td>
+                                    <td>
+                                        @{
+                                            var isAbsent = true;
+                                            var weekend = row.IsWeekend.ToString();
+
+                                            if (row.AttCheckIn != "" || row.AttCheckOut != "")
+                                            {
+                                                <p>Present</p>
+                                                isAbsent = false;
+                                            }
+                                            if (row.IsHoliday != null && row.IsHoliday != "")
+                                            {
+                                                <p>Holiday</p>
+                                                isAbsent = false;
+                                            }
+                                            if (weekend == "True")
+                                            {
+                                                <p>Weekend</p>
+                                                isAbsent = false;
+                                            }
+                                            if (row.Isleave != null && row.Isleave != "")
+                                            {
+                                                <p>Leave</p>
+                                                isAbsent = false;
+                                            }
+                                            if (row.IsOfficialVisit != null && row.IsOfficialVisit != "")
+                                            {
+                                                if (Convert.ToInt32(row.IsOfficialVisit) > 0)
+                                                {
+                                                    <p>Official Visit</p>
+                                                }
+
+                                                isAbsent = false;
+                                            }
+
+
+                                            if (row.IsTraining != null && row.IsTraining != "")
+                                            {
+                                                <p>On Training</p>
+                                                isAbsent = false;
+                                            }
+                                            if (isAbsent == true)
+                                            {
+                                                <p>Absent</p>
+                                            }
+
+                                        }
+                                    </td>
+                                    <td>
+
+                                        @{
+                                            if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                            {
+                                                <p>@Convert.ToDateTime(row.AttCheckIn).ToString("hh:mm tt")</p>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+
+
+                                        @{
+                                            if (row.AttCheckOut != null && row.AttCheckOut != "")
+                                            {
+                                                <p>@Convert.ToDateTime(row.AttCheckOut).ToString("hh:mm tt")</p>
+                                            }
+                                        }
+
+
+
+                                    </td>
+                                    <td>
+                                        @{if (row.Worked_Hour != null && row.Worked_Hour != "")
+                                            {
+                                                <p>@TimeSpan.FromMinutes(Convert.ToInt32(row.Worked_Hour))</p>
+
+                                            }
+                                            else
+                                            {
+                                                <p> </p>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+
+                                        @{
+                                            if (row.AttCheckIn != null && row.AttCheckIn != "")
+                                            {
+                                                DateTime? checkin = Convert.ToDateTime(row.AttCheckIn);
+                                                TimeSpan? starttime = TimeSpan.Parse(row.AttShiftStart);
+                                                TimeSpan? delayallow = TimeSpan.Parse(row.ShiftDelayAllow);
+                                                TimeSpan? diff = FormatLateEntry(checkin, starttime);
+
+                                                if (-delayallow > diff)
+                                                {
+                                                    <p class="label label-danger">@(-diff)</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>@(-diff)</p>
+                                                }
+
+
+                                            }
+                                        }
+
+                                    </td>
+                                    <td>
+
+                                        @{
+                                            if (row.AttCheckOut != null && row.AttCheckOut != "")
+                                            {
+                                                DateTime? checkout = Convert.ToDateTime(row.AttCheckOut);
+                                                TimeSpan? endtime = TimeSpan.Parse(row.AttShiftEnd);
+                                                TimeSpan? delayallow = TimeSpan.Parse(row.ShiftDelayAllow);
+                                                TimeSpan? diff = FormatEarlyExit(checkout, endtime);
+
+                                                if ((-delayallow) > diff)
+                                                {
+                                                    <p class="label label-danger">@(-diff)</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>@(-diff)</p>
+                                                }
+
+
+                                            }
+                                        }
+
+
+                                    </td>
+                                    <td>
+                                        @{ if (ViewBag.AllowEdit)
+                                            {
+
+                                                <a class="btn btn-info" data-toggle="modal" data-target="#@i"><i class="fa fa-edit"></i></a>
+                                            }
+                                        }
+                                        <div id="@i" class="modal fade" role="dialog">
+                                            <div class="modal-dialog">
+
+                                                Modal content
+                                                <div class="modal-content">
+                                                    <div class="modal-body">
+                                                        <form action="/UpdateAttendance/UpdateAttendancedata/" method="post">
+
+                                                            <input type="hidden" value="@Model.SearchStartdate" name="SearchStartdate" />
+                                                            <input type="hidden" value="@Model.SeacrchEnddate" name="SearchEndDate" />
+                                                            <input type="hidden" value="@row.code" name="EmpCode" />
+                                                            <input type="hidden" value="@row.AttDate" name="AttDate" />
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                <h5>  Update Attendance</h5>
+                                                            </div>
+                                                            <br />
+                                                            <div class="row ">
+                                                                <div class="col-md-3"><label>Attendance Status</label></div>
+                                                                <div class="col-md-6">
+                                                                    <select class="form-control" name="IsAbsent">
+                                                                        @{ if (row.IsAbsent == "1" || String.IsNullOrEmpty(row.IsAbsent))
+                                                                            {
+                                                                                <option value="1" selected>Absent </option>
+                                                                                <option value="0">Present </option>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <option value="1">Absent </option>
+                                                                                <option value="0" selected>Present </option>
+                                                                            }
+                                                                        }
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <br clear="all" />
+                                                            <div class="row">
+                                                                <div class="col-md-3"><label>Check In</label> </div>
+                                                                <div class="col-md-6">
+                                                                    <div class='input-group datetime'>
+                                                                        @{ if (String.IsNullOrEmpty(row.AttCheckIn))
+                                                                            {
+                                                                                <input type='text' class="form-control" placeholder="Enter Check In Time" name="AttCheckIn" />
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var AttCheckIn = Convert.ToDateTime(row.AttCheckIn).ToString("HH:mm:ss");
+                                                                                <input type='text' class="form-control" placeholder="Enter Check In Time" value="@AttCheckIn" name="AttCheckIn" />
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                            }
+                                                                        }
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br clear="all" />
+                                                            <div class="row">
+                                                                <div class="col-md-3"> <label> Check Out</label></div>
+                                                                <div class="col-md-6">
+                                                                    <div class='input-group datetime'>
+                                                                        @{ if (String.IsNullOrEmpty(row.AttCheckOut))
+                                                                            {
+                                                                                <input type='text' class="form-control" placeholder="Enter Check In Time" name="AttCheckOut" />
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                var AttCheckOut = Convert.ToDateTime(row.AttCheckOut).ToString("HH:mm:ss");
+                                                                                <input type='text' class="form-control" placeholder="Enter Check In Time" value="@AttCheckOut" name="AttCheckOut" />
+                                                                                <span class="input-group-addon">
+                                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                                </span>
+                                                                            }
+                                                                        }
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br clear="all" />
+                                                            <div class="row">
+                                                                <div class="col-md-2 ">
+                                                                    <input type="submit" class="btn-success btn" value="Update" />
+
+                                                                </div>
+                                                                <div class="col-md-1"><input type="button" class="btn btn-default" data-dismiss="modal" value="Close"></div>
+                                                            </div>
+
+                                                        </form>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+
+                                                                                i = i + 1;
+
+                                                                            }
+                        </tbody>
+
+                    </table>
+
+
+
+                                                                            }
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#date2').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('.datetime').datetimepicker({
+                format: 'HH:mm:ss',
+
+            });
+
+            $('#attendanceTable').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+
+        });
+
+
+
+    </script>
+}
+
+
+@functions{
+    public TimeSpan? FormatLateEntry(DateTime? date, TimeSpan? shiftStart)
+    {
+        TimeSpan ret = new TimeSpan();
+        TimeSpan? checkInTime = date != null ? TimeSpan.Parse(date.Value.ToString("HH:mm:ss")) : ret;
+        TimeSpan? lateTime = shiftStart - checkInTime;
+        if (lateTime == TimeSpan.Parse("10:00:00"))
+        {
+            return TimeSpan.Parse("00:00:00");
+        }
+        return lateTime;
+    }
+
+    public TimeSpan? FormatEarlyExit(DateTime? checkOut, TimeSpan? shiftEnd)
+    {
+        TimeSpan? checkOutTime = checkOut != null ? TimeSpan.Parse(checkOut.Value.ToString("HH:mm:ss")) + TimeSpan.Parse("00:00:00") : new TimeSpan();
+        TimeSpan? earlyExit = checkOutTime - shiftEnd;
+        if (earlyExit == TimeSpan.Parse("-18:00:00"))
+        {
+            return TimeSpan.Parse("00:00:00");
+        }
+        return earlyExit;
+    }
+
+}

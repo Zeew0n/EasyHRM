@@ -1,0 +1,126 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.EmployeePrizeDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Prizes
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        $('.delete').on('click', function () {
+            var res = confirm("Are you sure you want to delete?");
+            if (!res) {
+                return false;
+            }
+        });
+
+    </script>
+}
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+        </div>
+        <div class="panel-body basic">
+            <div class="pull-right">
+                <a href="/prize/@ViewBag.EmployeeDetail.Code/create" class="btn btn-sm btn-success"><i class="fa fa-plus-circle"></i>  Add More</a>
+            </div>
+            <h3>Prizes</h3>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrizeName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrizeType)
+                    </th>
+                    
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrizeDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrizeDetails)
+                    </th>
+                    <th>
+                        Designation
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrizeName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrizeType)
+                        </td>
+                        
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.PrizeDate)*@
+                            @{var a = BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.PrizeDate)).ToString().Replace('/', '-');}
+                            @a (@(Convert.ToString(item.PrizeDate) == "" ? "" : Convert.ToDateTime(item.PrizeDate).ToString("yyyy-MMM-dd")))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrizeDetails)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DesignationName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit",item.PrizeEmpCode+"/EmployeePrizeEdit", new {  id=item.PrizeId  }) |
+                            @Html.ActionLink("Delete", item.PrizeEmpCode+"/EmployeeDelete", new {  id=item.PrizeId  },new { @class = "delete"})
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

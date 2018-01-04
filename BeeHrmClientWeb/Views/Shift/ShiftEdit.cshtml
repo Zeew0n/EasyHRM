@@ -1,0 +1,140 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.ShiftDetailViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='~/shift' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Shift
+                    <small>Add New</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShiftName, "Name(*)")
+                                @Html.HiddenFor(model => model.ShiftId)
+                                @Html.EditorFor(model => model.ShiftName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ShiftName, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShiftStatus, "Status")
+
+                                @Html.EditorFor(model => model.ShiftStatus, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ShiftStatus, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShiftDelayAllow, "Allow Delay (HH:MM:SS)")
+
+                                @Html.EditorFor(model => model.ShiftDelayAllow, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ShiftDelayAllow, "", new { @class = "text-danger" })
+
+                            </div>
+                            @{
+                                string[] DayName = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+                            }
+                            <table class="table table-responsive">
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Start Time(HH:MM:SS)</th>
+                                    <th>End Time(HH:MM:SS)</th>
+                                    <th>Dual</th>
+                                    <th>Weekend</th>
+                                </tr>
+                                @{
+                                    for (int i = 0; i <= 6; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.HiddenFor(model => model.ShiftDay[i].DayId)
+                                                @Html.HiddenFor(model => model.ShiftDay[i].DayShiftId)
+                                                @Html.HiddenFor(model => model.ShiftDay[i].DayNumber, new { @Value = i.ToString() })
+                                                @Html.EditorFor(model => model.ShiftDay[i].DayName, new { htmlAttributes = new { @class = "form-control", @Value = DayName[i], @readonly = "readonly" } })
+                                            </td>
+                                            <td>
+                                                @Html.EditorFor(model => model.ShiftDay[i].DayStartTime, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.ShiftDay[i].DayStartTime, "", new { @class = "text-danger" })
+                                            </td>
+                                            <td>
+                                                @Html.EditorFor(model => model.ShiftDay[i].DayEndTime, new { htmlAttributes = new { @class = "form-control" } })
+                                                @Html.ValidationMessageFor(model => model.ShiftDay[i].DayEndTime, "", new { @class = "text-danger" })
+                                            </td>
+                                            <td>
+                                                @Html.EditorFor(model => model.ShiftDay[i].DayDual, new { htmlAttributes = new { @class = "form-control" } })
+                                            </td>
+                                            <td>
+                                                @Html.EditorFor(model => model.ShiftDay[i].DayWeekend, new { htmlAttributes = new { @class = "form-control" } })
+                                            </td>
+                                        </tr>
+
+                                    }
+                                }
+                            </table>
+
+
+                            <div class="box-footer">
+                                <input type="submit" value="Save" class="btn btn-success" />
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                    }
+

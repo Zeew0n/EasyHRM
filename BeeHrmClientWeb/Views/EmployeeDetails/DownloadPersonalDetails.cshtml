@@ -1,0 +1,513 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeDetailAdminViewModel
+@{
+    ViewBag.Title = "EMployee Detail";
+    Layout = "~/Views/Shared/download.cshtml";
+}
+
+@section styles{
+   
+<style>
+    .profile-heading {
+    background-color:#ddd;
+    padding:2px;
+    color: #323a7a;    
+    margin-bottom:10px;
+    width:100%;
+}
+.profile-heading>h4
+{
+    margin-left:10px;
+    
+}
+    </style>
+}
+
+
+
+<div  class="panel-body box box-top-border">
+    <div class="profile-heading">
+        <i class="fa fa-fw fa-thumb-tack"></i> <strong>Profile </strong>
+    </div>
+    <div class="row">
+        <div class="col-md-2 pull-left ">
+            @{
+                if (Model.EmpDetails.PhotoName != null)
+                {
+                    <img src="~/img/emp_photos/@Model.EmpDetails.PhotoName"
+                         alt="Profile photo of @Model.EmpDetails.Name"  style="max-height:200px;">
+                }
+                else
+                {
+                    <img src="/img/emp_photos/profile.jpg"
+                         alt="Beehrm User " class="img-responsive img-circle">
+                }
+            }
+            <div class="text-center">
+                <h4 class="nomarginbtm">[ @Model.EmpDetails.Code ] @Model.EmpDetails.Name &nbsp;</h4>
+            </div>
+        </div>
+        <div class="col-md-10">
+
+
+            <table class="table table-bordered table-responsive">
+                <tr>
+                    <td><strong>User Name</strong></td>
+                    <td><strong>Extension</strong></td>
+                    <td><strong>DOB</strong></td>
+                </tr>
+                <tr>
+                    <td>@Model.EmpDetails.Username</td>
+                    <td>@Model.EmpDetails.Contact</td>
+                    <td>
+                        @{
+                            if (Model.EmpDetails.DateOfBirth == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                @Convert.ToDateTime(Model.EmpDetails.DateOfBirth).ToString("d MMM, yyyy")
+                            }
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Marital status</strong></td>
+                    <td><strong>Marriage Anniversary</strong></td>
+                    <td><strong>Blood Group</strong></td>
+                </tr>
+                <tr>
+                    <td>@Model.EmpDetails.MaritalStatus</td>
+                    <td>
+                        @{
+                            if (Model.EmpDetails.MarriageAnniversary == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                @Convert.ToDateTime(Model.EmpDetails.MarriageAnniversary).ToString("d MMM, yyyy")
+                            }
+                        }
+                    </td>
+                    <td>@Model.EmpDetails.BloodGroup</td>
+                </tr>
+                <tr>
+                    <td><strong>Pan no</strong></td>
+                    <td><strong>PF Number</strong></td>
+                    <td><strong>CIT Number</strong></td>
+                </tr>
+                <tr>
+                    <td>@Model.EmpDetails.PAN</td>
+                    <td>@Model.EmpDetails.PFNUmber</td>
+                    <td>@Model.EmpDetails.CITNumber</td>
+                </tr>
+                <tr>
+                    <td><strong>Ignore Attendance For Payroll</strong></td>
+                    <td><strong>Incapacitated</strong></td>
+                    <td><strong>Remote Area</strong></td>
+                </tr>
+                <tr>
+                    <td>
+                        @{
+                            if (Model.EmpDetails.AttendanceIgnore == "True")
+                            {
+                                <label class="label label-success">
+                                    <i class="fa fa-minus-circle"></i>
+                                    True
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    <i class="fa fa-minus-circle"></i>
+                                    False
+                                </label>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @{
+                            if (Model.EmpDetails.Incapacitated == "True")
+                            {
+                                <label class="label label-success">
+                                    <i class="fa fa-minus-circle"></i>
+                                    True
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    <i class="fa fa-minus-circle"></i>
+                                    False
+                                </label>
+                            }
+                        }
+                    </td>
+                    <td>@Model.EmpDetails.RemoteArea</td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="profile-heading">
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Contact Details </strong>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+
+                    <span class="col-md-6"><strong>Mobile Number</strong></span>
+                    @if (Model.OtherDetails.MobileNumber == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.MobileNumber
+                </li>
+                <li class="list-group-item">
+
+                    <span class="col-md-6"><strong>Home Phone</strong></span>
+                    @if (Model.OtherDetails.HomePhone == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.HomePhone
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-6"><strong>Office Phone</strong> </span>
+                    @if (Model.OtherDetails.OfficePhone == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.OfficePhone
+                </li>
+
+                <li class="list-group-item">
+
+                    <span class="col-md-6"><strong>Emergency Contact Number</strong></span>
+                    @if (Model.OtherDetails.EmerContact == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.EmerContact
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-6"><strong>Personal Email</strong> </span>
+                    @if (Model.OtherDetails.Email == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.Email
+                </li>
+
+                <li class="list-group-item">
+
+                    <span class="col-md-6"><strong>Office Email</strong></span>
+                    @if (Model.OtherDetails.OfficeEmail == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.OfficeEmail
+                </li>
+            </ul>
+
+        </div>
+        <div class="col-md-6">
+            <div class="profile-heading">
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Address Details </strong>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="col-md-6"><strong>Permanent Address</strong> </span>
+                    @if (Model.OtherDetails.PermanentAddress == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.PermanentAddress
+                </li>
+                <li class="list-group-item">
+
+                    <span class="col-md-6"><strong>Temporary Adress</strong></span>
+                    @if (Model.OtherDetails.TempAddress == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.TempAddress
+                </li>
+                <li class="list-group-item">
+
+                    <span class="col-md-6"><strong>Emergency Adress</strong></span>
+                    @if (Model.OtherDetails.EmerAddress == "")
+                    {
+                        <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.EmerAddress
+                </li>
+            </ul>
+
+
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-heading">
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Family Details </strong>
+            </div>
+            <table class="table">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Date Of Birth
+                    </th>
+                    <th>
+                        Gender
+                    </th>
+
+                    <th>
+                        Relation
+                    </th>
+                    <th>
+                        Contact Number
+                    </th>
+                    <th>
+                        Contact Adress
+                    </th>
+
+                </tr>
+
+                @foreach (var item in Model.Familydetails)
+                {
+                    <tr>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Fname)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FDob)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FGender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FRelation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FContactNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FContactAddress)
+                        </td>
+
+                    </tr>
+                }
+
+            </table>
+
+</div>
+        </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-heading">
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Nominee Detail </strong>
+            </div>
+
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="col-md-4"><strong>Name</strong></span>
+                    @if (Model.OtherDetails.NomineeName == "")
+                    {
+                    <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.NomineeName
+                </li>
+                <li class="list-group-item">
+
+                    <span class="col-md-4"><strong>Adress</strong></span>
+                    @if (Model.OtherDetails.NomineeAddress == "")
+                    {
+                    <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.NomineeAddress
+                </li>
+                <li class="list-group-item">
+
+                    <span class="col-md-4"><strong>Date Of Birth</strong></span>
+                    @if (Model.OtherDetails.NomineeDob == null)
+                    {
+                    <p>Not Found</p>
+                    }
+                    @{
+                    var a = Model.OtherDetails.NomineeDob.Split(' ');
+                    string first = a[0];
+                    }
+                    @first
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4"><strong>Relation</strong></span>
+                    @if (Model.OtherDetails.NomineeRelation == "")
+                    {
+                    <p>Not Found</p>
+                    }
+                    @Model.OtherDetails.NomineeRelation
+                </li>
+                <li class="list-group-item">
+
+                    <span class="col-md-4"><strong>Photo</strong></span>
+                    <span>
+                        @if (Model.OtherDetails.NomineePhoto == "")
+                        {
+                        <img src="/img/emp_photos/profile.jpg" style="height: 200px;"
+                             alt="Beehrm User " class="img-responsive">
+                        }
+                        else
+                        {
+                        <img src="~/img/nom_photos/@Model.OtherDetails.NomineePhoto" style="height: 200px;"
+                             alt="Profile photo of @Model.OtherDetails.NomineePhoto" class="img-responsive">
+                        }
+                    </span>
+
+                </li>
+
+            </ul>
+
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-heading">
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Employee Skills </strong>
+
+            </div>
+
+
+
+            <table class="table">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Point
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+                </tr>
+
+                @foreach (var item in Model.Skill)
+                {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SkillName)
+                    </td>
+                    <td>
+                        <meter min="0" max="100" value="@item.EmpSkillPoint"></meter>
+                        @Html.DisplayFor(modelItem => item.EmpSkillPoint)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmpSkillStatus)
+                    </td>
+                </tr>
+                }
+
+            </table>
+
+       </div> 
+        </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="profile-heading">
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Service Information </strong>
+            </div>
+
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Current Status Data</th>
+                        <th>Appointed Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.EmpDetails.EmployeeAppointmentDetail)
+                    {
+                    <tr>
+                        <td><strong>Date</strong></td>
+                        <td></td>
+                        @{
+                        var datetime = item.AppointDate.Split(' ');
+                        var date = datetime[0];
+                        }
+                        <td>@date</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Branch</strong></td>
+                        <td>@Model.EmpDetails.OfficeName</td>
+                        <td>@item.AppointBranch</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Department</strong></td>
+                        <td>@Model.EmpDetails.Department</td>
+                        <td>@item.AppointDepartment</td>
+                    </tr>
+                    @*<tr>
+                    <td><strong>Group</strong></td>
+                    <td>@Model.Group</td>
+                    <td>@item.AppointGroup</td>
+                    </tr>*@
+                    <tr>
+                        <td><strong>Rank</strong></td>
+                        <td>@Model.EmpDetails.Rank</td>
+                        <td>@item.AppointRank</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shift</strong></td>
+                        <td>@Model.EmpDetails.Shift</td>
+                        <td>@item.AppointShift</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Designation</strong></td>
+                        <td>@Model.EmpDetails.Designation</td>
+                        <td>@item.AppointDesignation</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Level</strong></td>
+                        <td>@Model.EmpDetails.Level</td>
+                        <td>@item.AppointLevel</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Service Status</strong></td>
+                        <td>@Model.EmpDetails.ServiceStatus</td>
+                        <td>@item.AppointService</td>
+                    </tr>
+                    }
+
+
+                </tbody>
+            </table>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+

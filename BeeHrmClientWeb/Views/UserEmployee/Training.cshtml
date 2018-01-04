@@ -1,0 +1,122 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.EmpTrainingDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Detail of Employee
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        $('.delete').on('click', function () {
+            var res = confirm("Are you sure you want to delete?");
+            if (!res) {
+                return false;
+            }
+        });
+
+    </script>
+}
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@Html.Partial("_partialpageUserProfileDetail")
+<div class="col-md-8 col-lg-9">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+        </div>
+        <div class="panel-body basic">
+
+            <h3>Training</h3>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingStartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingEndDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingOrganization)
+                    </th>
+                    <th>
+                        Country Name
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TrainingTitle)
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.TrainingStartDate)*@
+                            @{var sdate = !String.IsNullOrEmpty(item.TrainingStartDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.TrainingStartDate)).ToString().Replace('/', '-') : null;
+                            }
+                            @if (@sdate != null)
+                            {
+                                <p>@sdate (@(Convert.ToString(item.TrainingStartDate) == "" ? "" : Convert.ToDateTime(item.TrainingStartDate).ToString("yyyy-MMM-dd")))</p>
+                            }
+                            else {
+                                <p></p>
+                            }
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.TrainingEndDate)*@
+                            @{var edate = !String.IsNullOrEmpty(item.TrainingEndDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.TrainingEndDate)).ToString().Replace('/', '-') : null;
+                            }
+                            @if (@edate != null)
+                            {
+                                <p>@edate (@(Convert.ToString(item.TrainingEndDate) == "" ? "" : Convert.ToDateTime(item.TrainingEndDate).ToString("yyyy-MMM-dd")))</p>
+                            }
+                            else {
+                                <p></p>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayNameFor(model => model.TrainingOrganization)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CountryName)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

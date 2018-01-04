@@ -1,0 +1,168 @@
+﻿@model BeeHrmClientWeb.Models.LeaveBalanceModel
+
+@{
+    ViewBag.Title = "LeaveBalance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Balance Details
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    @using (Html.BeginForm())
+            {
+                        @Html.AntiForgeryToken()
+
+                        
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                @Html.DropDownListFor(model => model.LeaveBalance.LeaveYearId, Model.LeaveBalance.LeaveYearList, new { @class = "form-control" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="submit" value="Search" class="btn btn-success" />
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Session["error"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @Session["error"]
+    </div>
+}
+@if (Session["sucess"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @Session["sucess"]
+    </div>
+}
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                @if (Model.LeaveBalanceDetails != null && Model.LeaveBalanceDetails.Count() > 0)
+                {
+                    <table class="table table-hover text-center table-bordered" id="tblLeaveTypes">
+
+                        <tr>
+                            <th>SN</th>
+                            <th>Leave name</th>
+                            <th>Prev. Year Balance</th>
+                            <th>Leave Earned</th>
+                            @*<th>Total Leave Assigned </th>*@
+                            <th>Total Leave Taken/Encashed</th>
+                            <th>Balance</th>
+                        </tr>
+
+                        @foreach (var item in Model.LeaveBalanceDetails.Select((x, i) => new { Data = x, Index = i }))
+                        {
+                            <tr>
+                                <td>
+                                    @(item.Index + 1)
+                                </td>
+
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Data.LeaveTypeName)
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Data.PrevYearBalance)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Data.ThisYearEarned)</td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.Data.TotalLeaveAssigned)
+                                </td>*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Data.TotalTaken)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Data.Leave_Balance)
+                                </td>
+
+
+                            </tr>
+                        }
+
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-danger">
+                        <strong>Sorry !</strong> No Data avaiable !!
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    if (Session["sucess"] != null)
+    {
+        Session.Remove("sucess");
+    }
+    if (Session["error"] != null)
+    {
+        Session.Remove("error");
+    }
+}
+
+@section scripts{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#emplist").customselect();
+            });
+    </script>
+}
+@{
+    if (Session["error"] != null)
+    {
+        Session.Remove("error");
+    }
+}

@@ -1,0 +1,299 @@
+﻿
+@{
+    ViewBag.Title = "RecommendAttendance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<BeeHRM.ApplicationService.ViewModel.AttendanceRequestsListViewModel>
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+
+        .badge {
+            background-color: #fff;
+            color: #222;
+        }
+    </style>
+}
+
+@{
+    
+    if (Model!=null)
+    {
+
+
+
+
+
+        @section PageHeader{
+            <div class="small-header">
+                <div class="hpanel">
+                    <div class="panel-body">
+                        <div id="hbreadcrumb" class="pull-right">
+                            <ol class="hbreadcrumb breadcrumb">
+                                <li class="active">
+                                    <span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    </span><a href="/user/attendancerequest/recommendlist/@ViewBag.id"> <i class="fa fa-bars"></i> View Recommerder List</a>
+                                </li>
+                            </ol>
+                        </div>
+                        <h2 class="font-light m-b-xs">
+                            Recommend Attendence
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        }
+
+<div class="clearfix">
+    <br />
+</div>
+<div class="container-fluid">
+    <div class="row ">
+
+
+        <div class="clearfix">
+            <br />
+        </div>
+        <div class="box box-green well box box-top-border">
+            <div class="box-body table-responsive" style="overflow:hidden">
+                <div id="divToPrint">
+
+
+                    <div class="row">
+                        <div class="col-sm-12 col-md-5 col-lg-3">
+
+                            <div class="row">
+                                @foreach (var lst in Model)
+                                {
+                                    <div class="panel panel-default">
+                                        }
+                                        <div class="panel-body">
+                                            <div class="avatar">
+                                                <div class="text-center">
+                                                    @{
+                                                        if (lst.EmpPhoto != null)
+                                                        {
+                                                            <img src="~/img/emp_photos/@lst.EmpPhoto" alt="Profile of @lst.EmpName" class="img-responsive">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="http://demo.beehrm.com/assets/img/avatar5.png" alt="Profile Photo" class="img">
+                                                        }
+                                                    }
+                                                </div>
+                                                <div class="text-center">
+                                                    <h4 class="nomarginbtm">[@lst.EmpCode] @lst.EmpName</h4>
+                                                    <i>@lst.Designation</i>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <ul class="list-group mt20" id="list-border-remove">
+                                            <li class="list-group-item">
+                                                <span class="badge"><a href="mailto: @lst.EmpEmail">@lst.EmpEmail</a></span> <i class="fa fa-envelope-o"></i>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <span class="badge">@(lst.JoinDate == "" ? "" : Convert.ToDateTime(lst.JoinDate).ToString("yyyy-MMM-dd"))</span> <i class="fa fa-fw fa-calendar-o"></i>
+                                            </li>
+                                        </ul>
+
+                                        <div style="text-align: center;">
+                                            <blockquote class="skills"></blockquote>
+                                        </div>
+
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 col-lg-9">
+                            <div class="panel panel-default">
+
+                                @foreach (var lst in Model)
+                                {
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <span class="badge clean"> @lst.RequestType</span>
+                                            <strong>Request Type</strong>
+                                        </li>
+
+                                        <li class="list-group-item">
+                                            <span class="badge clean">@(lst.CheckIn_Date == "" ? "" : Convert.ToDateTime(lst.CheckIn_Date).ToString("hh:mm:ss"))</span>
+                                            <strong>Login Time</strong>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="badge clean">@(lst.CheckOut_Date == "" ? "" : Convert.ToDateTime(lst.CheckOut_Date).ToString("hh:mm:ss"))</span>
+                                            <strong>Logout Time</strong>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="badge clean">@(lst.RequestDate == "" ? "" : Convert.ToDateTime(lst.RequestDate).ToString("yyyy-MMM-dd"))</span>
+                                            <strong>Requested On</strong>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <span class="badge clean">
+                                                @{
+                                                    if (lst.ApproveStatus.ToString() == "1")
+                                                    {
+                                                        <label class="label label-warning">Pending</label>
+                                                    }
+                                                    else
+                                                   if (lst.ApproveStatus.ToString() == "2")
+                                                    {
+                                                        <label class="label label-success">Approve</label>
+                                                    }
+                                                    else
+                                                 if (lst.ApproveStatus.ToString() == "3")
+                                                    {
+                                                        <label class="label label-danger">Rejected</label>
+                                                    }
+                                                    else
+                                              if (lst.ApproveStatus.ToString() == "4")
+                                                    {
+                                                        <label class="label label-danger">Cancelled</label>
+                                                    }
+                                                    else
+                                                    {
+                                                        <label class="label label-warning">Pending</label>
+                                                    }
+                                                }
+                                            </span>
+                                            <strong>Approve Status</strong>
+                                        </li>
+                                        <div class="list-group-item">
+                                            <p class="list-group-item-heading"><strong>Approve Message</strong></p>
+                                            <br>
+                                            <p class="list-group-item-text"> @lst.ApproveMessage</p>
+                                        </div>
+
+                                        <li class="list-group-item">
+                                            <span class="badge clean">@(lst.ApproveDate == "" ? "" : Convert.ToDateTime(lst.ApproveDate).ToString("yyyy-MMM-dd"))</span>
+                                            <strong>Approved On</strong>
+                                        </li>
+
+
+
+
+                                        <div class="list-group-item">
+                                            <p class="list-group-item-heading"><strong>Request description</strong></p>
+                                            <br>
+                                            <p class="list-group-item-text"> @lst.Description</p>
+                                        </div>
+                                    </ul>
+
+
+
+                                <li class="list-group-item">
+                                    <form method="POST" action="/user/attendancerequest/recommend/@lst.RequestId" accept-charset="UTF-8">
+                                        <input type="hidden" value="@lst.RequestId" name="RequestId"/>
+                                        <input type="radio" name="RecommendStatus" checked="checked" value="2" >
+                                        <span class="approve">Approve</span>
+
+                                        <input type="radio" name="RecommendStatus" value="3" >
+                                        <span class="approve">Reject</span>
+
+                                        <br><br />
+                                        <div class="form-group ">
+                                            <label for="remarks">Message</label>
+                                            <textarea rows="3" class="form-control" placeholder="Enter your message" name="RecommedarMessage" cols="50" id="remarks"></textarea>
+
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Save</button>
+                                        <a href="/user/attendancerequest/recommendlist/@lst.RecommenderEmpCode" class="btn btn-success">Cancle</a>
+                                    </form>
+                                </li>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+    }
+
+    else
+    {
+        <div class="alert alert-danger fade in">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+            @ViewBag.error
+        </div>
+    }
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#attendanceTable').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $(".datepicker").datepicker();
+
+
+        });
+
+
+        $(window).resize(function () {
+            if ($(window).width() <= 600) {
+                $('#prop-type-group').removeClass('btn-group');
+                $('#prop-type-group').addClass('btn-group-vertical');
+            } else {
+                $('#prop-type-group').addClass('btn-group');
+                $('#prop-type-group').removeClass('btn-group-vertical');
+            }
+        });
+
+    </script>
+}

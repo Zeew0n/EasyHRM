@@ -1,0 +1,214 @@
+﻿@model BeeHRM.ApplicationService.DTOs.LeaveEarnedDTO
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/LeaveEarned/Index" class="btn btn-success"><i class="fa fa-bars"></i> View Leave Earned List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    ADD LEAVE EARNED
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <span class="error-label">
+                @Html.ValidationSummary()
+            </span>
+            <div class="col-md-6">
+                @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="box-body">
+
+                        <div class="form-group">
+                            <label for="leave_type">Employee(*)</label>
+                            @Html.DropDownListFor(model => model.EmpCode, Model.EmployeeCodeSelectlist, "Select Please", new { @class = "form-control custom-select" })
+                            @Html.ValidationMessageFor(model => model.EmpCode, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="LeaveApproverEmpCode">Recommender</label>
+                            <select name="RecommendedEmpCode" id="RecommendedEmpCode" class="form-control ">
+                                <option value="0" selected>Please Select</option>
+                            </select>
+                            @*@Html.DropDownListFor(model => model.RecommendedEmpCode, Model.GetRecommederSelectList, "Select Please", new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.RecommendedEmpCode, "", new { @class = "text-danger " })
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label for="LeaveApproverEmpCode">Approver</label>
+                            <select name="ApproverEmpCode" id="ApproverEmpCode" class="form-control">
+                                <option value="0" selected>Please Select</option>
+                            </select>
+                            @*@Html.DropDownListFor(model => model.ApproverEmpCode, Model.ApproveEmployeeCodeSelectlist, "Select Please", new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.ApproverEmpCode, "", new { @class = "text-danger " })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="LeaveStartDate"> Work Start Date</label>
+                            @Html.EditorFor(model => model.WorkedStartDateNP, new { htmlAttributes = new { @class = "form-control date", @required = "required" } })
+                        </div>
+                        <div class="form-group">
+
+                            <label for="LeaveEndDate"> Work End Date</label>
+                            @Html.EditorFor(model => model.WorkedEndDateNP, new { htmlAttributes = new { @class = "form-control date", @required = "required" } })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="LeaveTypeId"> Leave Type</label>
+                            @Html.DropDownListFor(model => model.LeaveTypeId, Model.LeaveTypeSelectList, "Select Please", new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.LeaveTypeId, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            <label for="YearId">Leave Year(*)</label>
+                            @Html.DropDownListFor(model => model.LeaveYearId, Model.YearSelectList, "Select Please", new { @class = "form-control", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.LeaveYearId, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Remarks, htmlAttributes: new { @class = "control-label" })
+                            @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+                        </div>
+
+
+
+
+
+
+                    </div>
+
+                    <div class="box-footer">
+                            <input type="submit" value="Save" id="btnSubmit" class="btn btn-success" /> <a href="/LeaveEarned/Index" class="btn btn-success">Cancel</a>
+                    </div>
+
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+}
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+
+            $(".custom-select").customselect();
+
+
+            $("#EmpCode").change(function () {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetEmloyeeApproverSelectList", "LeaveEarned")',
+                    data: {
+                        EmpCode: $("#EmpCode").val(),
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $("#ApproverEmpCode").html('<option value="0">Please Select</option>');
+                        $.each(data, function () {
+                            $("#ApproverEmpCode").append($("<option />").val(this.Value).text(this.Text));
+                        });
+
+                    }
+
+                });
+
+                /***Recommeder*******/
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetEmloyeeRecommederSelectList", "LeaveEarned")',
+                    data: {
+                        EmpCode: $("#EmpCode").val(),
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $("#RecommendedEmpCode").html('<option value="0">Please Select</option>');
+                        $.each(data, function () {
+                            $("#RecommendedEmpCode").append($("<option />").val(this.Value).text(this.Text));
+                        });
+                    }
+
+                });
+
+                $(".custom-select").customselect();
+
+            });
+        });
+
+
+    </script>
+}

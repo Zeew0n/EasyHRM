@@ -1,0 +1,252 @@
+﻿@model BeeHrmClientWeb.Models.LeaveApplicationModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Approver List
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="box box-top-border">
+    @if (Session["error"] != null)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["error"]
+        </div>
+    }
+    @if (Session["success"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-times" aria-hidden="true"></i> @Session["success"]
+        </div>
+    }
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+
+                    @using (Html.BeginForm())
+            {
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    &nbsp;&nbsp;&nbsp;
+                                    Employee
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">&nbsp;&nbsp;Leave Year</div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    Recommand Status
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    Leave Status
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @Html.DropDownListFor(model => model.LeaveApplication.LeaveEmpCode, Model.LeaveApplication.EmpList, new { @class = "form-control custom-select", @id = "emplist" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(model => model.LeaveApplication.LeaveYearId, Model.LeaveApplication.LeaveYearList, new { @class = "form-control " })
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(model => model.LeaveApplication.RecommendStatus, Model.LeaveApplication.LeaveStatusList, new { @class = "form-control" })
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                @Html.DropDownListFor(model => model.LeaveApplication.LeaveStatus, Model.LeaveApplication.LeaveStatusList, new { @class = "form-control " })
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="submit" value="Search" class="btn btn-success" />
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box box-top-border">
+
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <table class="table">
+                        <tr>
+                            <th>SN</th>
+                            <th>Applied Date</th>
+                            <th>Employee</th>
+                            <th>Designation</th>
+                            <th>Subject</th>
+                            <th>Recommend Status</th>
+                            <th>Approve Status </th>
+                            <th>StartDate</th>
+                            <th>EndDate</th>
+                            <th>Days</th>
+                            <th>Details</th>
+                        </tr>
+
+                        @foreach (var item in Model.LeaveApplicationDetails.Select((x, i) => new { Data = x, Index = i }))
+                        {
+                            <tr>
+                                <td>@(item.Index + 1)</td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Data.LeaveAppliedDate)*@
+                                    @{var appointmentdate = !String.IsNullOrEmpty(item.Data.LeaveAppliedDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.Data.LeaveAppliedDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @appointmentdate (@(Convert.ToString(item.Data.LeaveAppliedDate) == "" ? "" : Convert.ToDateTime(item.Data.LeaveAppliedDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Data.EmpName) (@Html.DisplayFor(modelItem => item.Data.LeaveEmpCode) )</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Data.EmployeeDetail.Designation.DsgName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Data.LeaveSubject)
+                                </td>
+                                <td>
+
+                                    @{if (item.Data.RecommendStatus == 3)
+                                        {
+                                            <label class="label label-danger">Rejected</label>
+                                        }
+                                        else if (item.Data.RecommendStatus == 2)
+                                        {
+                                            <label class="label label-success">Approved</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-warning">Pending</label>
+                                        }
+                                    }
+
+                                </td>
+                                <td>
+
+                                    @{if (item.Data.LeaveStatus == 3)
+                                        {
+                                            <label class="label label-danger">Rejected</label>
+                                        }
+                                        else if (item.Data.LeaveStatus == 2)
+                                        {
+                                            <label class="label label-success">Approved</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-warning">Pending</label>
+                                        }
+                                    }
+
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Data.LeaveStartDate)*@
+                                    @{var startdate = !String.IsNullOrEmpty(item.Data.LeaveStartDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.Data.LeaveStartDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @startdate (@(Convert.ToString(item.Data.LeaveStartDate) == "" ? "" : Convert.ToDateTime(item.Data.LeaveStartDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Data.LeaveEndDate)*@
+                                    @{var enddate = !String.IsNullOrEmpty(item.Data.LeaveEndDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.Data.LeaveEndDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @enddate (@(Convert.ToString(item.Data.LeaveEndDate) == "" ? "" : Convert.ToDateTime(item.Data.LeaveEndDate).ToString("yyyy-MMM-dd")))
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Data.LeaveDays)</td>
+                                <td>
+                                    @if (item.Data.LeaveStatus == 1)
+                                    {
+                                        @Html.ActionLink("Approve", "LeaveApprove", new { id = item.Data.LeaveId })
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Details", "LeaveApprove", new { id = item.Data.LeaveId })
+                                    }
+
+                                </td>
+                            </tr>
+                                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".custom-select").customselect();
+        });
+    </script>
+}
+@{
+
+    if (Session["error"] != null)
+    {
+        Session.Remove("error");
+    }
+    if (Session["sucess"] != null)
+    {
+        Session.Remove("sucess");
+    }
+}

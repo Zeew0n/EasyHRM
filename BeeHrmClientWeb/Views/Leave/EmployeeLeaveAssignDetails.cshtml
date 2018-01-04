@@ -1,0 +1,368 @@
+﻿@model BeeHrmClientWeb.Models.LeaveBalanceIndividual
+@{
+    ViewBag.Title = "LeaveBalanceUserDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+    int j = 0;
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Leave Balance Details - @Model.EmpDetail.Name
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+
+    <div class="col-md-12 col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Leave Assign Details</strong>
+            </div>
+            <div class="panel-body basic">
+                <div class="box-body">
+                    @if (Session["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            <p>@Session["Error"].ToString()</p>
+                        </div>
+                        Session.Remove("Error");
+                    }
+                    @if (Session["Sucess"] != null)
+                    {
+                        <div class="alert alert-sucess">
+                            <p>@Session["Sucess"].ToString()</p>
+                        </div>
+                        Session.Remove("Sucess");
+                    }
+                    <div class="row">
+                        <div id="error"></div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <label class="col-md-3">Current Leave Rule: </label>
+                                <label class="col-md-4" id="leaverulename">@Model.LeaveuleName</label>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <label class="col-md-3">Assign Leave Rule : </label>
+                                <div class="col-md-4">
+                                    <select class="form-control" id="leaveruleid">
+                                        <option value="">Please Select Leave Rules</option>
+                                        @foreach (var row in Model.LeaveRuleList)
+                                        {
+                                            <option value="@row.LeaveRuleId">@row.LeaveRuleName</option>
+                                        }
+                                    </select>
+
+                                </div>
+                                <div class="col-md-3 ">
+                                    <button class="btn btn-info" onclick="return UpdateLeaveRule(@Model.EmpDetail.Code)"> Update </button>
+                                </div>
+                                <div class="col-md-8 col-md-offset-3">
+                                    <p class="error" id="validatemgs" style="color:#d52e2e; font-weight:600"> </p>
+                                    <p class="error" id="successmgs" style="color:#098f07; font-weight:600"> </p>
+                                </div>
+
+                            </div>
+                           
+                            @if (Model.LeaveDetails.Count() >= 1)
+                            {
+                                <table class="table table-hover text-center table-bordered" id="tblLeaveYear">
+                                    <thead>
+                                        <tr>
+                                            <th>SN</th>
+                                            <th>Leave Types</th>
+                                            <th>Entitlement</th>
+                                            <th>Leave Taken</th>
+                                            <th>Balance</th>
+
+                                        </tr>
+                                    <tbody>
+
+                                        @foreach (var Item in Model.LeaveDetails)
+                                        {
+                                            i++;
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@Item.LeaveTypeName</td>
+                                                <td>@Item.LeaveDays</td>
+                                                <td>@Item.TotalLeaveTakenDays</td>
+                                                <td>@Item.TotalRemainingDays</td>
+
+                                            </tr>
+
+                                        }
+                                        
+                                    </tbody>
+
+                                </table>
+                            }
+                            else
+                            {
+
+
+                                <br clear="all" />
+                                <div class="alert alert-danger">
+                                    <strong>Sorry!</strong> There is no  leave Assign Record for this employee .
+                                    Please confirm current leave rule whether it is correct or not if not please update the new leave rule before proceed further. <br />
+                                    Click the link below to create the leave assign record for this employee
+
+                                    <br />
+                                    <br />
+                                    <p><a href="/leave/assign/@Model.EmpDetail.Code" class="btn btn-info" onclick="return create_confrim()"> Create Record</a></p>
+                                </div>
+
+                            }
+
+
+                            <button type="button" class="btn btn-info " data-toggle="modal" data-target="#myModal">Update Leave Rules</button>
+
+                            <!-- Modal -->
+                            <div id="myModal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content" >
+                                        
+                                        <br />
+                                        <div class="modal-body">
+                                            <h4 style="margin:10px;">Update Leave Days</h4>
+
+                                            <form action="/admin/UpdateLeaveAssign/detail/@Model.EmpDetail.Code" method="post">
+                                                <table class="table" id="tblLeaveYear">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sataus</th>
+                                                            <th>Leave Types</th>
+                                                            <th>Entitle</th>
+                                                            <th>Balance</th>
+                                                          
+                                                        </tr>
+                                                    <tbody>
+
+                                                        @foreach (var Item in Model.LeaveDetails)
+                                                        {
+
+
+                                                            <tr id="tr_@Item.LeaveTypeId">
+                                                                <input type="hidden"  name="UpdateResult[@j].LeaveTypeId" value="@Item.LeaveTypeId" />
+                                                                <input type="hidden" name="UpdateResult[@j].LeaveYearId" value="@Item.LeaveYearId" />
+                                                                <input type="hidden" name="UpdateResult[@j].AssignedId" value="@Item.LeaveAssiginId" />
+                                                               
+
+                                                                <p style="display:none">@Html.CheckBox("UpdateResult[" + j + "].IsAlreadyAssigned", true)</p>
+
+                                                                <td> @Html.CheckBox("UpdateResult[" + j + "].IsEnable", true, new{ onclick = "DeleteLeave()" }) </td>
+                                                                <td>@Item.LeaveTypeName</td>
+                                                                <td>
+                                                                    <input class="form-control" name="UpdateResult[@j].AddDays" value="@Item.LeaveDays" />
+                                                                </td>
+                                                                <td>@(Item.LeaveDays-Item.TotalLeaveTakenDays)</td>
+                                                               
+
+
+                                                            </tr>
+                                                            j++;
+
+                                                        }
+                                                        @if (Model.UnassignLeave.Count() > 0)
+                                                        {
+                                                            <tr>
+                                                                <th colspan="4"><h4 style="margin:10px;">Add New Leave</h4></th>
+                                                            </tr>
+                                                        }
+                                                        
+                                                        @foreach (var Item in Model.UnassignLeave)
+                                                        {
+
+                                                            <tr id="tr_@Item.LeaveTypeId">
+                                                                <input type="hidden" name="UpdateResult[@j].LeaveTypeId" value="@Item.LeaveTypeId" />
+                                                                <input type="hidden" name="UpdateResult[@j].LeaveYearId" value="@Item.LeaveYearId" />
+                                                              <p style="display:none">@Html.CheckBox("UpdateResult[" + j + "].IsAlreadyAssigned", false)</p> 
+                                                               
+                                                                <td> @Html.CheckBox("UpdateResult["+j+"].IsEnable")</td>
+                                                                <td>@Item.LeaveTypeName</td>                                                                
+                                                                <td><input type="text" name="UpdateResult[@j].AddDays" class="form-control txtboxToFilter" placeholder="EnterLeave Days " />
+
+                                                                </td>
+                                                               </tr>
+                                                            j++;
+                                                        }
+
+                                                    </tbody>
+
+                                                </table>
+                                                <input type="submit" class="btn btn-success" value="Update" />
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+
+            $(".txtboxToFilter").keydown(function (e) {
+                // Allow: backspace, delete, tab, escape, enter and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+C
+                    (e.keyCode == 67 && e.ctrlKey === true) ||
+                    // Allow: Ctrl+X
+                    (e.keyCode == 88 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    // let it happen, don't do anything
+                    return;
+                }
+                // Ensure that it is a number and stop the keypress
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+
+            $("#test").click(function () {
+                if (!$(this).is(':checked')) {
+                    return confirm("This Leave type will be delete if you unchecked .");
+                }
+
+            });
+
+        });
+
+        function create_confrim() {
+            if (confirm("Are you sure you want to create leave rule for this employee?"))
+                return true;
+            else
+                return false;
+        }
+
+        function DeleteLeave() {
+            if (confirm("if you unckecked this leave will be dteleted .Are rou sure you wanto detete this leave ?"))
+                return true;
+            else
+                return false;
+        }
+
+        function addUnassignedLeave(code) {
+
+        }
+        function UpdateLeaveRule(empcode) {
+            var lid = $("#leaveruleid").val();
+            if (lid != '') {
+
+                debugger;
+                $.ajax({
+
+                    type: "post",
+                    url: "/admin/updat/employeeleaverules?Empcode=" + empcode + "&&LeaveId=" + lid,
+                    ajaxasync: true,
+                    contentType: 'application/json; charset=utf-8',
+
+                    success: function (response) {
+                        if (response.Success) {
+
+                            $('#leaverulename').empty();
+                            $('#leaverulename').append($("#leaveruleid option:selected").text());
+                            $('#successmgs').empty();
+                            $('#validatemgs').empty();
+                            var test = 'New Leave Rule Updated Sucessfully';
+                            $('#successmgs').append(test);
+                        }
+                        else {
+
+                        }
+
+                    },
+                    error: function () {
+                        console.log("error");
+                    }
+                });
+            }
+            else {
+                $('#successmgs').empty();
+                $('#validatemgs').empty();
+                var test = 'Please Select one Leave Rule from Dropdown list';
+                $('#validatemgs').append(test);
+            }
+
+
+        }
+    </script>
+
+}

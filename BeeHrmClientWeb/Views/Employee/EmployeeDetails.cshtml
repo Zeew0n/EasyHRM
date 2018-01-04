@@ -1,0 +1,270 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeDetailsViewModel
+@{
+    ViewBag.Title = "EmployeeDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Details of Employee - @Model.Name
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+    <div class="col-sm-12 col-md-5 col-lg-3">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="avatar">
+                    <div class="text-center">
+                        <a href="#">
+                            @{
+                                if (Model.PhotoName != null)
+                                {
+                                    <img src="~/img/emp_photos/@Model.PhotoName"
+                                         alt="Profile photo of @Model.Name" class="img-responsive img-circle">
+                                }
+                                else
+                                {
+                                    <img src="http://hr.youngminds.com.np/uploads/employees/profile/e86dd2e73f4dbd33fc42e7303a18a431.jpg"
+                                         alt="Prakash Bhandari " class="img-responsive img-circle">
+                                }
+                            }
+                        </a>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="nomarginbtm">[ @Model.Code ] @Model.Name &nbsp;</h3>
+                    </div>
+                </div>
+            </div>
+            <ul class="list-group" id="list-border-remove">
+                <li class="list-group-item">
+                    <i class="fa fa-envelope-o"></i>
+                    <span><a href="#">@Model.Email</a></span>
+                </li>
+                <li class="list-group-item">
+                    <span class="">
+                        <i class="fa fa-fw fa-calendar-o"></i>
+                        @(!String.IsNullOrEmpty(Model.JoinDate) ? Convert.ToDateTime(Model.JoinDate).ToString("d MMM, yyyy") : "No Join Date") 
+                    </span> 
+                </li>
+            </ul>
+            <div class="list-group hidden-sm quick-link">
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">A</p>
+                    </div>
+                    <div class="col-md-10">
+                        @*<a href="#" class="list-group-item">Appraisal</a>*@
+                        @*<a href="#" class="list-group-item">
+                            Assigned Assets
+                        </a>*@
+                        <a class="list-group-item" href="/user/attendance"> Attendance </a>
+                        <a href="/user/applyattendance" class="list-group-item">Attendance Requests</a>
+                        <a href="/user/attendancerequest/recommendlist" class="list-group-item">Attendance Recommend</a>
+                        <a href="/user/attendancerequest/approvelist" class="list-group-item">Attendance Approve</a>
+                    </div>
+                </div>
+                
+                <div class="clearfix"></div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <p class="nav">L</p>
+                    </div>
+                    <div class="col-md-10">
+                        <a href="/user/leaveapplications" class="list-group-item">My Leave Applications</a>
+                        <a href="/user/leaveapplications/recommend" class="list-group-item">Leave Recommend</a>
+                        <a href="/user/leaveapplications/approve" class="list-group-item">Leave Approve</a>
+                    </div>
+                </div>
+               
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-lg-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Basic Information</strong>
+            </div>
+            <div class="panel-body basic">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span class="col-md-4">Username</span>
+                        @Model.Username
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Extension/Off. Contact</span>
+                        @Model.Contact
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Branch</span>
+                        @Model.OfficeName <span style="color:white">test</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Department</span>
+                        @Model.Department
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Group</span>
+                        @Model.Group <span style="color:white">test</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Rank</span>
+                        @Model.Rank
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Shift</span>
+                        @Model.Shift
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Designation</span>
+                        @Model.Designation
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Level</span>
+                        @Model.Level
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Current Service Status</span>
+                        @Model.ServiceStatus
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4"> Contract Expiry Date </span>
+                        @{
+                            if (Model.ContractExpiryDate == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                var a = !String.IsNullOrEmpty(Convert.ToString(Model.ContractExpiryDate)) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.ContractExpiryDate)).ToString().Replace('/', '-') : null;
+                                <p> @a (@(Convert.ToString(Model.ContractExpiryDate) == "" ? "" : Convert.ToDateTime(Model.ContractExpiryDate).ToString("yyyy-MMM-dd")))</p>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Marital status</span>
+                        @Model.MaritalStatus
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Date of Birth</span>
+                        @{
+                            if (Model.DateOfBirth == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                var a = !String.IsNullOrEmpty(Convert.ToString(Model.DateOfBirth)) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.DateOfBirth)).ToString().Replace('/', '-') : null;
+                                <p> @a (@(Convert.ToString(Model.DateOfBirth) == "" ? "" : Convert.ToDateTime(Model.DateOfBirth).ToString("yyyy-MMM-dd")))</p>
+                            }
+                        }
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Marriage Anniversary</span>
+                        @{
+                            if (Model.MarriageAnniversary == "")
+                            {
+                                <span>Not Given</span>
+                            }
+                            else
+                            {
+                                var a = !String.IsNullOrEmpty(Convert.ToString(Model.MarriageAnniversary)) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(Model.MarriageAnniversary)).ToString().Replace('/', '-') : null;
+                                <p> @a (@(Convert.ToString(Model.MarriageAnniversary) == "" ? "" : Convert.ToDateTime(Model.MarriageAnniversary).ToString("yyyy-MMM-dd")))</p>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Blood Group</span>
+                        @Model.BloodGroup
+                    </li>
+
+                    <li class="list-group-item">
+                        <span class="col-md-4">Pan no</span>
+                        @Model.PAN
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">PF Number</span>
+                        @Model.PFNUmber
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">CIT Number</span>
+                        @Model.CITNumber
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Incapacitated</span>
+                        @{
+                            if (Model.Incapacitated == "True")
+                            {
+                                <label class="label label-success">
+                                    <i class="fa fa-minus-circle"></i>
+                                    True
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    <i class="fa fa-minus-circle"></i> 
+                                    False
+                                </label>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Ignore Attendance For Payroll</span>
+                        @{
+                            if (Model.AttendanceIgnore == "True")
+                            {
+                                <label class="label label-success">
+                                    <i class="fa fa-minus-circle"></i>
+                                    True
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="label label-danger">
+                                    <i class="fa fa-minus-circle"></i>
+                                    False
+                                </label>
+                            }
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <span class="col-md-4">Remote Area</span>
+                        @Model.RemoteArea
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+

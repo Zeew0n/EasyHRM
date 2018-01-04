@@ -1,0 +1,123 @@
+﻿
+@model BeeHRM.ApplicationService.DTOs.LeaveYearDTO
+@{
+    ViewBag.Title = "LeaveRuleAdd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/leaveyears" class="btn btn-success"><i class="fa fa-bars"></i> View LeaveYear List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Edit Leave Year - @Model.YearName
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Request.QueryString["msg"] != null && Request.QueryString["msg"].ToString() == "done")
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> The Leave Year has been updated.
+    </div>
+}
+
+@if (Request.QueryString["msg"] != null && Request.QueryString["msg"].ToString() == "failed")
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> The Leave Year Cannot be updated at the moment.
+    </div>
+}
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#date1').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+    </script>
+}
+
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-8">
+                @Html.ValidationSummary()
+                <form action="/leaveyear/edit/@Model.YearId" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="box-body">
+                        <input type="hidden" value="@Model.YearId" name="YearId" />
+                        <div class="form-group ">
+                            <label for="label">Year Name(*)</label>
+                            <input class="form-control" placeholder="Enter leave year name" value="@Model.YearName" name="YearName" type="text" id="label">
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.YearName)</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="yearStartDate">Year Start Date(*)</label>
+                                <input type='text' class="form-control" value="@Model.YearStartDateNp" placeholder="Enter Year Start Date" name="YearStartDateNp" id="date" required="required"/>
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.YearStartDateNp)</span>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="yearEndDate">Year End Date(*)</label>
+                                <input type='text' class="form-control" value="@Model.YearEndDateNp" placeholder="Enter Year Start Date" name="YearEndDateNp" id="date1" required="required" />
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.YearEndDateNp)</span>
+                        </div>
+
+
+                        <div class="form-group ">
+                            <input type="checkbox" value="true" name="YearCurrent" @(Model.YearCurrent == true ? "checked" : "") id="isActiveYear" /> <label>Is Active Year</label>
+                            <input type="hidden" value="false" name="YearCurrent" />
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.YearCurrent)</span>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <input type="submit" class="btn btn-success" name="action:Create" value="Update Leave Year" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

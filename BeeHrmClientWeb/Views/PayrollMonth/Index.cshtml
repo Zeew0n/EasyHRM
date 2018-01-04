@@ -1,0 +1,127 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollMonthDescriptionDTO>
+
+@{
+    ViewBag.Title = "PayrollMonths";
+    string fsId = "";
+    if (ViewBag.fsId != null)
+    {
+        fsId = Convert.ToString(ViewBag.fsId);
+    }
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="col-md-4">Payroll Months</h2>
+                <div id="hbreadcrumb" class="pull-right">
+
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><a href="~/PayrollMonth/AddPayrollMonth" class="btn btn-success"><i class="fa fa-plus"></i> Create new</a></li>
+                    </ol>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="hpanel">
+        <div class="panel-body">
+            <form name="frmpayrollmonths" action="" method="get">
+                <select class="form-control" name="fyId" style="width:250px;" onchange="form.submit();">
+                    <option value="">Please Choose Fiscal Year</option>
+                    @if (ViewBag.FiscalsDropdown != null)
+                    {
+                        foreach (var row in ViewBag.FiscalsDropdown)
+                        {
+                            <option value="@row.Value" @( fsId == row.Value.ToString() ? "selected" : "")> @row.Text</option>
+                        }
+                    }
+
+                </select>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="box box-top-border">
+    <table class="table">
+        <tr>
+            <th>
+                Fiscal Year
+            </th>
+            <th>
+                Salary Month Number
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MonthNameNepali)
+            </th>
+            <th>
+                Month Name
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkingDays)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fiscal.FyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MonthIndex)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.MonthNameEnglish)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.MonthNameNepali)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WorkingDays)
+                </td>
+                <td>
+                    <a href="/PayrollMonth/EditPayrollMonth/@item.Id" class="btn btn-success"><i class="fa fa-pencil"></i> Edit</a>
+
+                </td>
+            </tr>
+        }
+
+    </table>
+
+</div>

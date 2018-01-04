@@ -1,0 +1,222 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.ViewModel.MultipleLeaveYearlyReportViewModel>
+@{
+    ViewBag.Title = "LeaveBalance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    string officeId = "", desgId = "",  leaveYearId = "";
+
+
+    if (ViewBag.OfficeId != null)
+    {
+        officeId = Convert.ToString(ViewBag.OfficeId);
+    }
+
+    if (ViewBag.DesgId != null)
+    {
+        desgId = Convert.ToString(ViewBag.DesgId);
+    }
+
+    if (ViewBag.LeaveYearId != null)
+    {
+        leaveYearId = Convert.ToString(ViewBag.LeaveYearId);
+    }
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i>@Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <a href="~/YearlyLeaveReport/Create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Create</a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Balance Details
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<form action="" method="post" id="MyForm">
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        @using (Html.BeginForm())
+            {
+                            @Html.AntiForgeryToken()
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select name="OfficeId" class="form-control custom-select" required>
+                                        <option value="" selected>Select Office</option>
+                                        @if (ViewBag.dllOfficeTypeList != null)
+                                        {
+                                            foreach (var row in ViewBag.dllOfficeTypeList)
+                                            {
+                                                <option value="@row.OfficeId" @(officeId == row.OfficeId.ToString() ? "selected" : "")> @row.OfficeName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select class="form-control custom-select" name="DesgId">
+                                        <option selected="selected" value="">Select Designation</option>
+                                        @if (ViewBag.dllDesginationList != null)
+                                        {
+                                            foreach (var row in ViewBag.dllDesginationList)
+                                            {
+                                                <option value="@row.DsgId" @(desgId == row.DsgId.ToString() ? "selected" : "")>@row.DsgName</option>
+
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select class="form-control selector" name="LeaveYearId" required>
+                                        <option selected="selected" value="">LeaveYear</option>
+                                        @if (ViewBag.dllLeaveYearList != null)
+                                        {
+                                            foreach (var row in ViewBag.dllLeaveYearList)
+                                            {
+                                                <option value="@row.Value" @(leaveYearId == row.Value.ToString() ? "selected" : "")>@row.Text</option>
+
+                                            }
+                                        }
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="submit" value="Search" class="btn btn-success" />
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <table class="table table-hover table-bordered" id="tblLeaveTypes">
+
+                        <tr>
+                            <th>SN</th>
+                            <th>EmpCode</th>
+                            <th>EmpName</th>
+                            <th>Designation</th>
+                            <th>Office</th>
+                            <th colspan="4" style="text-align:center">Home Leave</th>
+                            <th colspan="3" style="text-align:center">Sick Leave</th>
+                            <th colspan="3" style="text-align:center">Casual Leave</th>
+                            <th colspan="3" style="text-align:center">Compensation Leave</th>
+                            <th>Remarks</th>
+
+                        </tr>
+                        <tr>
+                            <td colspan="5"></td>
+                            
+                            <td>Prev. Year</td>
+                            <td>This Year</td>
+                            <td>Taken/Encahsed</td>
+                            <td>Balance</td>
+                            <td>Total</td>
+                            <td>Taken</td>
+                            <td>Balance</td>
+                            <td>Total</td>
+                            <td>Taken</td>
+                            <td>Balance</td>
+                            <td>Total</td>
+                            <td>Taken</td>
+                            <td>Balance</td>
+                            <td></td>
+
+                        </tr>
+                        @if (Model!=null)
+                        {
+                            int i = 1;
+                            foreach (var item in Model)
+                            {
+
+
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.EmpCode</td>
+                            <td>@item.EmpName</td>
+                            <td>@item.DesgName</td>
+                            <td>@item.OfficeName</td>
+                            <td>@item.H_PrevYearLeaveDays</td>
+                            <td>@item.H_ThisYearLeaveDays</td>
+                            <td>@item.H_TotalTaken</td>
+                            <td>@item.H_BalanceDays</td>
+                            <td>@item.S_TotalLeaveDays</td>
+                            <td>@item.S_TotalTaken</td>
+                            <td>@item.S_BalanceDays</td>
+                            <td>@item.Ca_TotalLeaveDays</td>
+                            <td>@item.Ca_TotalTaken</td>
+                            <td>@item.Ca_BalanceDays</td>
+                            <td>@item.Co_TotalLeaveDays</td>
+                            <td>@item.Co_TotalTaken</td>
+                            <td>@item.Co_BalanceDays</td>
+                            @{ i = i + 1;}
+                            <td></td>
+                        </tr>
+                            }}
+
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    @section scripts{
+        <script src="~/Scripts/moment.min.js"></script>
+        <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+        <script src="~/Scripts/underscore.js"></script>
+        <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+        <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $("#emplist").customselect();
+            });
+        </script>
+    }
+    @{
+        if (Session["error"] != null)
+        {
+            Session.Remove("error");
+        }
+    }

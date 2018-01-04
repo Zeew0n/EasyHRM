@@ -1,0 +1,123 @@
+﻿@model BeeHRM.ApplicationService.DTOs.RolesDTO
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("Roles","Roles")' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Roles
+                    <small>@Model.RoleName</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RoleName)
+
+                                @Html.EditorFor(model => model.RoleName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.RoleName, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RoleDetails)
+
+                                @Html.EditorFor(model => model.RoleDetails, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.RoleDetails, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.RoleDataAccessAll)
+
+                                @Html.EditorFor(model => model.RoleDataAccessAll)
+                                @Html.ValidationMessageFor(model => model.RoleDataAccessAll, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group" id="details">
+                                @{  IEnumerable<SelectListItem> BusinessGroupList = ViewBag.BusinessGroupList;
+                                    IEnumerable<SelectListItem> selectedBgList = ViewBag.selectedBgList;
+                               
+                                }
+                                @Html.LabelFor(model => model.BusinessGroup)
+                                @Html.DropDownListFor(model => model.BusinessGroup, new MultiSelectList(BusinessGroupList, "Value", "Text"), new { @multiple = "multiple" })
+                                <br />
+                                  <br />
+                                
+                                    <table class="table" style="width:50%">
+                                        <tr>
+                                            <th colspan="2">@Html.Label("Selected Business Group")</th>
+                                        </tr>
+                                        @{ foreach (var row in selectedBgList)
+                                            {
+                                                <tr>
+                                                    <td>@row.Text</td>
+                                                   
+                                                    <td><a href="/Role/RemoveBusinessGroup?roleId=@Model.RoleId&bgId=@row.Value" class="label label-danger"><i class="fa fa-trash "></i></a></td>
+                                                </tr>
+                                            }
+                                        }
+                                    </table>
+                               
+
+                            </div>
+                            <div class="box-footer">
+                                <input type="submit" value="Save" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                    }
+@section scripts{
+    <script>
+        if ($('#RoleDataAccessAll').prop('checked') == true)
+        {
+            $('#details').hide();
+        }
+        $('#RoleDataAccessAll').on('click', function () {
+            if ($('#RoleDataAccessAll').prop('checked') == true) {
+                $('#details').hide();
+            }
+            else {
+                $('#details').show();
+            }
+        });
+
+    </script>
+
+}

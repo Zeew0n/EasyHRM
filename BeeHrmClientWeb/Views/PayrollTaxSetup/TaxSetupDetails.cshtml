@@ -1,0 +1,75 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.TaxDetailDTO>
+@{
+    ViewBag.Title = "TaxSetupDetails";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><a href="~/PayrollTaxSetup/Index" class="btn btn-success"><i class="fa fa-bars"></i> Back to list</a></li>
+                        <li><a href="/PayrollTaxSetup/TaxDetailCreate?MasterId=@Request.QueryString["MasterId"]" class="btn btn-success"><i class="fa fa-plus"></i> Add New</a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    @ViewBag.MasterName
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Percentage)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.DetailId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MasterId)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Percentage)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "TaxDetailEdit", new { id = item.DetailId })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

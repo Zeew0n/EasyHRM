@@ -1,0 +1,201 @@
+﻿@model BeeHrmClientWeb.Models.LeaveBalanceIndividual
+@{
+    ViewBag.Title = "LeaveBalanceUserDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Leave Balance Details - @Model.EmpDetail.Name
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+   
+    <div class="col-md-12 col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Leave Balance</strong>
+            </div>
+            <div class="panel-body basic">
+                <div class="box-body">
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <select class="form-control" id="sltYear">
+                                <option value="" selected="selected">Choose Year </option>
+                                @foreach (var item in Model.YearList)
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="button" id="search" class="btn btn-success" value="Search" />
+                        </div>
+                    </div>
+                    <br clear="all" />
+                    <br clear="all" />
+
+                    <div class="row">
+
+                        <div id="error"></div>
+                        <div class="col-md-12">
+                            <table class="table table-hover text-center table-bordered" id="tblLeaveYear">
+                                <thead>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th>Leave Types</th>
+                                        <th>IsPayable</th>
+                                        <th>Entitlement</th>
+                                        <th>Leave Taken</th>
+                                        <th>Balance</th>
+
+                                    </tr>
+                                <tbody id="leavebalance"></tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+
+    <script>
+        $(document).ready(function ()
+        {
+            $.ajax({
+
+                url: "/employee/leeavebalance/",
+                data: { id: @Model.EmpDetail.Code, yearid:@Model.Currentyear },
+                success: function (data) {
+                    $("#leavebalance").empty();
+                    var result = '';
+                    debugger;
+                    if (data.length < 1) {
+                        $("#error").empty();
+                        $('#tblLeaveYear').hide();
+                        var test = "<div  class='alert alert-danger' ><strong>Sorry!</strong> No Leave Rule assigned yet for this employee for this year  </div>";
+                        $("#error").append(test);
+                    }
+                    else {
+                        $("#error").empty();
+                        $('#tblLeaveYear').show();
+                        for (var i = 0; i < data.length; i++)
+                        {
+                            var ispayable = '';
+                            if (data[i].EmpCode == true)
+                                ispayable += '<i class="fa fa-check"> </i>';
+                            else
+                                ispayable += '<i class="fa fa-times" aria-hidden="true"></i>';
+
+                            result += ('<tr><td>' + (i+1) +'</td><td>'+
+                                data[i].LeaveTypeName + '</td><td>'+
+                                ispayable +'</td><td>'+ data[i].LeaveDays +
+                                '</td><td>' + data[i].TotalLeaveTakenDays +
+                                '</td><td>' + data[i].TotalRemainingDays +
+                                '</td></tr>');
+                        }
+                        $("#leavebalance").append(result);
+                    }
+
+                }
+
+            });
+
+
+
+            $("#search").click(function ()
+            {
+
+                var year = $("#sltYear").val();
+
+                    if (year == "")
+                    {
+                        $('#tblLeaveYear').hide();
+                        $("#error").empty();
+                        var test = "<div  class='alert alert-danger' ><strong>Please Select Fiscal yer from list   !!</strong></div>";
+                        $("#error").append(test);
+                    }
+                    else
+                    {
+                        $.ajax({
+
+                            url: "/admin/leave/leeavebalance/",
+                            data: { id: @Model.EmpDetail.Code, year: year },
+                            success: function (data) {
+                                $("#leavebalance").empty();
+                                var result = '';
+                                debugger;
+                                if (data.length < 1) {
+                                    $("#error").empty();
+                                    $('#tblLeaveYear').hide();
+                                    var test = "<div  class='alert alert-danger' ><strong>Sorry!</strong> No Leave Rule assigned yet for this employee  </div>";
+                                    $("#error").append(test);
+                                }
+                                else {
+                                    $("#error").empty();
+                                    $('#tblLeaveYear').show();
+                                    for (var i = 0; i < data.length; i++)
+                                    {
+                                        var ispayable = '';
+                                        if (data[i].EmpCode == true)
+                                            ispayable += '<i class="fa fa-check"> </i>';
+                                        else
+                                            ispayable += '<i class="fa fa-times" aria-hidden="true"></i>';
+
+                                        result += ('<tr><td>' + (i+1) +'</td><td>'+
+                                            data[i].LeaveTypeName + '</td><td>'+
+                                            ispayable +'</td><td>'+ data[i].LeaveDays +
+                                            '</td><td>' + data[i].TotalLeaveTakenDays +
+                                            '</td><td>' + data[i].TotalRemainingDays +
+                                            '</td></tr>');
+                                    }
+                                    $("#leavebalance").append(result);
+                                }
+
+                            }
+
+                        });
+
+                    }
+
+            });
+        });
+    </script>
+
+}

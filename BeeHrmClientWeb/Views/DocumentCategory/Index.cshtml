@@ -1,0 +1,101 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.DocumentCategoryDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('.dataTable').DataTable();
+    </script>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href="~/configurations/DocumentCategory/Create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Document Categories
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@if (Session["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @Session["Success"].ToString()
+    </div>
+    Session.Remove("Success");
+}
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well box">
+                    <div class="box-body table-responsive">
+                        <table class="table table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        SN
+                                    </th>
+                                    <th>
+                                        Category Name
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var i = 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @i
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CatTitle)
+                                            </td>
+                                            <td>
+                                                <a href="documentcategory/edit/@item.CatId"> Edit</a>
+                                                @*<a class="label-danger label confirm_delete" href="/DocumentCategory/Delete/@item.CatId">Delete</a>*@
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

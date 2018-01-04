@@ -1,0 +1,250 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeKaazViwModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    काजमा खटाउने
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>कर्मचारी काजमा खटाउने </strong>
+        </div>
+        <div class="panel-body basic">
+            <h3> हालको कर्मचारी विवरण  </h3>
+            <div class="media-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>EmpName:</th>
+                        <th>Office:</th>
+                        <th>Designation:</th>
+                        <th>Department:</th>
+                        <th>Section:</th>
+
+                    </tr>
+                    <tr>
+                        <td>@Model.Name</td>
+                        <td>@Model.OfficeName</td>
+                        <td>@Model.Designation</td>
+                        <td>@Model.Department</td>
+                        <td>@Model.Section</td>
+                    </tr>
+                    <tr>
+                        <th>Empcode:</th>
+                        <th>Level:</th>
+                        <th>Rank:</th>
+                        <th>Current Rank Appt.:</th>
+                        <th>Job Type:</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.EmpCode</td>
+                        <td>@Model.Level</td>
+                        <td>@Model.Rank</td>
+                        <td>@Model.Rank</td>
+                        <td>@Model.JobType</td>
+                    </tr>
+
+
+                </table>
+                <h3>काजमा खटाउने गरिने कार्यालय र अन्य विवरण छानुहुओस</h3>
+            </div>
+
+            <div class="text-danger">
+                @if (Session["ErrorMgsKaaz"] != null)
+                {
+                    <b class="text-danger error-label">@Session["ErrorMgsKaaz"].ToString()</b>
+
+                }
+                @if (Session["sucessMgsKaaz"] != null)
+                {
+                    <b class="text-success error-sucess">@Session["sucessMgsKaaz"].ToString()</b>
+
+                }
+
+            </div>
+            @using (Html.BeginForm("KajMaKhataune", "Kaj", FormMethod.Post, new { id = "target" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <hr />
+                <div class="form-horizontal">
+                    @Html.ValidationSummary()
+                    @Html.HiddenFor(model=>model.EmpCode)
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.LetterIssueDate)
+                        @Html.EditorFor(model => model.LetterIssueDateNP, new { htmlAttributes = new { @class = "nepali-calendar form-control", @placeholder = "Letter Issue Date" } })
+                        @Html.ValidationMessageFor(model => model.LetterIssueDateNP, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.LetterRefNo)
+                        @Html.EditorFor(model => model.LetterRefNo, new { htmlAttributes = new { @class = " form-control", @placeholder = "Letter Number" } })
+                        @Html.ValidationMessageFor(model => model.LetterRefNo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.LetterChalaniNumber)
+                        @Html.EditorFor(model => model.LetterChalaniNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Chalani Number" } })
+                        @Html.ValidationMessageFor(model => model.LetterChalaniNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.KajStartDate)
+                        @Html.EditorFor(model => model.KajStartDateNP, new { htmlAttributes = new { @class = "nepali-calendar form-control", @placeholder = "Kaaz Start date" } })
+                        @Html.ValidationMessageFor(model => model.KajStartDateNP, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.KajEndDate)
+                        @Html.EditorFor(model => model.KajEndDateNP, new { htmlAttributes = new { @class = "nepali-calendar form-control", @placeholder = "Kaaz End date" } })
+                        @Html.ValidationMessageFor(model => model.KajEndDateNP, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-4">
+                        @Html.LabelFor(model => model.SadarGarneEmployeeCode)
+                        @{
+                            List<SelectListItem> EmployeeList = ViewBag.employeeList;
+                        }
+                        @Html.DropDownListFor(model => model.SadarGarneEmployeeCode, EmployeeList, new { @class = "form-control custom-select", @id = "emplist" })
+                        @Html.ValidationMessageFor(model => model.SadarGarneEmployeeCode, "", new { @class = "text-danger" })
+
+                    </div>
+
+
+
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="Instruction">Kaaz Types </label>
+                        <br />
+                        @*@Html.EditorFor(model => model.KajStartDate, new { htmlAttributes = new { @class = "date form-control", @placeholder = "Kaaz Start date" } })*@
+                        @*Union Kaaz <input type="radio" name="KaazType" value="10" />
+                            non union Kaaz <input type="radio" name="KaazType"  value="11"/>*@
+
+                        @Html.DropDownListFor(model => model.KaajType, new List<SelectListItem>
+                        {
+                            new SelectListItem{ Text="Union Kaaj", Value = "U" },
+                            new SelectListItem{ Text="Non union kaaj", Value = "V" },
+
+                         }, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.KaajType, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-4">
+
+                        <label for="Instruction">Places </label>
+                        @*@Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "date form-control", @placeholder = "Places of kaaz" } })*@
+                        @Html.EditorFor(model => model.Remarks, new { htmlAttributes = new { @class = "date form-control", @placeholder = "Places of kaaz" } })
+                        @Html.ValidationMessageFor(model => model.Remarks, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="col-md-4">
+
+                        @Html.LabelFor(model => model.Instruction)
+                        @Html.EditorFor(model => model.Instruction, new { htmlAttributes = new { @class = "date form-control", @placeholder = "Purpose of kaaz" } })
+                        @Html.ValidationMessageFor(model => model.Instruction, "", new { @class = "text-danger" })
+
+                    </div>
+
+
+
+                </div>
+                <input type="submit" value="काजमा खटाउने" class="btn btn-success" />
+                <a class="btn btn-danger" href="/kajmakhataune/@Model.EmpCode">Cancel</a>
+
+
+                            }
+
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $('#target').on('submit', function () {
+            var res = confirm("Are you sure to काजमा खटाउने ?");
+            if (!res) {
+                return false;
+            }
+        });
+
+        //$('.date').on('click', function () {
+        //    $('.date').datepicker();
+        //});
+        $(document).ready(function () {
+            $('.nepali-calendar').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+
+            $("#emplist").customselect();
+
+        });
+    </script>
+}
+
+@{
+    Session.Remove("ErrorMgsKaaz");
+    Session.Remove("sucessMgsKaaz");
+
+}

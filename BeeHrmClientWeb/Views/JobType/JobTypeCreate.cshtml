@@ -1,0 +1,128 @@
+﻿@model BeeHRM.ApplicationService.DTOs.JobTypeDTO
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href="@Url.Action("JobType","JobType")" class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Job Type
+                    <small>Add New</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@{
+    List<SelectListItem> AppointmentType = new List<SelectListItem>();
+    AppointmentType.Add(new SelectListItem
+    {
+        Text = "None",
+        Value = ""
+    });
+    AppointmentType.Add(new SelectListItem
+    {
+        Text = "Permanent ",
+        Value = "1"
+    });
+    AppointmentType.Add(new SelectListItem
+    {
+        Text = "Probation",
+        Value = "2",
+    });
+    AppointmentType.Add(new SelectListItem
+    {
+        Text = "Contract",
+        Value = "3"
+    });
+}
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.JobTypeName, "Name(*)")
+                                @Html.HiddenFor(model => model.PayRollType, new { @Value = "Permanent" })
+                                @Html.EditorFor(model => model.JobTypeName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter the name for job type" } })
+                                @Html.ValidationMessageFor(model => model.JobTypeName, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            @*<div class="form-group">
+                                    @Html.LabelFor(model => model.PayRollType, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @Html.EditorFor(model => model.PayRollType, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.PayRollType, "", new { @class = "text-danger" })
+                                </div>*@
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.JobPeriodMonth, "Period Month (if permanent month=0)")
+                                @Html.EditorFor(model => model.JobPeriodMonth, new { htmlAttributes = new { @class = "form-control", @placeholder = "Enter number of month" } })
+                                @Html.ValidationMessageFor(model => model.JobPeriodMonth, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.JobAppointmentType)
+                                @Html.DropDownListFor(model => model.JobAppointmentType, AppointmentType, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.JobAppointmentType, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.CheckBoxFor(model =>model.PfAllow)
+                            </div>
+                          
+
+
+                            <div class="box-footer">
+                                <input type="submit" name="action:Create" value="Save" class="btn btn-success" />
+                                <input type="submit" name="action:CreateClose" value="Save & Close" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

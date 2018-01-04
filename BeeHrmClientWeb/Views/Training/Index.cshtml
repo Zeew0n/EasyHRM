@@ -1,0 +1,142 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.EmpTrainingDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+                                <a href="/Training/Create/@ViewBag.EmployeeDetail.Code" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add Training</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Training
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/Content/DataTables/datatables.min.css" />
+}
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script>
+        $('#Delete').on('click', function () {
+            var res = confirm("Are you sure you want to delete?");
+            if (!res) {
+                return false;
+            }
+        });
+        $('#trainingtable').DataTable();
+        $('.dataTables_filter').css('float', 'right');
+
+    </script>
+}
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Information </strong>
+        </div>
+        <div class="panel-body basic">
+            <table class="table" id="trainingtable">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingTitle)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingStartDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingEndDate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingOrganization)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TrainingCountry)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TrainingTitle)
+                        </td>
+                        <td>
+                            @*@Convert.ToDateTime(item.TrainingStartDate).ToString("yyyy-MM-dd")*@
+                            @{var a = BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(item.TrainingStartDate)).ToString().Replace('/', '-');}
+                            @if (a != null)
+                            {
+                                <p>@a (@(Convert.ToString(item.TrainingStartDate) == "" ? "" : Convert.ToDateTime(item.TrainingStartDate).ToString("yyyy-MMM-dd")))</p>
+
+                            }
+                            else {
+                                <p></p>
+                            }
+                        </td>
+                        <td>
+                            @*@Convert.ToDateTime(item.TrainingEndDate).ToString("yyyy-MM-dd")*@
+                            @{var b = BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(item.TrainingEndDate)).ToString().Replace('/', '-');}
+                            @if (b != null)
+                            {
+                                <p>@b (@(Convert.ToString(item.TrainingEndDate) == "" ? "" : Convert.ToDateTime(item.TrainingEndDate).ToString("yyyy-MMM-dd")))</p>
+
+                            }
+                            else {
+                                <p></p>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TrainingOrganization)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CountryName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id, EId = ViewBag.EmployeeDetail.Code }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id, EId = ViewBag.EmployeeDetail.Code }, new { @class = "confirm_delete" })
+                        </td>
+                    </tr>
+                                }
+
+            </table>
+        </div>
+    </div>
+</div>

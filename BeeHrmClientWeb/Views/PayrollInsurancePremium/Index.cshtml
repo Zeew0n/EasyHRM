@@ -1,0 +1,179 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollInsuranceInformation
+@{
+    ViewBag.Title = "Insurance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var i = 0;
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                
+                                <a href="/PayrollInsurancePremium/Create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+
+                <h2 class="font-light m-b-xs">
+                    Payroll Insurance Premium list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        .modal-header {
+            padding: 5px;
+            border-bottom: 1px solid #a94442;
+        }
+
+        @@media only screen and (min-width: 500px) {
+            .modal-dialog {
+                width: 500px;
+                margin: 30px auto;
+                top: 100px;
+            }
+        }
+
+        .modal-content {
+            background-color: #eff5ff;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        }
+    </style>
+}
+
+
+@*@if (Session["LeaveDeleteStatus"] != null && Session["LeaveDeleteStatus"].ToString() == "Done")
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-check" aria-hidden="true"></i> The Leave has been deleted.
+        </div>
+        Session.Remove("LeaveDeleteStatus");
+    }*@
+
+@if (Session["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @Session["Success"].ToString()
+    </div>
+    Session.Remove("Success");
+}
+
+
+<div class="delerror"></div>
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="ef">
+                    <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Employee Name</th>
+                            <th>Insurance Company</th>
+                            <th>Insured Amount</th>
+                            <th>Premium Amount</th>
+                            <th>Amount Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Policy Number</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.PayrollInsurancePremiumList != null && Model.PayrollInsurancePremiumList.Count > 0)
+                        {
+                            foreach (var item in Model.PayrollInsurancePremiumList)
+                            {
+                                i = i + 1;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>
+                                        @Html.HiddenFor(modelItem => item.IsuranceClaimId)
+                                        @Html.DisplayFor(modelItem => @item.Employee.EmpName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.InsuranceCompany.CompanyName)
+                                    </td>
+                                    <td>
+                                        Rs.@Html.DisplayFor(modelItem => item.InsuredAmount)
+                                    </td>
+
+                                    <td>
+                                        Rs.@Html.DisplayFor(modelItem => item.PremiumAmount)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AmountType)
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.StartDateNP) (@Convert.ToDateTime(item.StartDate).ToString("yyyy-MMM-dd"))
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EndDateNP) (@Convert.ToDateTime(item.EndDate).ToString("yyyy-MMM-dd"))
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.InsurancePolicyNumber)
+                                    </td>
+                                    <td>
+                                        @*<a class="label-primary label" href="~/emp_documents/@item.DocumentTitle" download>View</a> &nbsp*@
+                                        <a target="_blank" href="~/PayrollInsurancePremium/Details/@item.IsuranceClaimId">Details</a> <t>|</t>
+                                        <a href="/PayrollInsurancePremium/Update/@item.IsuranceClaimId">Edit</a> <t>|</t>
+                                        <a class="confirm_delete" href="/PayrollInsurancePremium/Delete/@item.IsuranceClaimId">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#ef').DataTable();
+    </script>
+}
+

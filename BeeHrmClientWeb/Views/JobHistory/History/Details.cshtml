@@ -1,0 +1,171 @@
+﻿@model BeeHRM.ApplicationService.DTOs.EmployeeJobHistoryDTO
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    History
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>History of @Model.EmployeeName</strong>
+        </div>
+        <div class="panel-body basic">
+            <ul class="list-group">
+                @*<li class="list-group-item">
+                        <span class="col-md-4">सदर गर्ने अधिकारी </span>
+                        @Model.SadarGarneName
+                    </li>*@
+                <li class="list-group-item">
+                    <span class="col-md-4">Service Event</span>
+                    @Model.ServiceEventName &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Effective Date</span>
+
+                    @{var appointmentdate = !String.IsNullOrEmpty(Model.EffectiveDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.EffectiveDate)).ToString().Replace('/', '-') : null;
+                    }
+                    @if (@appointmentdate != null)
+                    {
+                        <p>@appointmentdate (@(Convert.ToString(Model.EffectiveDate) == "" ? "" : Convert.ToDateTime(Model.EffectiveDate).ToString("yyyy-MMM-dd")))</p>
+                    }
+                    else {
+                        <p></p>
+                    }
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Service Date</span>
+                    @*@Html.DisplayFor(modelItem => Model.ServiceHolidingDate)*@
+                    @{var serviceholdingdate = !String.IsNullOrEmpty(Model.ServiceHolidingDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.ServiceHolidingDate)).ToString().Replace('/', '-') : null;
+                    }
+                    @if (@serviceholdingdate != null)
+                    {
+                        <p>@serviceholdingdate (@(Convert.ToString(Model.ServiceHolidingDate) == "" ? "" : Convert.ToDateTime(Model.ServiceHolidingDate).ToString("yyyy-MMM-dd")))</p>
+                    }
+                    else {
+                        <p></p>
+                    }
+                </li>
+
+                <li class="list-group-item">
+                    <span class="col-md-4">Office</span>
+                    @Model.OfficeName
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Section</span>
+                    @Model.SectionName
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Rank</span>
+                    @Model.RankName &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Designation</span>
+                    @Model.DesignationName &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Decision Date</span>
+                    @*@Html.DisplayFor(modelItem => Model.DecisionDate)*@
+                    @{var decisiondate = !String.IsNullOrEmpty(Model.DecisionDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.DecisionDate)).ToString().Replace('/', '-') : null;
+                    }
+                    @if (@decisiondate != null)
+                    {
+                        <p>@decisiondate (@(Convert.ToString(Model.DecisionDate) == "" ? "" : Convert.ToDateTime(Model.DecisionDate).ToString("yyyy-MMM-dd")))</p>
+                    }
+                    else {
+                        <p></p>
+                    }
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Letter Issue Date</span>
+                    @*@Html.DisplayFor(modelItem => Model.LetterIssueDate)*@
+                    @{var issuedate = !String.IsNullOrEmpty(Model.LetterIssueDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.LetterIssueDate)).ToString().Replace('/', '-') : null;
+                    }
+                    @if (@issuedate != null)
+                    {
+                        <p>@issuedate (@(Convert.ToString(Model.LetterIssueDate) == "" ? "" : Convert.ToDateTime(Model.LetterIssueDate).ToString("yyyy-MMM-dd")))</p>
+                    }
+                    else {
+                        <p></p>
+                    }
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Effective Till Date</span>
+                    @*@Html.DisplayFor(modelItem => Model.EffectiveTillDate)*@
+                    @{var tilldate = !String.IsNullOrEmpty(Model.EffectiveTillDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.EffectiveTillDate)).ToString().Replace('/', '-') : null;
+                    }
+                    @if (@tilldate != null)
+                    {
+                        <p>@tilldate (@(Convert.ToString(Model.EffectiveTillDate) == "" ? "" : Convert.ToDateTime(Model.EffectiveTillDate).ToString("yyyy-MMM-dd")))</p>
+                    }
+                    else {
+                        <p></p>
+                    }
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Office Join Date</span>
+                    @*@Html.DisplayFor(modelItem => Model.OfficeJoinDate)*@
+                    @{var joindate = !String.IsNullOrEmpty(Model.OfficeJoinDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(Model.OfficeJoinDate)).ToString().Replace('/', '-') : null;
+                    }
+                    @if (@joindate != null)
+                    {
+                        <p>@joindate (@(Convert.ToString(Model.OfficeJoinDate) == "" ? "" : Convert.ToDateTime(Model.OfficeJoinDate).ToString("yyyy-MMM-dd")))</p>
+                    }
+                    else {
+                        <p></p>
+                    }
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Remarks</span>
+                    @Model.Remarks &nbsp;
+                </li>
+                <li class="list-group-item">
+                    <span class="col-md-4">Instruction</span>
+                    @Model.Instruction &nbsp;
+                </li>
+            </ul>
+            <a href="/history/@Model.EmpCode" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,352 @@
+﻿@model BeeHRM.Repository.PayrollSalaryMasterSheet
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>PayrollSalaryMasterSheet</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeeName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaritialStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaritialStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DesignationCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DesignationCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DepartmentCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DepartmentCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BranchCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BranchCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RankSalary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RankSalary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentGrade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentGrade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RankMaxGrade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RankMaxGrade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RankPerGradeAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RankPerGradeAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GradeSalary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GradeSalary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RankAndGradeSalary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RankAndGradeSalary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PfSelf)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PfSelf)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PfCompany)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PfCompany)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PfExtra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PfExtra)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BankAllowance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BankAllowance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RankSpecialAllowance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RankSpecialAllowance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RankInchargeShipAllowance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RankInchargeShipAllowance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RankOtherAllowances)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RankOtherAllowances)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TotalRankAllowances)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TotalRankAllowances)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalaryWithRankAllowance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalaryWithRankAllowance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteAllowanceId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RemoteAllowanceId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteAllowanceType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RemoteAllowanceType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteAllowance)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RemoteAllowance)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoteTaxExcemption)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RemoteTaxExcemption)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaxableAllowanceAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaxableAllowanceAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NonTaxableAllowanceAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NonTaxableAllowanceAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaxablePfCitAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaxablePfCitAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CitAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CitAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GrossSalary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GrossSalary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GrossIncome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GrossIncome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaxableSalary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaxableSalary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TaxAmount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TaxAmount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SalaryAfterTaxDeduction)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SalaryAfterTaxDeduction)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmpAttendanceIgnore)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmpAttendanceIgnore)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkingDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkingDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkedDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkedDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PerDaysalary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PerDaysalary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeductableDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeductableDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ActualSalary)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ActualSalary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PayrollSalaryTableId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PayrollSalaryTableId)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

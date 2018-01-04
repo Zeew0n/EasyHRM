@@ -1,0 +1,93 @@
+﻿@model BeeHRM.ApplicationService.DTOs.RolesAccessDTO
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='~/roleaccess/@Model.AssignRoleId' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    @Model.ModuleName <small>EDIT</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.HiddenFor(model=>model.AssignRoleId)
+                                @Html.HiddenFor(model => model.AssignModuleId)
+                                @Html.HiddenFor(model => model.AssignId)
+                                @Html.LabelFor(model => model.AllowAdd, "Allow Add?:")
+                               
+                                    @Html.EditorFor(model => model.AllowAdd)
+                                    @Html.ValidationMessageFor(model => model.AllowAdd, "", new { @class = "text-danger" })
+                               
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AllowEdit, "Allow Edit?:")
+                               
+                                    @Html.EditorFor(model => model.AllowEdit)
+                                    @Html.ValidationMessageFor(model => model.AllowEdit, "", new { @class = "text-danger" })
+                               
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AllowDelete, "Allow Delete?:")
+                               
+                                    @Html.EditorFor(model => model.AllowDelete)
+                                    @Html.ValidationMessageFor(model => model.AllowDelete, "", new { @class = "text-danger" })
+                               
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AllowView, "Allow View?:")
+                               
+                                    @Html.EditorFor(model => model.AllowView)
+                                    @Html.ValidationMessageFor(model => model.AllowView, "", new { @class = "text-danger" })
+                               
+                            </div>
+
+                            <div class="box-footer">
+                                <input type="submit" value="Save" class="btn btn-success" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

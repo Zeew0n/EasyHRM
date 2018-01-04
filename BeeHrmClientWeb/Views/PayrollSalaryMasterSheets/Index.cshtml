@@ -1,0 +1,414 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollSalaryMasterSheetListDTO
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <link href="~/Content/EmployeeDetails.css" rel="stylesheet" />
+}
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Content/jspdf.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('ul.tabs li').click(function () {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            });
+
+            var doc = new jsPDF();
+            var specialElementHandlers = {
+                '#print': function (element, renderer) {
+                    return true;
+                }
+            };
+
+            $('#cmd').click(function () {
+                doc.fromHTML($('#print').html(), 15, 15, {
+                    'width': 170,
+                    'elementHandlers': specialElementHandlers
+                });
+                doc.save('sample-file.pdf');
+            });
+
+            $("#print").click(function () {
+                //Hide all other elements other than printarea.
+                $("#printdiv").show();
+                window.print();
+                $("#printdiv").hide();
+            });
+        });
+
+    </script>
+
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    My Salary
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<ul class="tabs">
+    <li class="tab-link current" data-tab="Salaries">Salaries </li>
+    <li class="tab-link" data-tab="PF">PF </li>
+    <li class="tab-link" data-tab="CIT">CIT </li>
+    <li class="tab-link" data-tab="Tax">Tax</li>
+</ul>
+<div class="box">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                @using (Html.BeginForm("Index", "PayrollSalaryMasterSheets"))
+{
+                    <div class="form-group">
+
+
+                        @Html.Label("Fiscal Year", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-4">
+                            @Html.DropDownList("FiscalYear", Model.FiscalYearList, new { @class = "form-control", @id = "fiscalYear" })
+                            @Html.ValidationMessage("Fiscal Year", "", new { @class = "text-danger" })
+                        </div>
+                        <input type="submit" value="FILTER" class="btn btn-success" />
+                    </div>
+                        }
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Salaries" class="tab-content current panel-body box box-top-border">
+    <div class="profile-heading">
+        <i class="fa fa-fw fa-thumb-tack"></i> <strong>Salaries </strong>
+    </div>
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well box">
+                        <div class="box-body table-responsive">
+                            <table class="table table-hover dataTable" id="payrollsalaryMasterTable">
+                                <thead>
+                                    <tr>
+                                        <th>S.N.</th>
+
+                                        <th>Month Name</th>
+                                        <th>
+                                            Rank Salary
+                                        </th>
+                                        <th>
+                                            Grade Salary
+                                        </th>
+                                        <th>
+                                            Total Allowance
+                                        </th>
+                                        <th>
+                                            Gross Income
+                                        </th>
+                                        <th>
+                                            Tax Amount
+                                        </th>
+                                        <th>
+                                            Net Salary
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int i = 1; }
+                                    @foreach (var item in Model.PayrollSalaryMasterSheetDTO)
+                                    {
+                                        <tr>
+                                            <td>@i</td>
+                                            <td>@Html.DisplayFor(modelItem => item.PayrollSalaryTable.PayrollMonthDescription.MonthNameNepali)</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RankSalary)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.GradeSalary)
+                                            </td>
+                                            <td>
+                                                @{ decimal tr = item.TotalRankAllowances + item.TaxableAllowanceAmount + item.NonTaxableAllowanceAmount;}<text>@tr.ToString("0.00")</text>
+
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.GrossIncome)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.TaxAmount)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SalaryAfterTaxDeduction)
+                                            </td>
+                                            <td>
+                                                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
+                                                @Html.ActionLink("Details", "Details", new { id = item.Id })
+                                                @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+                                            </td>
+                                        </tr>
+                                                        i++;
+                                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">Total</th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalRank)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalGrade)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalAllowance)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalGrossIncome)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalTax)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalActual)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="PF" class="tab-content panel-body box box-top-border">
+    <div class="profile-heading">
+        <i class="fa fa-fw fa-thumb-tack"></i> <strong>PF </strong>
+    </div>
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well box">
+                        <div class="box-body table-responsive">
+                            <table class="table table-hover dataTable" id="payrollsalaryMasterTable">
+                                <thead>
+                                    <tr>
+                                        <th>S.N.</th>
+
+                                        <th>Month Name</th>
+                                        <th>
+                                            PF Company
+                                        </th>
+                                        <th>
+                                            PF Self
+                                        </th>
+                                        <th>
+                                            PF Extra
+                                        </th>
+                                        <th>
+                                            CIT Amount
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int j = 1; }
+                                    @foreach (var item in Model.PayrollSalaryMasterSheetDTO)
+                                        {
+                                        <tr>
+                                            <td>@j</td>
+                                            <td>@Html.DisplayFor(modelItem => item.PayrollSalaryTable.PayrollMonthDescription.MonthNameNepali)</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PfCompany)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PfSelf)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PfExtra)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CitAmount)
+                                            </td>
+                                        </tr>
+                                            j++;
+                                        }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">Total</th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalPfCompany)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalPfSelf)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalPfExtra)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalCIT)
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="CIT" class="tab-content panel-body box box-top-border">
+    <div class="profile-heading">
+        <i class="fa fa-fw fa-thumb-tack"></i> <strong>CIT </strong>
+    </div>
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well box">
+                        <div class="box-body table-responsive">
+                            <table class="table table-hover dataTable" id="payrollsalaryMasterTable">
+                                <thead>
+                                    <tr>
+                                        <th>S.N.</th>
+
+                                        <th>Month Name</th>
+                                        <th>
+                                            CIT Amount
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int k = 1; }
+                                    @foreach (var item in Model.PayrollSalaryMasterSheetDTO)
+                                        {
+                                        <tr>
+                                            <td>@k</td>
+                                            <td>@Html.DisplayFor(modelItem => item.PayrollSalaryTable.PayrollMonthDescription.MonthNameNepali)</td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CitAmount)
+                                            </td>
+                                        </tr>
+                                            k++;
+                                        }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">Total</th>
+
+                                        <th>
+                                            @Html.DisplayFor(m => m.totalCIT)
+                                        </th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="Tax" class="tab-content panel-body box box-top-border">
+    <div class="profile-heading">
+        <i class="fa fa-fw fa-thumb-tack"></i> <strong>Tax </strong>
+    </div>
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well box">
+                        <div class="box-body table-responsive">
+                            <table class="table table-hover dataTable" id="payrollsalaryMasterTable">
+                                <thead>
+
+                                    <tr>
+                                        <th>S.N.</th>
+                                        @foreach (var listItem in Model.PayrollSalaryMasterSheetDTO.Take(1))
+                                        {
+                                            foreach (System.Data.DataColumn item in listItem.PayrollEmployeeTaxDetail.Columns)
+                                            {
+                                                <th>@item.Caption</th>
+                                            }
+                                        }
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{int l = 1; }
+                                    @foreach (var listItem in Model.PayrollSalaryMasterSheetDTO.Take(1))
+                                    {
+                                        foreach (System.Data.DataRow item in listItem.PayrollEmployeeTaxDetail.Rows)
+                                        {
+                                            decimal a = 0;
+                                            <tr>
+                                                <td>@l</td>
+                                          
+                                                @*<td>@Html.DisplayFor(modelItem => listItem.PayrollSalaryTable.PayrollMonthDescription.MonthNameNepali)</td>*@
+                                                @{ int m = 0;}
+                                                @foreach (var cell in item.ItemArray)
+                                                {
+                                                    if(m<item.ItemArray.Count()-1)
+                                                    {
+                                                        m++;
+                                                        var dd = item.Table.Rows[l - 1][m].ToString();
+                                                        if (item.Table.Rows[l - 1][m].ToString()=="")
+                                                        {
+                                                            item.Table.Rows[l - 1][m]= "0";
+                                                        }
+                                                        var z = Convert.ToDecimal(item.Table.Rows[l-1][m].ToString());
+                                                        a += Convert.ToDecimal(item.Table.Rows[l-1][m].ToString());
+                                                    }
+
+                                                    <td>
+                                                        @cell.ToString()
+                                                    </td>
+                                                        }
+                                                <td>
+                                                   @a
+                                                </td>
+                                            </tr>
+                                            l++;
+                                                    }
+                                                }
+                                </tbody>
+                              
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

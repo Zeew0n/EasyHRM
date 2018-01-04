@@ -1,0 +1,147 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.PayrollSalaryViewModel
+@{
+    ViewBag.Title = "Payroll Overall";
+
+    string fsId = Convert.ToString(ViewBag.fsId);
+    string officeId = Convert.ToString(ViewBag.officeId);
+
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Overall Payroll sheet
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+    <div class="box-body">
+        <h2 style="text-align:center">Agricultural Development Bank</h2><br />
+        <h4 style="text-align:center">Head Office</h4><br />
+        <h5 style="text-align:center">Annual Income and Tax As Of FY @Model.FiscalYear</h5>
+        <hr />
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-6">Code No.:</b> <t class="col-md-6">@Model.EmployeeCode</t></t>
+            <t class="col-md-4"><b class="col-md-6">Name:</b> <t class="col-md-6">@Model.EmployeeName</t></t>
+        </div>
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-6">Post:</b> <t class="col-md-6">@Model.EmpPost</t></t>
+            <t class="col-md-4"><b class="col-md-6">Grade No.:</b> <t class="col-md-6">@Model.GradeNo</t></t>
+        </div>
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-6">CIT No.:</b> <t class="col-md-6">@Model.CitNo</t></t>
+            <t class="col-md-4"><b class="col-md-6">PAN No.:</b> <t class="col-md-6">@Model.PANNo</t></t>
+        </div>
+        <hr />
+
+        <h4 class="col-md-offset-2">Incomes</h4>
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-8">Salary:</b> <t class="col-md-4">@Model.Salary</t></t>
+            <t class="col-md-4"><b class="col-md-8">Grade Amount:</b> <t class="col-md-4">@Model.GradeSalary</t></t>
+        </div>
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-8">Bank Allowance:</b> <t class="col-md-4">@Model.BankAllowance</t></t>
+        </div>
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-8">PF Contribution:</b> <t class="col-md-4">@Model.PFContribution</t></t>
+            <t class="col-md-4"><b class="col-md-8">One Month Sal in PF:</b> <t class="col-md-4">@Model.OneMonthSalPF</t></t>
+        </div>
+
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-8">Incashment of Home Leave:</b> <t class="col-md-4">@Model.HomeLeaveIncashment</t></t>
+            <t class="col-md-4"><b class="col-md-8">Bonus:</b> <t class="col-md-4">@Model.Bonus</t></t>
+        </div>
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-8">Loan Int Income:</b> <t class="col-md-4">@Model.LoanIntIncome</t></t>
+        </div>
+        @foreach (var item in Model.AllowanceViewModel)
+        {
+            <div class="form-group row">
+                <t class="col-md-4 col-md-offset-2"><b class="col-md-8">@item.AllowanceName</b> <t class="col-md-4">@item.totalValue</t></t>
+                @*<t class="col-md-4"><b class="col-md-8">Regional Allowance:</b> <t class="col-md-4">@Model.RegionalAllowance</t></t>*@
+            </div>
+        }
+        <hr />
+
+        <h4 class="col-md-offset-2">Deduction</h4>
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-8">Deducted CIT:</b> <t class="col-md-4">@Model.CitAmount</t></t>
+            <t class="col-md-4"><b class="col-md-8">PM Relief Fund:</b> <t class="col-md-4">@Model.PMReliefFund</t></t>
+        </div><hr />
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-8">Taxable Income:</b> <t class="col-md-4">@Model.TaxableSalary</t></t>
+            <t class="col-md-4"><b class="col-md-8">Tax Excemption:</b> <t class="col-md-4">@Model.RemoteTaxExcemption</t></t>
+        </div><hr />
+
+        <h4 class="col-md-offset-2">Paid Tax</h4>
+        @foreach (var item in Model.TaxModel)
+        {
+            <div class="form-group row">
+                <t class="col-md-4 col-md-offset-2"><b class="col-md-8">@item.TaxName</b> <t class="col-md-4">@item.totalValue</t></t>
+            </div>
+        }
+        <div class="form-group row">
+            <t class="col-md-4 col-md-offset-2"><b class="col-md-8">Total Paid Tax:</b> <t class="col-md-4">@Model.TotalPaidTax</t></t>
+        </div>
+        <hr />
+
+        <h4 class="col-md-offset-2">Insurance Detail</h4>
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <table class="table table-responsive">
+                    <tr>
+                        <th>ID</th>
+                        <th>Company Name</th>
+                        <th>Policy No.</th>
+                        <th>Insured Amount</th>
+                        <th>Effected Date</th>
+                        <th>Maturity Date</th>
+                        <th>Annual Premium</th>
+                    </tr>
+                    @foreach (var item in Model.InsurancePremium)
+                    {
+
+                        <tr>
+                            <td>@item.IsuranceClaimId</td>
+                            <td>@item.InsuranceCompany.CompanyName</td>
+                            <td>@item.InsurancePolicyNumber</td>
+                            <td>@item.InsuredAmount</td>
+                            <td>@Convert.ToDateTime(item.StartDate).ToString("yyyy-MM-dd")</td>
+                            <td>@Convert.ToDateTime(@item.EndDate).ToString("yyyy-MM-dd")</td>
+                            <td>@item.PremiumAmount</td>
+                        </tr>
+                    }
+                    <tr>
+                        <th>Total:</th>
+                        <td></td>
+                        <td></td>
+                        <th>@ViewBag.TotalInsured</th>
+                        <td></td>
+                        <td></td>
+                        <th>@ViewBag.TotalPremium</th>
+                    </tr>
+
+                </table>
+            </div>
+        </div><hr />
+    </div>
+</div>

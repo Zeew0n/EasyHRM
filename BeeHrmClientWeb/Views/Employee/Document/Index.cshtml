@@ -1,0 +1,160 @@
+﻿@model BeeHRM.ApplicationService.DTOs.EmployeeDocumentInformation
+@{
+    ViewBag.Title = "Documents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var i = 0;
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                
+                                <a href="/Document/Add/@Model.EmpId" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New Document</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+
+                <h2 class="font-light m-b-xs">
+                    Employee Document list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        .modal-header {
+            padding: 5px;
+            border-bottom: 1px solid #a94442;
+        }
+
+        @@media only screen and (min-width: 500px) {
+            .modal-dialog {
+                width: 500px;
+                margin: 30px auto;
+                top: 100px;
+            }
+        }
+
+        .modal-content {
+            background-color: #eff5ff;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        }
+    </style>
+}
+
+
+@*@if (Session["LeaveDeleteStatus"] != null && Session["LeaveDeleteStatus"].ToString() == "Done")
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-check" aria-hidden="true"></i> The Leave has been deleted.
+        </div>
+        Session.Remove("LeaveDeleteStatus");
+    }*@
+
+@if (Session["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @Session["Success"].ToString()
+    </div>
+    Session.Remove("Success");
+}
+
+
+<div class="delerror"></div>
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="ef">
+                    <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Document Type</th>
+                            <th>Remarks</th>
+                            @*<th>Status</th>*@
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.EmployeeDocumentList != null && Model.EmployeeDocumentList.Count > 0)
+                        {
+                            foreach (var item in Model.EmployeeDocumentList)
+                            {
+                                i = i + 1;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>
+                                        @Html.HiddenFor(modelItem => item.DocumentCatId)
+                                        @Html.DisplayFor(modelItem => item.DocumentCategory.CatTitle)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.DocumentRemarks)
+                                    </td>
+                                    @*@if (item.DocumentVerified == true)
+                                    {
+                                        <td>Verified</td>
+                                    }
+                                    else
+                                    {
+                                        <td>tester</td>
+                                    }*@
+                                        <td>
+                                            @*<a class="label-primary label" href="~/emp_documents/@item.DocumentTitle" download>View</a> &nbsp*@
+                                            <a class="label-primary label" target="_blank" href="~/Document/ViewDocument/@item.DocumentId">View</a> &nbsp
+                                            <a class="label-success label" href="/Document/Update/@item.DocumentId">Edit</a> &nbsp
+                                            <a class="label-danger label confirm_delete" href="/Document/Delete/@item.DocumentId">Delete</a>                                            
+                                        </td>
+                                    </tr>
+                                    }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            @section scripts{
+                <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+                <script type="text/javascript">
+                    $('#ef').DataTable();
+                </script>
+            }
+

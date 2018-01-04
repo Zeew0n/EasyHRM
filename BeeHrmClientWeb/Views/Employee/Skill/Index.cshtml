@@ -1,0 +1,161 @@
+﻿@model BeeHRM.ApplicationService.DTOs.EmployeeSkillInformation
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <a href="~/Skill/Add/@Model.EmpId" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New</a>
+                            @*<span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                          
+                                <i class="fa fa-plus-circle"></i>   @Html.ActionLink("Add New", "Add", new { Id = Model.EmpId }, new { @class="btn btn-success"})
+                    
+                            </span><a href="#"></a>*@
+                        </li>
+                    </ol>
+                </div>
+
+                <h2 class="font-light m-b-xs">
+                    Employee Skill list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section SideBar{
+   
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+           <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        .modal-header {
+            padding: 5px;
+            border-bottom: 1px solid #a94442;
+        }
+
+        @@media only screen and (min-width: 500px) {
+            .modal-dialog {
+                width: 500px;
+                margin: 30px auto;
+                top: 100px;
+            }
+        }
+
+        .modal-content {
+            background-color: #eff5ff;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        }
+    </style>
+}
+
+
+@if (Session["LeaveDeleteStatus"] != null && Session["LeaveDeleteStatus"].ToString() == "Done")
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> The Leave has been deleted.
+    </div>
+    Session.Remove("LeaveDeleteStatus");
+}
+
+@if (Session["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @Session["Success"].ToString()
+    </div>
+    Session.Remove("Success");
+}
+
+
+<div class="delerror"></div>
+
+<div class="box box-top-border">
+    <div class="box-body">
+
+
+      
+
+        <div class="row">
+            <div class="col-md-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="ef">
+                    <thead>
+
+                        <tr>
+
+                            <th>Employee Name</th>
+                            <th>Skill</th>
+                            <th>Skill Point</th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.EmployeeSkillList != null && Model.EmployeeSkillList.Count > 0)
+                        {
+                            foreach (var item in Model.EmployeeSkillList)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.HiddenFor(modelItem => item.Id)
+                                        @Html.DisplayFor(modelItem => item.Employee.EmpName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Skill.SkillName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.EmpSkillPoint)
+                                    </td>
+                               
+                                    <td>
+                                        <a class="label-success label" href="/Skill/Update/@item.Id"><i class="fa fa-edit"></i> </a> &nbsp
+                                       <!-- <a class="label-success label confirm_delete" href="/Skill/Delete/@item.Id"><i class="fa fa-trash-o"></i> </a>-->
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                      
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#ef').DataTable();
+    </script>
+}
+

@@ -1,0 +1,208 @@
+﻿@model  BeeHRM.ApplicationService.DTOs.DesignationDTO
+
+@{
+    ViewBag.Title = "DesignationCreate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("Designations","Designations")' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Designation
+                    <small>Add New</small>
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="box box-top-border">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-lg-8 ">
+                    <div class="box-body">
+                        <div class="well box box-primary">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @{
+                                List<SelectListItem> listforParents = new List<SelectListItem>();
+                                listforParents.Add(new SelectListItem
+                                {
+                                    Text = "None",
+                                    Value = "0"
+                                });
+                                foreach (var row in ViewBag.designationList)
+                                {
+                                    listforParents.Add(new SelectListItem
+                                    {
+                                        Text = row.DsgName,
+                                        Value = row.DsgId.ToString()
+                                    });
+                                }
+
+                            }
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DsgParentId, "Choose parent Designation(*)")
+                                @Html.DropDownListFor(model => model.DsgParentId, listforParents, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DsgName, "Label(*)")
+                                @Html.EditorFor(model => model.DsgName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter designation label", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.DsgName, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgCode, "Designation Code(*)")
+                                @Html.EditorFor(model => model.DesgCode, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter designation code", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.DesgCode, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgShortCode, "Designation Short Code(*)")
+                                @Html.EditorFor(model => model.DesgShortCode, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter designation short code", required = "required" } })
+                                @Html.ValidationMessageFor(model => model.DesgShortCode, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgOrder, "Order")
+                                @Html.EditorFor(model => model.DesgOrder, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter designation order", required = "required", min = "1" } })
+                                @Html.ValidationMessageFor(model => model.DesgOrder, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LeaveRecommendation, "Can Recommend Leave")
+                                @Html.EditorFor(model => model.LeaveRecommendation, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.LeaveRecommendation, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LeaveApprove, "Can Approve Leave  ")
+                                @Html.EditorFor(model => model.LeaveApprove, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.LeaveApprove, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AttendanceRecommendation, "Can Recommend Attendance ")
+                                @Html.EditorFor(model => model.AttendanceRecommendation, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.AttendanceRecommendation, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.AttendanceApprove, "Can Approve Attendance  ")
+                                @Html.EditorFor(model => model.AttendanceApprove, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.AttendanceApprove, "", new { @class = "text-danger" })
+
+                            </div>
+
+                            @*<div class="form-group">
+                                @Html.LabelFor(model => model.DesgMaxPeriodDays, "Designation Max Period(in days)")
+                                @Html.EditorFor(model => model.DesgMaxPeriodDays, new { htmlAttributes = new { @class = "form-control", placeholder = "Max Days to remain in the designation" } })
+                                @Html.ValidationMessageFor(model => model.DesgMaxPeriodDays, "", new { @class = "text-danger" })
+
+                            </div>*@
+
+                            <div class="form-group">
+                                @{
+                                    List<SelectListItem> listforLevel = new List<SelectListItem>();
+                                    foreach (var row in ViewBag.levelList)
+                                    {
+                                        listforLevel.Add(new SelectListItem
+                                        {
+                                            Text = row.LevelName,
+                                            Value = row.LevelId.ToString()
+                                        });
+                                    }
+
+                                }
+                                @Html.LabelFor(model => model.DesgLevelId, "Designation Level Id")
+                                @Html.DropDownListFor(model => model.DesgLevelId, listforLevel, new { @class = "form-control" })
+
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgSalary, "Designation Salary")
+                                @Html.EditorFor(model => model.DesgSalary, new { htmlAttributes = new { @class = "form-control", placeholder = "Salary of the designation" } })
+                                @Html.ValidationMessageFor(model => model.DesgSalary, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgPerGradeAmount, "Designation Per Grade Amount")
+                                @Html.EditorFor(model => model.DesgPerGradeAmount, new { htmlAttributes = new { @class = "form-control", placeholder = "Per Grade amount of the Designation" } })
+                                @Html.ValidationMessageFor(model => model.DesgPerGradeAmount, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgMaxGrade, "Maximum grade allowed to be in the designation")
+                                @{
+                                    List<SelectListItem> GradeList = ViewBag.gradeList;
+                                }
+                                @Html.DropDownListFor(model => model.DesgMaxGrade, GradeList, "--Select Grade--")
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgSpecialAllowances, "Designation Special Allowance")
+                                @Html.EditorFor(model => model.DesgSpecialAllowances, new { htmlAttributes = new { @class = "form-control", placeholder = "Special Allowance for Designation" } })
+                                @Html.ValidationMessageFor(model => model.DesgSpecialAllowances, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgDressAmount, "Designation Dress Allowance")
+                                @Html.EditorFor(model => model.DesgDressAmount, new { htmlAttributes = new { @class = "form-control", placeholder = "Dress Allowance for Designation" } })
+                                @Html.ValidationMessageFor(model => model.DesgDressAmount, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgOtherAllowance, "Designation Other Allowance")
+                                @Html.EditorFor(model => model.DesgOtherAllowance, new { htmlAttributes = new { @class = "form-control", placeholder = "Other Allowance for Designation" } })
+                                @Html.ValidationMessageFor(model => model.DesgOtherAllowance, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DesgDearnessAllowance, "Designation Dearness Allowance")
+                                @Html.EditorFor(model => model.DesgDearnessAllowance, new { htmlAttributes = new { @class = "form-control", placeholder = "Dearness Allowance for Designation" } })
+                                @Html.ValidationMessageFor(model => model.DesgDearnessAllowance, "", new { @class = "text-danger" })
+
+                            </div>
+                            <div class="box-footer">
+                                <input type="submit" value="Save" class="btn btn-primary" name="action:DeptCreate" />
+                                <input type="submit" value="Save & Close" class="btn btn-primary" name="action:DeptCreateClose" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                                    }
+
+

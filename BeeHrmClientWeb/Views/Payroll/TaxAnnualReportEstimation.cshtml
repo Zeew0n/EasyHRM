@@ -1,0 +1,46 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.PayrollActualAnnualTaxModel
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    tax annual report
+                </h2>
+            </div>
+
+        </div>
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>Employee name</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.EmployeeList)
+    {
+        <tr>
+            <td>@item.EmpName</td>
+            <td>@Html.ActionLink("View", "IndividualTaxAnnualReportEstimation", new { Id = item.EmpCode })</td>
+        </tr>
+    }
+</table>

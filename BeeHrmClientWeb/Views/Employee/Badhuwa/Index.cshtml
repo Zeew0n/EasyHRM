@@ -1,0 +1,342 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeJobHistoryViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+<link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+<link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+
+<style>
+    th {
+        padding-left: 15px;
+    }
+
+    .custom-select {
+        width: 80%;
+    }
+</style>
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    बढुवा
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>कर्मचारी बढुवा </strong>
+        </div>
+        <div class="panel-body basic">
+            <h3> हालको कर्मचारी विवरण  </h3>
+            <div class="media-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Office:</th>
+                        <th>Designation:</th>
+                        <th>Department:</th>
+                        <th>Section:</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.OfficeName</td>
+                        <td>@Model.Designation</td>
+                        <td>@Model.Department</td>
+                        <td>@Model.Section</td>
+                    </tr>
+                    <tr>
+                        <th>Level:</th>
+                        <th>Rank:</th>
+                        <th>Current Rank Appt.:</th>
+                        <th>Job Type:</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.Level</td>
+                        <td>@Model.Rank</td>
+                        <td>@Model.Rank</td>
+                        <td>@Model.JobType</td>
+                    </tr>
+
+
+                </table>
+                <h3>बढुवा गरिने कार्यालय र अन्य विवरण छानुहुओस</h3>
+            </div>
+            @using (Html.BeginForm("Badhuwa", "Badhuwa", FormMethod.Post, new { id = "target" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <hr />
+                <div class="form-horizontal">
+                    @Html.ValidationSummary()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <table width="98%">
+                        <tr>
+                            <th>@Html.LabelFor(model => model.OfficeId)</th>
+                            <th>@Html.LabelFor(model => model.DeptId)</th>
+                            <th>@Html.LabelFor(model => model.SectionId)</th>
+
+                        </tr>
+                        <tr>
+                            <td>
+                                @{
+                                    List<SelectListItem> OfficeList = ViewBag.officeList;
+                                }
+                                @Html.DropDownListFor(model => model.OfficeId, OfficeList, new { @class = "form-control custom-select", @style = "width:80%;" })
+                                @Html.ValidationMessageFor(model => model.OfficeId, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> DepartmentList = ViewBag.departmentList;
+                                }
+                                @Html.DropDownListFor(model => model.DeptId, DepartmentList, new { @class = "form-control", @style = "width:80%;" })
+                                @Html.ValidationMessageFor(model => model.DeptId, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> SectionList = ViewBag.sectionList;
+                                }
+                                @Html.DropDownListFor(model => model.SectionId, SectionList, new { @class = "form-control", @style = "width:100%;" })
+                                @Html.ValidationMessageFor(model => model.SectionId, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.DesgKayamMukayamMuKaRaRa)</th>
+                            <th>@Html.LabelFor(model => model.DesgId)</th>
+                            <th>@Html.LabelFor(model => model.RankId)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.EditorFor(model => model.DesgKayamMukayamMuKaRaRa, new { @class = "form-control", @style = "float:center" })
+                                @Html.ValidationMessageFor(model => model.DesgKayamMukayamMuKaRaRa, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> DesignationList = ViewBag.designationList;
+                                }
+                                @Html.DropDownListFor(model => model.DesgId, DesignationList, new { @class = "form-control custom-select", @style = "width:80%;" })
+                                @Html.ValidationMessageFor(model => model.DesgId, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> RankList = ViewBag.rankList;
+                                }
+                                @Html.DropDownListFor(model => model.RankId, RankList,new { @class = "form-control", @style = "width:100%;" })
+                                @Html.ValidationMessageFor(model => model.RankId, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.LevelId)</th>
+                            <th>@Html.LabelFor(model => model.BusinessGroupId)</th>
+                            <th>@Html.LabelFor(model => model.ShiftId)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @{
+                                    List<SelectListItem> LevelList = ViewBag.levelList;
+                                }
+                                @Html.DropDownListFor(model => model.LevelId, LevelList, new { @class = "form-control", @style = "width:80%;" })
+                                @Html.ValidationMessageFor(model => model.LevelId, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> BusinessGroupList = ViewBag.businessGroupList;
+                                }
+                                @Html.DropDownListFor(model => model.BusinessGroupId, BusinessGroupList, new { @class = "form-control", @style = "width:80%;" })
+                                @Html.ValidationMessageFor(model => model.BusinessGroupId, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> ShiftList = ViewBag.shiftList;
+                                }
+                                @Html.DropDownListFor(model => model.ShiftId, ShiftList, new { @class = "form-control", @style = "width:100%;" })
+                                @Html.ValidationMessageFor(model => model.ShiftId, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.RemoteId)</th>
+                            <th>@Html.LabelFor(model => model.JobTypeId)</th>
+                            <th>@Html.LabelFor(model => model.DecisionDate)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @{
+                                    List<SelectListItem> RemoteList = ViewBag.remoteList;
+                                }
+                                @Html.DropDownListFor(model => model.RemoteCode, RemoteList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> JobTypeList = ViewBag.jobTypeList;
+                                }
+                                @Html.DropDownListFor(model => model.JobTypeId, JobTypeList, new { @class = "form-control", @style = "width:80%;" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.DecisionDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:100%;" } })
+                                @Html.ValidationMessageFor(model => model.DecisionDateNP, "", new { @class = "text-danger" })
+                            </td>
+                        <tr><td>&nbsp;</td></tr>
+                        </tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.LetterIssueDate)</th>
+                            <th>@Html.LabelFor(model => model.LetterChalaniNumber)</th>
+                            <th> @Html.LabelFor(model => model.EffectiveDate)</th>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                @Html.EditorFor(model => model.LetterIssueDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;" } })
+                                @Html.ValidationMessageFor(model => model.LetterIssueDateNP, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.LetterChalaniNumber, new { htmlAttributes = new { @class = "form-control", @style = "width:80%;" } } )
+                                @Html.ValidationMessageFor(model => model.LetterChalaniNumber, "",new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.EffectiveDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:100%;" } })
+                                @Html.ValidationMessageFor(model => model.EffectiveDateNP, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.ServiceCountingFromDate)</th>
+                            <th>@Html.LabelFor(model => model.OfficeJoinDate)</th>
+                            <th>@Html.LabelFor(model => model.EffectiveTillDate)</th>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                @Html.EditorFor(model => model.ServiceCountingFromDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;" } })
+                                @Html.ValidationMessageFor(model => model.ServiceCountingFromDateNP, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.OfficeJoinDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;" } })
+                                @Html.ValidationMessageFor(model => model.OfficeJoinDateNP, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.EffectiveTillDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:100%;" } })
+                                @Html.ValidationMessageFor(model => model.EffectiveTillDateNP, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.SadarDate)</th>
+                            <th>@Html.LabelFor(model => model.ServiceEvent)</th>
+                            <th>@Html.LabelFor(model => model.Instruction)</th>
+                            @*<th>@Html.LabelFor(model => model.BadhuwaType)</th>*@
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.EditorFor(model => model.SadarDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar", @style = "width:80%;" } })
+                                @Html.ValidationMessageFor(model => model.SadarDateNP, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.ServiceEvent, new { htmlAttributes = new { @class = "form-control", @style = "width:80%" } })
+                                @Html.ValidationMessageFor(model => model.ServiceEvent, "", new { @class = "text-danger" })
+                            </td>
+                            <td>
+                                @Html.EditorFor(model => model.Instruction, new { htmlAttributes = new { @class = "form-control", @style = "width:100%" } })
+                                @Html.ValidationMessageFor(model => model.Instruction, "", new { @class = "text-danger" })
+                            </td>
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <th>@Html.LabelFor(model => model.SadarGarneEmployeeCode)</th>
+                            <th>@Html.LabelFor(model => model.ServiceEventSubGroupId, "बढुवा नियुक्तीको किसिम")</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @{
+                                    List<SelectListItem> EmployeeList = ViewBag.employeeList;
+                                }
+                                @Html.DropDownListFor(model => model.SadarGarneEmployeeCode, EmployeeList, new { @class = "form-control custom-select", @style = "width:80%" })
+                                @Html.ValidationMessageFor(model => model.SadarGarneEmployeeCode, "", new { @class = "text-danger"})
+                            </td>
+                            <td>
+                                @{
+                                    List<SelectListItem> ServiceEvenList = ViewBag.SubGroupList;
+
+                                }
+                                @Html.DropDownListFor(model => model.ServiceEventSubGroupId, ServiceEvenList, new { @class = "form-control", @style = "width:80%" })
+                            </td>
+
+                        </tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr>
+                            <td><input type="submit" value="बढुवा गर्नुहोस" class="btn btn-primary" /></td>
+                        </tr>
+                    </table>
+                </div>
+
+                                    }
+
+
+        </div>
+    </div>
+</div>
+@section scripts{
+<script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+
+    <script>
+        $('#target').on('submit', function () {
+            var res = confirm("Are you sure to बढुवा?");
+            if (!res) {
+                return false;
+            }
+        });
+
+        $(document).ready(function () {
+            $('.nepali-calendar').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $(".custom-select").customselect();
+
+        });
+
+
+    </script>
+}
+

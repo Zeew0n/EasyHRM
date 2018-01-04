@@ -1,0 +1,131 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.LeaveMonthlyProcessDTO>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@if (TempData["Danger"] != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Danger"]
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leave Monthly Process
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="box box-top-border">
+        <table class="table">
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.LeaveYearId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MonthNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProcessByEmpCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProcessDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProcessStatus)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LeaveYearId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonthNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProcessByEmpCode)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.ProcessDate)*@
+                        @{var startdate = !String.IsNullOrEmpty(item.ProcessDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(item.ProcessDate)).ToString().Replace('/', '-') : null;
+                        }
+                        @if (@startdate != null)
+                        {
+                            <p>@startdate (@(Convert.ToString(item.ProcessDate) == "" ? "" : Convert.ToDateTime(item.ProcessDate).ToString("yyyy-MMM-dd")))</p>
+                        }
+                        else {
+                            <p></p>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProcessStatus)
+                    </td>
+                    <td>
+
+                        @if (item.ProcessByEmpCode == null && item.ProcessDate == null && item.ProcessStatus == null)
+                {
+                            <div class="proceessMonthly"> @Html.ActionLink("Process", "MonthlyProcess", new { id = item.ProcessId })</div>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(function () {
+            $('.proceessMonthly a').on('click', function () {
+
+                if (confirm('Are you sure you want to process leave for this month? \n Note: You will not rollback processed leave.'))
+                    return true;
+                else
+                    return false;
+            });
+
+
+
+        });
+    </script>
+}

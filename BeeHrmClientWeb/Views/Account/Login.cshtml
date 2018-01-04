@@ -1,0 +1,78 @@
+﻿@using BeeHrmClientWeb.Models
+@using BeeHRM.ApplicationService.DTOs;
+
+@model employeeBaseMOdel
+@{
+    EmployeeDTO emp = new EmployeeDTO();
+    RoleAccessDTOs roleInfo = new RoleAccessDTOs();
+    ViewBag.Title = "Log in";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    if (ViewBag.Test != null)
+    {
+        emp = (EmployeeDTO)ViewBag.Test;
+        roleInfo = (RoleAccessDTOs)ViewBag.RoleInfo;
+    }
+
+}
+
+@if (ViewBag.Test != null)
+{
+    <h1>Hello @emp.EmpName  || @emp.EmpRoleId</h1>
+    <h2>Hello @roleInfo.AssignModuleId || @roleInfo.AllowEdit</h2>
+}
+
+<div class="row">
+    <div class="container-fluid">
+        <br /><br /><br />
+        <br /><br /><br />
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default" style="opacity: .9">
+                    
+
+                    <div class="panel-heading"><h3>@ViewBag.Title</h3></div>
+                    <div class="panel-body">
+                     
+                            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            { 
+                                @Html.AntiForgeryToken()
+
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    <div class="col-md-offset-4 col-md-6">
+                                        <div class="error-label error">
+                                            @ViewBag.loginFail  @ViewBag.error
+                                            @*@Html.CheckBoxFor(m => m.RememberMe)
+                                                @Html.LabelFor(m => m.RememberMe)*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.EmpUserName, new { @class = "col-md-4 control-label" })
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.EmpUserName, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EmpUserName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.EmpPassword, new { @class = "col-md-4 control-label" })
+                                    <div class="col-md-6">
+                                        @Html.PasswordFor(m => m.EmpPassword, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.EmpPassword, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group">
+                                    <div class="col-md-offset-4 col-md-6">
+                                        <input type="submit" value="Submit" class="btn btn btn-primary" />
+                                    </div>
+                                </div>
+                            }
+                       
+                                </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>

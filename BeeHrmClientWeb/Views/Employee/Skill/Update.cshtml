@@ -1,0 +1,131 @@
+﻿@model BeeHRM.ApplicationService.DTOs.EmployeeSkillsDTO
+
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+
+
+
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/Skill/Index/@Model.EmpId" class="btn btn-success"><i class="fa fa-bars"></i> View Employee Skill List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    UPDATE EMPLOYEE SKILL
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <span class="error-label">
+                @Html.ValidationSummary()
+            </span>
+            <div class="col-md-6">
+                @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="box-body">
+
+                        <label>Skill Point</label>
+                        <div class="form-group">
+                            @Html.HiddenFor(model => model.Id)
+                            @Html.HiddenFor(model => model.EmpId)
+                            @Html.EditorFor(model => model.EmpSkillPoint, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.EmpSkillPoint, "", new { @class = "text-danger" })
+                        </div>
+
+
+                        <label>Skill</label>
+                        <div class="form-group">
+                            @Html.DropDownListFor(model => model.EmpSkillId, Model.SkillSelectlist, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.EmpSkillId, "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+
+
+
+
+                    <div class="box-footer">
+                        <div class="col-md-10">
+                            <input type="submit" value="Save" id="btnSubmit" class="btn btn-success" />
+                            @Html.ActionLink("Cancel", "Index", "Skill",
+                   new { @id = Model.EmpId }, new { @class = "btn btn-success" })
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+        });
+    </script>
+}

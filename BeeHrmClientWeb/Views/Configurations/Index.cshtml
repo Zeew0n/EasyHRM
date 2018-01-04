@@ -1,0 +1,51 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.ModuleDTOs>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+
+                <h2 class="font-light m-b-xs">
+                    <p>Menu List</p>
+                </h2>
+
+                <div class="row">
+                    @foreach (var row in Model)
+                    {
+                        <div class="col-xs-6 col-md-3">
+                            <div class="well">
+                                <a href="@row.MduleLink">
+                                    <p style="font-size: 30px; text-align: center">
+                                        <i style="font-size: 30px; text-align: center" class="@row.ModuleCssClass" aria-hidden="true"></i>
+                                    </p> @row.MOduleName</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+    

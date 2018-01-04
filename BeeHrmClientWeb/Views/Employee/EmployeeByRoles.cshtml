@@ -1,0 +1,194 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeSearchByRoles
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+
+
+@section styles{
+<link href="~/Content/DataTables/datatables.css" rel="stylesheet" />
+    <link href="~/Scripts/multiselect/css/style.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+    </style>
+}
+
+
+
+
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                <a href="/admin/updateepmloyeesroles" class="btn btn-success"><i class="fa fa-plus"></i>   Assigin Roles</a>
+                            </span>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Employee List
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+<div class="panel-body box box-top-border">
+
+    <div class="plane panel-body">
+        <div class="row">
+            <form action="/admin/employeebyroles" method="post">
+                <div class="col-lg-4 col-md-4">
+                  @Html.DropDownListFor(m=>m.OfficeId, Model.BranchSelectList, new { @class = "form-control custom-select" })
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    @Html.DropDownListFor(model => model.RoleId, Model.RolesSelectList, new { @class = "form-control" })
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <input type="submit" class="btn btn-success"  value="Search"/>
+                </div>
+            </form>
+
+        </div>
+        <div class="clearfix">
+
+        </div>
+    </div>
+</div>
+
+<div class="panel-body box box-top-border">
+    <div class="col-xs-12">
+
+
+
+
+        @if (Model.Employee == null)
+        {
+
+            <strong class="error"> Please select the parameter to select the employee </strong>
+
+        }
+        else
+        {
+            <table class="table table-responsive table-bordered " id="holiday">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th class="text-center">Code</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Designation/Department</th>
+                        <th class="text-center">Roles</th>
+                        <th class="text-center">Join date</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Model.Employee)
+                    {
+                        i = i + 1;
+                        <tr>
+                            <td> @i</td>
+                            <td>@row.EmpCode</td>
+                            <td>@row.EmpName</td>
+                            <td>@row.DsgName / @row.DeptName</td>
+                            <td>@row.RoleName</td>
+                            <td>@*@Convert.ToDateTime(row.EmpCreatedDate).ToString("yyyy-MMM-dd")*@
+                                @{var date = !String.IsNullOrEmpty(row.EmpCreatedDate.ToString()) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(row.EmpCreatedDate)).ToString().Replace('/', '-') : null;
+                                }
+                                @date (@(Convert.ToString(row.EmpCreatedDate) == "" ? "" : Convert.ToDateTime(row.EmpCreatedDate).ToString("yyyy-MMM-dd")))
+                            </td>
+
+
+                        </tr>
+
+
+
+                    }
+                </tbody>
+
+            </table>
+
+
+
+        }
+
+
+
+
+
+    </div>
+
+</div>
+
+
+
+@section scripts{
+
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#holiday').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $(".datepicker").datepicker();
+
+        });
+
+     
+    </script>
+
+}

@@ -1,0 +1,81 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.EmployeeDetailAdminViewModel
+@{
+    ViewBag.Title = "EMployee Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link href="~/Content/EmployeeDetails.css" rel="stylesheet" />
+
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb"></ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Employee Details
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<ul class="tabs">
+    <li class="tab-link" ><a href="/admin/userDetail/900049">Profile</a> </li>
+    <li class="tab-link" > <a href="/admin/userDetail/900049">Family Details </a></li>
+    <li class="tab-link"><a href="/admin/userDetail/900049">Nominees</a> </li>
+    <li class="tab-link current" data-tab="Skills">Skills</li>
+    <li class="tab-link"><a href="/admin/userDetail/900049">Documents</a></li>
+    <li class="tab-link" ><a href="/admin/userDetail/900049">Service Details</a></li>
+
+</ul>
+
+<div id="Documents" class="tab-content current panel-body box box-top-border">
+    <div class="profile-heading">
+        <i class="fa fa-fw fa-thumb-tack"></i> <strong>Add Employee Skills </strong>
+    </div>
+    <div class="row">
+
+    </div>
+</div>
+
+@section scripts{
+
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('ul.tabs li').click(function () {
+                var tab_id = $(this).attr('data-tab');
+
+                $('ul.tabs li').removeClass('current');
+                $('.tab-content').removeClass('current');
+
+                $(this).addClass('current');
+                $("#" + tab_id).addClass('current');
+            })
+
+        });
+
+    </script>
+}

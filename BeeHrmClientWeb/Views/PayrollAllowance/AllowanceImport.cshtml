@@ -1,0 +1,204 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollAllowanceDetailDTO
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var logEmpCode = "";
+    if (ViewBag.logEmpCode != null)
+    {
+        logEmpCode = ViewBag.logEmpCode.ToString();
+    }
+
+    var logDateNP = "";
+    if (ViewBag.logDateNP != null)
+    {
+        logDateNP = ViewBag.logDateNP;
+    }
+    int officeId = 0;
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Import Allowance and Retirement Fund
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-top-border">
+            <div class="panel-body">
+
+                <div class="box-body">
+                    <form action="/PayrollAllowance/AllowanceImport" method="post" enctype="multipart/form-data">
+
+                        <div class="form-group  col-md-6">
+                            @Html.LabelFor(model => model.AllowanceMasterId,"Select Allowances Type")
+
+                            @Html.DropDownListFor(model => model.AllowanceMasterId, Model.AllowanceMasterList, new { @class = "form-control custom-select" })
+                            @Html.ValidationMessageFor(model => model.AllowanceMasterId, "", new { @class = "text-danger" })
+                          <br />
+                            <input type='file' name="file" id="file" />
+                            <br /> 
+
+                            <button type="submit" class="btn btn-success">Import</button>
+                        </div>
+                       
+
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6  ">
+        <div class="box box-top-border">
+            <div class="panel-body">
+               
+                &nbsp;   &nbsp; &nbsp;
+                <div class="box-body">
+                    <form action="" id="OfficeForm" method="post" enctype="multipart/form-data">
+
+                        <div class="form-group  col-md-6">
+                            @Html.LabelFor(model => model.OfficeId, "Select office for downloading sample ")
+
+                            @Html.DropDownListFor(model => model.OfficeId, Model.OfficeList, new { @class = "form-control custom-select", @id = "OfficeId" })
+                            @Html.ValidationMessageFor(model => model.OfficeId, "", new { @class = "text-danger" })
+                            <br />
+                            <br />
+                            <button type="submit" class="btn btn-success">Download Sample File</button>
+                        </div>
+                        &nbsp;  
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="clearfix">
+
+    </div>
+    <div class="box box-top-border">
+       
+        <div class="box-body table-responsive">
+            <div id="divToPrint">
+                @if (ViewBag.AllowanceImportedList != null)
+                {
+                    <div class="box-header">
+
+                        <em style="color:green;">Note:  Following data has been successfully imported.</em>
+
+                    </div>
+                    int i = 0;
+
+                    <table class="table table-bordered" id="attendanceTable">
+                        <thead>
+                            <tr>
+                                <th>S.N</th>
+                                <th>EmpCode</th>
+                                <th>EmployeeName</th>
+                                <th>PercentageAmount</th>
+
+                                <th>Value</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @foreach (var row in ViewBag.AllowanceImportedList)
+                            {
+                                i = i + 1;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>
+                                        @row.EmployeeCode
+                                    </td>
+                                    <td>@row.EmployeeName</td>
+
+                                    <td>
+                                        @if (row.PercentageAmount == "P")
+                                        { <text>Percentage</text>}
+                                        else
+                                        {
+                                            <text>Amount</text>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        @row.Value
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script> <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" / >
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('.nepali-calendar').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+
+
+        });
+        $("#OfficeId").change(function () {
+            officeId = $("#OfficeId").val();
+
+            $('#OfficeForm').attr('action', "/PayrollAllowance/ExportToExcel/" + officeId);
+        });
+    </script>
+}

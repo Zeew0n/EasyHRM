@@ -1,0 +1,470 @@
+﻿@model BeeHRM.ApplicationService.DTOs.EmployeeDTO
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/employees" class="btn btn-success"><i class="fa fa-bars"></i> View Employee List</a></span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Create New Employee
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@foreach (ModelState modelState in ViewData.ModelState.Values)
+{
+    foreach (ModelError error in modelState.Errors)
+    {
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-close" aria-hidden="true"></i> @error.ErrorMessage.ToString()
+        </div>
+    }
+}
+
+<form method="post" action="/employee/create" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6 ">
+            <div class="box box-top-border">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="name">
+                            <label for="Name">Employee Code </label>
+                        </label>
+                        @Html.EditorFor(model => model.EmpCode, new { htmlAttributes = new { @class = "form-control", @placeholder = "Employee Code", @required = "required" } })
+                        <span class="field-validation-valid" data-valmsg-for="Name" data-valmsg-replace="true"> @Html.ValidationMessageFor(model => model.EmpCode, "", new { @class = "text-danger" })</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">
+                            <label for="Employee_Code">Name</label>
+                        </label>
+                        @Html.EditorFor(model => model.EmpName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Employee Name", @required = "required" } })
+                        @Html.ValidationMessageFor(model => model.EmpName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="name">
+                            <label for="UserName">UserName</label>
+                        </label>
+                        @Html.EditorFor(model => model.EmpUserName, new { htmlAttributes = new { @class = "form-control", @placeholder = "Employee User Name", @required = "required" } })
+                        @Html.ValidationMessageFor(model => model.EmpUserName, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label for="createdDate">Joined Date</label>
+                            @*<input type='text' class="form-control" placeholder="Enter Created Date" name="EmpAppointmentDate" id="createdDate" />*@
+                            @Html.EditorFor(model => model.EmpAppointmentDateNP, new { htmlAttributes = new { @class = "form-control nepali-calendar",@id = "from-nepali-calendar", @placeholder = "Enter Join Date" } })
+                    </div>
+                    <div class="form-group">
+                        <div class="text-center" style="padding: 10px;">
+                            <img class="img-thumbnail" alt="140x140" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" style="width: 140px; height: 140px;">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="name">
+                                    <label for="Photo">Photo</label>
+                                </label>
+                            </div>
+                            <div class="col-md-9">
+                                <input class="" name="EmpImage" type="file" id="photo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-top-border">
+                <div class="box-body">
+                    <div class="form-group ">
+                        <label for="name"> Gender</label>
+                        <br>
+                        <div class="radio radio-primary radio-inline mt0">
+                            <label class="">
+                                @Html.RadioButtonFor(m => m.EmpGender, "Male", new { @required = "required" }) Male
+                            </label>
+                        </div>
+                        <div class="radio radio-primary radio-inline mt0">
+                            <label class="">
+                                @Html.RadioButtonFor(m => m.EmpGender, "Female", new { @required = "required" }) Female
+                            </label>
+                        </div>
+                        <div class="radio radio-primary radio-inline mt0">
+                            <label class="">
+                                @Html.RadioButtonFor(m => m.EmpGender, "Others", new { @required = "required" }) Others
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label> Employee Status</label>
+                        <br>
+                        <div class="radio radio-primary radio-inline mt0">
+                            <label class="">
+                                @Html.RadioButtonFor(m => m.EmpStatus, "true", new { @required = "required" }) Active
+                                @*<input id="MaritalStatus" name="EmpStatus" type="radio" value="true">*@
+                            </label>
+                        </div>
+                        <div class="radio radio-primary radio-inline">
+                            <label>
+                                @Html.RadioButtonFor(m => m.EmpStatus, "false", new { @required = "required" }) Inactive
+
+                            </label>
+                        </div>
+
+                    </div>
+                    <div class="form-group ">
+                        <label> Marital Status</label>
+                        <br>
+                        <div class="radio radio-primary radio-inline mt0">
+                            <label class="">
+                                @Html.RadioButtonFor(m => m.EmpMaritalStatus, "Married", new { @required = "required" }) Married
+
+                            </label>
+                        </div>
+                        <div class="radio radio-primary radio-inline">
+                            <label>
+                                @Html.RadioButtonFor(m => m.EmpMaritalStatus, "UnMarried", new { @required = "required" }) UnMarried
+
+                            </label>
+                        </div>
+                        <div class="radio radio-primary radio-inline">
+                            <label class="">
+                                @Html.RadioButtonFor(m => m.EmpMaritalStatus, "Divorce", new { @required = "required" }) Divorce
+
+                            </label>
+                        </div>
+                        <div class="form-group ">
+                            <label>Incapacitated</label>
+                            <br>
+                            <div class="radio radio-primary radio-inline mt0">
+                                <label>
+
+                                    @Html.RadioButtonFor(m => m.EmpIncapacitated, "true", new { @required = "required" }) Yes
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.EmpIncapacitated, "false", new { @required = "required" }) No
+                                    @*<input name="EmpIncapacitated" type="radio" value="false"> No*@
+                                </label>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group ">
+                            <label>Department Head</label>
+                            <br>
+                            <div class="radio radio-primary radio-inline mt0">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.EmpDeptHead, "true", new { @required = "required" }) Yes
+                                    @*<input name="EmpDeptHead" type="radio" value="true"> Yes*@
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.EmpDeptHead, "false", new { @required = "required" }) No
+                                    @*<input name="EmpDeptHead" type="radio" value="false"> No*@
+                                </label>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group ">
+                            <label>Office Head</label>
+                            <br>
+                            <div class="radio radio-primary radio-inline mt0">
+                                <label>
+                                    @Html.RadioButtonFor(m => m.EmpOfficeHead, "true", new { @required = "required" }) Yes
+                                    @*<input name="EmpOfficeHead" type="radio" value="true"> Yes*@
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline">
+                                <label>
+                                    @*<input name="EmpOfficeHead" type="radio" value="false"> No*@
+                                    @Html.RadioButtonFor(m => m.EmpOfficeHead, "false", new { @required = "required" }) No
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label>Attendance Ignore</label>
+                            <br>
+                            <div class="radio radio-primary radio-inline mt0">
+                                <label>
+                                    @*<input name="EmpAttendanceIgnore" type="radio" value="true"> Yes*@
+                                    @Html.RadioButtonFor(m => m.EmpAttendanceIgnore, "true", new { @required = "required" }) Yes
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline">
+                                <label>
+                                    @*<input name="EmpAttendanceIgnore" type="radio" value="false" checked="checked"> No*@
+                                    @Html.RadioButtonFor(m => m.EmpAttendanceIgnore, "false", new { @required = "required" }) No
+                                </label>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group ">
+                            <label>Payroll</label>
+                            <br>
+                            <div class="radio radio-primary radio-inline mt0">
+                                <label>
+                                    @*<input name="EmpPayroll" type="radio" value="true"> Yes*@
+                                    @Html.RadioButtonFor(m => m.EmpPayroll, "true", new { @required = "required" }) Yes
+                                </label>
+                            </div>
+                            <div class="radio radio-primary radio-inline">
+                                <label>
+                                    @*<input name="EmpPayroll" type="radio" value="false"> No*@
+                                    @Html.RadioButtonFor(m => m.EmpPayroll, "false", new { @required = "required" }) No
+                                </label>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+                        
+                                <div class="form-group">
+                                    <label for="name">
+                                        <label for="Password">Tax Rule</label>
+                                    </label>
+                                    @Html.DropDownListFor(m => m.EmpTaxSetupId, Model.dllTaxRuleList, new { @class = "form-control", @required = "required" })
+                                    @Html.ValidationMessageFor(m => m.EmpTaxSetupId, "", new { @class = "text-danger" })
+                                    @*<span class="help-block"><span class="field-validation-valid" data-valmsg-for="EmpTaxSetupId" data-valmsg-replace="true"></span></span>*@
+                                </div>
+                           
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="box box-top-border">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4-col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Branch">Office</label>
+                                </label>
+                                @Html.DropDownListFor(m => m.EmpOfficeId, Model.OfficeList, new { @class = "form-control", @required = "required" })
+                            </div>
+                            <div class="form-group">
+                                <label for="name" class="control-label">
+                                    <label for="Level">Level</label>
+                                </label>
+
+                                @Html.DropDownListFor(m => m.EmpLevelId, Model.LevelList, new { @class = "form-control", @required = "required" })
+                                <span class="help-block"><span class="field-validation-valid ng-binding" data-valmsg-for="Email" data-valmsg-replace="true"></span></span>
+
+
+                            </div>
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Branch">Rank</label>
+                                </label>
+                                @Html.DropDownListFor(m => m.EmpRankId, Model.RankList, new { @class = "form-control", @required = "required" })
+
+                                <span class="help-block"><span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"> </span></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4-col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Department">Department</label>
+                                </label>
+
+                                @Html.DropDownListFor(m => m.EmpDeptId, Model.DepartmentList, new { @class = "form-control", @required = "required" })
+
+                                <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Designation">Section</label>
+                                </label>
+
+                                @Html.DropDownListFor(m => m.EmpSectionId, Model.SectionList, new { @class = "form-control", @required = "required" })
+
+                                <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Branch">Shift</label>
+                                </label>
+
+                                @Html.DropDownListFor(m => m.EmpShiftId, Model.dllShiftList, new { @class = "form-control", @required = "required" })
+                                <span class="help-block"><span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4-col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Group">Designation</label>
+                                </label>
+
+                                @Html.DropDownListFor(m => m.EmpDesgId, Model.dllDesginationList, new { @class = "form-control", @required = "required" })
+                                <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Leave_rule">Employee Group</label>
+                                </label>
+                                @Html.DropDownListFor(m => m.EmpTypeId, Model.EmployeeGroup, new { @class = "form-control", @required = "required" })
+                                <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Leave_rule">Service Event Group</label>
+                                </label>
+                                <input type="hidden" value="1" name="EmpServiceEventGroupId" />
+                                @Html.DropDownListFor(m => m.EmpServiceSubEventGroupId, Model.dllSubEventGroup, new { @class = "form-control", @required = "required" })
+                                <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4-col-sm-6 col-xs-12">
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Shift">LeaveRule</label>
+                                </label>
+                                @Html.DropDownListFor(m => m.EmpLeaveRuleId, Model.LeaveRuleList, new { @class = "form-control", @required = "required" })
+                                <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Service_Status">Job Type</label>
+                                </label>
+
+                                @Html.DropDownListFor(m => m.EmpJobTypeId, Model.JobTypeList, new { @class = "form-control", @required = "required" })
+                                <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Leave_rule">Business Group</label>
+                                </label>
+
+                                @Html.DropDownListFor(m => m.EmpBgId, Model.ddlBusinessGroupList, new { @class = "form-control", @required = "required" })
+                                <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="box box-top-border">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Name">Email</label>
+                                </label>
+
+                                @Html.EditorFor(model => model.EmpEmail, new { htmlAttributes = new { @class = "form-control", @placeholder = "Employee Email", @required = "required" } })
+                                <span class="field-validation-valid"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="name">
+                                    <label for="Password">Password</label>
+                                </label>
+                                <input class="form-control" id="Password" name="EmpPassword" placeholder="Enter employee Password" required="required" type="text" value="">
+
+                                <span class="field-validation-valid"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                            <div class="form-group">
+                                <label for="name"></label>
+                                <input data-val="true" data-val-required="The Checked field is required." id="Checked" name="Checked" type="checkbox" value="true"><input name="Checked" type="hidden" value="false"> Send Employee's Login information to their email ?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+            <div class="box box-top-border">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="submit" value="Save" class="btn btn-primary" name="action:Create" />
+                            @*<input type="submit" value="Save & Close" class="btn btn-primary" name="action:CreateClose" />*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section styles{
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript">
+        //$(document).ready(function () {
+        //    $('#datetimepicker1').datetimepicker({
+        //        format: 'MM/DD/YYYY'
+        //    });
+        //});
+
+        $(document).ready(function () {
+
+            $('.nepali-calendar').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+
+
+        });
+    </script>
+}
+
+

@@ -1,0 +1,120 @@
+﻿@model BeeHrmClientWeb.Models.EmployeeAssignRole
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    Details of Employee - @Model.EmpDetail.Name
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+<div class="row">
+       
+    <div class="col-md-12 col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                </div>
+                <i class="fa fa-fw fa-thumb-tack"></i> <strong>Update Roles </strong>
+            </div>
+            <div class="panel-body basic">
+                <div class="row">
+                    <div class="col-md-4">
+                        <select class="form-control" id="sltrole" required="required">
+                           
+                            <option value="" selected="selected">Roles </option>
+                            @foreach (var item in Model.Rolelist)
+                            {
+                                <option value="@item.RoleId" @(Model.RoleId.ToString() == item.RoleId.ToString() ? "selected" : "")>@item.RoleName </option>
+                            }
+
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="button" value="Set Role" class="btn btn-success" id="search" />
+                    </div>
+
+
+
+
+                </div>
+                <br clear="all" /><br clear="all" />
+                <div class="row">
+                   <div class="col-md-12" id="message">
+                       
+                   </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+
+
+
+    @section scripts
+        {
+        <script>
+
+            $(document).ready(function () {
+
+
+                $("#search").click(function ()
+                {
+                    var id = $("#sltrole").val();
+                    var text = $("#sltrole option:selected").text();
+                    console.log(id);
+                   
+                    $.ajax
+                        ({
+                            type: "POST",
+                            url: "/admin/setroles/",
+                            data: { emp:@Model.EmpDetail.Code, roleid:id },
+                            success: function (response) 
+                            {
+                                if (response.Success==true) {
+                                    $('#message').empty();
+                                    var mgs='<div class="alert alert-success"><strong>Role '+text +' has been assigned sucessfully for the employee '+@Model.EmpDetail.Code+' </strong> </div>';
+                                    $('#message').append(mgs);
+                                } else {
+                                    $('#message').empty();
+                                    var mgs='<div class="alert alert-danger"><strong>Oops sorry  !</strong> seems you do not have enough premission to assign User Role</div>';
+                                    $('#message').append(mgs);
+                                }                
+                            },
+                            error: function () {
+                                $('#message').empty();
+                                var mgs='<div class="alert alert-danger"><strong>Oops sorry  !</strong> this action can not be accomplished at the moment !!</div>';
+                                $('#message').append(mgs);
+                            }
+                    });
+                });
+            });
+
+
+        </script>
+    }

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.TaxDetailDTO>
+
+@{
+    ViewBag.Title = "TaxDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>TaxDetails</h2>
+
+<p>
+    @Html.ActionLink("Create New", "TaxDetailCreate")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DetailId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MasterId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Percentage)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.DetailId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MasterId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaxAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Percentage)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

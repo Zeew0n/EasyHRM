@@ -1,0 +1,499 @@
+﻿
+@{
+    ViewBag.Title = "IndividualAttendanceList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var i = 0;
+
+
+    var officeid = "";
+    if (ViewBag.officeid != null)
+    {
+        officeid = ViewBag.officeid.ToString();
+    }
+
+    var empcode = "";
+    if (ViewBag.empcode != null)
+    {
+        empcode = ViewBag.empcode.ToString();
+    }
+
+    //var startdate = "";
+    //if (ViewBag.startdate != null)
+    //{
+    //    startdate = ViewBag.startdate.ToString("yyyy-MM-dd");
+    //}
+    int? approvestatus = null;
+    if (ViewBag.approvestatus != null)
+    {
+        approvestatus = ViewBag.approvestatus;
+    }
+    int? recommendstatus = null;
+    if (ViewBag.recommendstatus != null)
+    {
+        recommendstatus = ViewBag.recommendstatus;
+    }
+    //var enddate = "";
+    //if (ViewBag.enddate != null)
+    //{
+    //    enddate = ViewBag.enddate.ToString("yyyy-MM-dd");
+    //}
+}
+
+
+
+@model IEnumerable<BeeHRM.ApplicationService.ViewModel.AttendanceRequestsListViewModel>
+
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    @*<link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />*@
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+
+        .modal-header {
+            padding: 5px;
+            border-bottom: 1px solid #a94442;
+        }
+
+        @@media only screen and (min-width: 500px) {
+            .modal-dialog {
+                width: 500px;
+                margin: 30px auto;
+                top: 100px;
+            }
+        }
+
+        .modal-content {
+            background-color: #eff5ff;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        }
+    </style>
+}
+
+
+@{
+    if (Session["attendance_request"] != null)
+    {
+        <div class="alert alert-success fade in" style="margin-top:18px;">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+            <strong>@Session["attendance_request"]</strong>
+
+        </div>
+
+        Session.Remove("attendance_request");
+    }
+
+
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/user/applyattendance" class="btn btn-success"><i class="fa fa-plus-circle"></i> Request New Attendance</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Attendance Requested list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="delerror"></div>
+<div class="container-fluid">
+    <div class="row ">
+        <div class="panel panel-default box box-top-border">
+            <div class="panel-body">
+                <div class="box-body row">
+                    <form action="/user/attendancerequest/selfattlist" method="post">
+                        <div class="row">
+                            <div class="form-group col-md-3 ">
+                                <input type='text' class="form-control" name="startdateNP" value="@ViewBag.startdate" id="date" placeholder="Start date" required />
+                                @*<span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>*@
+                            </div>
+                            <div class="form-group col-md-3 ">
+                                <input type='text' class="form-control" name="enddateNP" value="@ViewBag.enddate" id="date1" placeholder="End Date" required />
+                                @*<span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>*@
+                            </div>
+                            <div class="col-md-3">
+                                <select name="ApproverStatus" class="form-control">
+                                    <option value="">Select Approved Status</option>
+                                    @if (approvestatus != null)
+                                    {
+                                        if (approvestatus == 1)
+                                        {
+                                            <option value="1" selected>Pending</option>
+                                            <option value="2">Approved</option>
+                                            <option value="3">Rejected</option>
+                                        }
+                                        else
+                                            if (approvestatus == 2)
+                                        {
+                                            <option value="2" selected>Approved</option>
+                                            <option value="3">Rejected</option>
+                                            <option value="1">Pending</option>
+                                        }
+                                        else
+                                            if (approvestatus == 3)
+                                        {
+                                            <option value="3" selected>Rejected</option>
+                                            <option value="1">Pending</option>
+                                            <option value="2">Approved</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="1">Pending</option>
+                                        <option value="2">Approved</option>
+                                        <option value="3">Rejected</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <select name="RecommendSatus" class="form-control">
+                                    <option value="">Select Recommend Status</option>
+                                    @if (recommendstatus != null)
+                                    {
+                                        if (recommendstatus == 1)
+                                        {
+                                            <option value="1" selected>Pending</option>
+                                            <option value="2">Approved</option>
+                                            <option value="3">Rejected</option>
+                                        }
+                                        else
+                                            if (recommendstatus == 2)
+                                        {
+                                            <option value="2" selected>Approved</option>
+                                            <option value="3">Rejected</option>
+                                            <option value="1">Pending</option>
+                                        }
+                                        else
+                                            if (recommendstatus == 3)
+                                        {
+                                            <option value="3" selected>Rejected</option>
+                                            <option value="1">Pending</option>
+                                            <option value="2">Approved</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option value="1">Pending</option>
+                                        <option value="2">Approved</option>
+                                        <option value="3">Rejected</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="pull-left">
+                            <input type="submit" class="btn btn-success" value="Search" />
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="row ">
+        <div class="panel panel-default box box-top-border">
+            <div class="panel-body">
+                <div class="box-body row">
+
+                    <div id="divToPrint">
+
+                        @{
+                            if (Model != null)
+                            {
+                                <table class="table table-bordered" id="attendanceTable">
+                                    <thead>
+                                        <tr>
+                                            <th>S.N</th>
+                                            <th>Request Date</th>
+                                            <th>Name</th>
+                                            <th>Designation</th>
+                                            <th>Request Type</th>
+                                            <th>Recommend Status</th>
+                                            <th>Approve Satus </th>
+                                            <th>Option</th>
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var lst in Model)
+                                        {
+                                            i = i + 1;
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>
+                                                    @{var a = !String.IsNullOrEmpty(lst.RequestDate)? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(lst.RequestDate)).ToString().Replace('/', '-') : null;
+                                                    }
+                                                    @a (@(lst.RequestDate == "" ? "" : Convert.ToDateTime(lst.RequestDate).ToString("yyyy-MMM-dd")))
+                                                </td>
+                                                <td>@lst.EmpName</td>
+                                                <td>@lst.Designation</td>
+                                                <td>@lst.RequestType</td>
+
+                                                <td>
+                                                    @{
+                                                        if (lst.RecommendStatus.ToString() == "1")
+                                                        {
+                                                            <label class="label label-warning">Pending</label>
+                                                        }
+                                                        else
+                                                   if (lst.RecommendStatus.ToString() == "2")
+                                                        {
+                                                            <label class="label label-success">Approve</label>
+                                                        }
+                                                        else
+                                                 if (lst.RecommendStatus.ToString() == "3")
+                                                        {
+                                                            <label class="label label-danger">Rejected</label>
+                                                        }
+                                                        else
+                                              if (lst.RecommendStatus.ToString() == "4")
+                                                        {
+                                                            <label class="label label-danger">Cancelled</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="label label-warning">Pending</label>
+                                                        }
+                                                    }
+                                                    <br />
+                                                    @{var recommenddate = !String.IsNullOrEmpty(lst.RecommendeDate) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(lst.RecommendeDate)).ToString().Replace('/', '-') : null;
+                                                    }
+                                                    @if (recommenddate != null)
+                                                    {
+                                                        <p>@recommenddate (@(lst.RecommendeDate == "" ? "" : Convert.ToDateTime(lst.RecommendeDate).ToString("yyyy-MMM-dd")))</p>
+                                                    }
+                                                    else {
+                                                        <p></p>
+                                                    }
+                                                </td>
+
+                                                <td>
+                                                    @{ if (lst.ApproveStatus.ToString() == "1")
+                                                        {
+                                                            <label class="label label-warning">Pending</label>
+                                                        }
+                                                        else
+                                                   if (lst.ApproveStatus.ToString() == "2")
+                                                        {
+                                                            <label class="label label-success">Approve</label>
+                                                        }
+                                                        else
+                                                 if (lst.ApproveStatus.ToString() == "3")
+                                                        {
+                                                            <label class="label label-danger">Rejected</label>
+                                                        }
+                                                        else
+                                              if (lst.ApproveStatus.ToString() == "4")
+                                                        {
+                                                            <label class="label label-danger">Cancelled</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="label label-warning">Pending</label>
+                                                        }
+                                                    }
+                                                    <br />
+                                                    @{var approvedate = !String.IsNullOrEmpty(lst.ApproveDate) ? BeeHrmClientWeb.Utilities.Date.NepDateConverter.EngToNep(Convert.ToDateTime(lst.ApproveDate)).ToString().Replace('/', '-') : null;
+                                                    }
+                                                    @if (approvedate != null)
+                                                    {
+                                                        <p>@approvedate (@(lst.ApproveDate == "" ? "" : Convert.ToDateTime(lst.ApproveDate).ToString("yyyy-MMM-dd")))</p>
+                                                    }
+                                                    else {
+                                                        <p></p>
+                                                    }
+                                                </td>
+
+                                                <td>
+                                                    <a class="btn btn-success" href="/user/attendancerequest/AttendanceDetail/@lst.RequestId"><i class="fa fa-eye"></i> </a>
+                                                    &nbsp;
+                                                    <a class="btn-danger btn" data-toggle="modal" data-target="#@lst.RequestId"><i class="fa fa-trash"></i></a>
+                                                    <div id="@lst.RequestId" class="modal fade" role="dialog">
+                                                        <div class="modal-dialog">
+
+                                                            <!-- Modal content-->
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    Confirm Your Action
+                                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <h6>Do you really want to delete this Request ?</h6>
+
+                                                                    <button class="btn btn-success btn-sm" data-dismiss="modal" onclick="Delete(@lst.RequestId)"> Yes</button>
+                                                                    <button class="btn btn-danger btn-sm" data-dismiss="modal"> No</button>
+                                                                </div>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+                                                </td>
+
+                                            </tr>
+
+                                                        }
+                                    </tbody>
+                                </table>
+
+                                                        }
+                                                        else
+                                                        {
+
+
+                                                            <div class="alert alert-warning fade in">
+                                                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                                                                Validation Message
+                                                            </div>
+                                                        }
+
+                        }
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@*Model*@
+
+
+
+
+
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    @*<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#attendanceTable').DataTable();
+            $('.dataTables_filter').css('float', 'right');
+            $('.validate').hide();
+        });
+
+        function Delete(id) {
+
+            $.ajax({
+                type: "post",
+                url: "/deleteattendence/" + id,
+                ajaxasync: true,
+                contentType: 'application/json; charset=utf-8',
+
+                success: function (response) {
+                    console.log();
+                    if (response.Success) {
+                        location.reload();
+                    }
+                    else {
+                        var error = '<div class="alert alert-danger" ><a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a> <b > <snap>Sorry !!</snap> The attendance request cannot be deleted as its status has already changed. !!!</b></div>';
+                        $('.delerror').html(error);
+                    }
+
+                },
+                error: function () {
+                    console.log("error");
+                }
+            });
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $('#date1').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+        });
+    </script>
+
+}
+
+

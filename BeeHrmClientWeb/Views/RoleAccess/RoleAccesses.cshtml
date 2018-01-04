@@ -1,0 +1,118 @@
+﻿@model BeeHRM.ApplicationService.DTOs.ModularLists
+
+@{
+    ViewBag.Title = "RoleAccesses";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span><a href='@Url.Action("Roles","Roles")' class="btn btn-success"><i class="fa fa-bars" aria-hidden="true"></i> View</a></span></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    List of menu
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="box-body table-responsive">
+        <div id="divToPrint">
+            <form name="Sambhoo" method="post" action="~/RoleAccesses">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Menu
+                        </th>
+                        <th>View</th>
+                        <th>Add</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    @{int j = 0; }
+                    @{int Value = 0;}
+                    @for (int i = 0; i < Model.ListOfModules.Count; i++)
+                    {
+                        string CheckedAdd = ""; string CheckedEdit = ""; string CheckedDelete = ""; string CheckedView = "";
+                        if (Model.ListOfModules[i].Add)
+                        {
+                            CheckedAdd = "checked";
+                        }
+                        if (Model.ListOfModules[i].Edit)
+                        {
+                            CheckedEdit = "checked";
+                        }
+                        if (Model.ListOfModules[i].Delete)
+                        {
+                            CheckedDelete = "checked";
+                        }
+                        if (Model.ListOfModules[i].Views)
+                        {
+                            CheckedView = "checked";
+                        }
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(modelItem => Model.ListOfModules[i].Id)
+                                @if (Model.ListOfModules[i].Level == 2)
+                                {
+                                    <text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                                }
+                                @if (Model.ListOfModules[i].Level == 3)
+                                {
+                                    <text>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</text>
+                                }
+                                <i class="@Model.ListOfModules[i].ModuleCssClass"></i>
+
+                                @Html.DisplayFor(modelItem => Model.ListOfModules[i].MOduleName)
+                                @{Value = Model.ListOfModules[i].RoleId;}
+                                <input type="hidden" name="RoleId[@i]" value="@Value">
+                            </td>
+                            <td><input type="checkbox" name="Views[@i]" @CheckedView></td>
+                            <td><input type="checkbox" name="Add[@i]" @CheckedAdd></td>
+                            <td><input type="checkbox" name="Edit[@i]" @CheckedEdit></td>
+                            <td><input type="checkbox" name="Delete[@i]" @CheckedDelete></td>
+                        </tr>
+                                        j = i;
+                                    }
+                </table>
+
+                <input type="hidden" name="Counter" value="@j" />
+                <input type="submit" class="btn btn-primary">
+            </form>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+

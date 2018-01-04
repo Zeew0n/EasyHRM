@@ -1,0 +1,111 @@
+﻿@model IEnumerable<BeeHRM.Repository.PayrollAllowanceMaster>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AllowanceMasterId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AllowanceName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AllowanceType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EarningDeduction)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PercentageAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsAlwaysAplicable)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplyToAllEmployee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsPerDayDeductable)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SameForAllEmployee)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicableFromDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicableToDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AllowanceMasterId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AllowanceName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AllowanceType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EarningDeduction)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PercentageAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Value)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsAlwaysAplicable)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplyToAllEmployee)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsPerDayDeductable)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SameForAllEmployee)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsActive)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicableFromDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicableToDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,103 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.IndividualYearlyTaxEstimationModel
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @item.MOduleName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+<style>
+    .box.box-top-border{
+        border-top-color: #FFF;
+    }
+    .box {
+    border-top: 0px solid #d2d6de;
+}
+</style>
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                    tax annual report of @Model.EmployeeName till now
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="panel-body box box-top-border">
+    <div class="plane panel-body">
+        <table class="table table-bordered">
+            <tr>
+                <th>Code no.</th>
+                <td>@Model.EmployeeId</td>
+                <th>Employee name</th>
+                <td>@Model.EmployeeName</td>
+                <th>Post</th>
+                <td>@Model.DesignationName</td>
+            </tr>
+            <tr>
+                <th>Grade</th>
+                <td>@Model.Grade</td>
+                <th>Rank salary</th>
+                <td>@Model.AnnualSalary.ToString("0.00")</td>
+                <th>Grade salary</th>
+                <td>@Model.Gradesalary</td>                
+            </tr>
+            <tr>
+                <th>Bank allowance</th>
+                <td>@Model.BankAllowance</td>
+                <th>Regional allowance</th>
+                <td>@Model.RegionalAllowance</td>
+                <th>Other allowances</th>
+                <td>@Model.OtherAllowances</td>
+            </tr>
+            <tr>
+                <th>Rank Special allowance</th>
+                <td>@Model.SpecialAllowance</td>
+                <th>Rank Inchargeship allowance</th>
+                <td colspan="3">@Model.InchargeshipAllowance</td>
+            </tr>
+            <tr>
+                <th colspan="6">Savings</th>
+            </tr>
+            <tr>
+                <th>Pf self(Total)</th>
+                <td>@Model.PfSelf.ToString("0.00")</td>
+                <th>Pf company(Total)</th>
+                <td>@Model.PfCompany.ToString("0.00")</td>
+                <th>Pf Extra(Total)</th>
+                <td>@Model.PfExtra.ToString("0.00")</td>
+                
+            </tr>
+            <tr>
+                <th>CIT(Total)</th>
+                <td colspan="5">@Model.Cit.ToString("0.00")</td>
+            </tr>
+            <tr>
+                <th colspan="6">Tax detail</th>
+            </tr>
+            <tr>
+                <th>Paid social sec tax 1(%)</th>
+                <td>@Model.FirstSlabTax.ToString("0.00")</td>
+                <th>Paid tax(<text>@Model.SecondSlabName</text>)</th>
+                <td>@Model.SecondSlabTax.ToString("0.00")</td>
+                <th>Total tax</th>
+                <td>@{decimal TotalTax = Model.FirstSlabTax + Model.SecondSlabTax;}<text>@TotalTax.ToString("0.00")</text></td>
+            </tr>
+        </table>
+    </div>
+</div>
+

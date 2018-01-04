@@ -1,0 +1,294 @@
+﻿
+@model BeeHRM.ApplicationService.ViewModel.LeaveApplicationRecommendDetailViewModel
+@{
+    
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/admin/leaveapplication/list"><i class="fa fa-bars"></i> Leave Application</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">Leave Application Details                        </h2>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+    <style>
+        ul.tabs {
+            margin: 0px;
+            padding: 0px;
+            list-style: none;
+        }
+
+            ul.tabs li {
+                background: none;
+                color: #222;
+                display: inline-block;
+                padding: 10px 15px;
+                cursor: pointer;
+            }
+
+                ul.tabs li.current {
+                    background: #ededed;
+                    color: #222;
+                }
+
+        .tab-content {
+            display: none;
+            background: #ededed;
+            padding: 15px;
+        }
+
+            .tab-content.current {
+                display: inherit;
+            }
+
+        .badge {
+            background-color: #fff;
+            color: #222;
+        }
+    </style>
+}
+
+
+@if (Model.LeaveApplier != null)
+{
+    <section>
+        <div class="row">
+            <div class="col-sm-12 col-md-5 col-lg-3">
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="avatar">
+                                <div class="text-center">
+                                    <a href="/employee/@Model.LeaveApplier.Code">
+                                        @{
+                                            if (Model.LeaveApplier.PhotoName != null)
+                                            {
+                                                <img src="~/img/emp_photos/@Model.LeaveApplier.PhotoName" alt="Profile of @Model.LeaveApplier.Name" class="img-responsive">
+                                            }
+                                            else
+                                            {
+                                                <img src="http://demo.beehrm.com/assets/img/avatar5.png" alt="Profile Photo" class="img">
+                                            }
+                                        }
+                                    </a>
+                                </div>
+                                <div class="text-center">
+                                    <h3 class="nomarginbtm">[@Model.LeaveApplier.Code] @Model.LeaveApplier.Name</h3>
+                                    <i>@Model.LeaveApplier.Designation</i>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="list-group mt20" id="list-border-remove">
+                            <li class="list-group-item">
+                                <i class="fa fa-envelope"></i> <span>@Model.LeaveApplier.Email</span>
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fa fa-fw fa-calendar-o"></i> <span>@(!String.IsNullOrEmpty(Model.LeaveApplier.JoinDate) ? Convert.ToDateTime(Model.LeaveApplier.JoinDate).ToString("d MMM, yyyy") : "No Join Date") </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-lg-9">
+                <div class="box box-top-border">
+                    <div class="box-body">
+                        <div class="panel panel-default">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.LeaveDetail.LeaveSubject</span>
+                                    <strong>Leave Subject</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.LeaveDetail.LeaveDays</span>
+                                    <strong>Leave Days</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.LeaveDetail.LeaveAppliedDate.ToString("d MMM, yyyy")</span>
+                                    <strong>Leave Request Date</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.LeaveDetail.LeaveStartDate.ToString("d MMM, yyyy")</span>
+                                    <strong>Leave Start Date</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.LeaveDetail.LeaveEndDate.ToString("d MMM, yyyy")</span>
+                                    <strong>Leave End Date</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.LeaveDetail.LeaveTypeName</span>
+                                    <strong>Leave Type</strong>
+                                </li>
+                                <div class="list-group-item">
+                                    <p class="list-group-item-heading"><strong>Leave Description</strong></p>
+                                    <br>
+                                    <p class="list-group-item-text">@Model.LeaveDetail.ApproveMessage</p>
+                                </div>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.LeaveDetail.RecommenderName</span>
+                                    <strong>Recommender Name</strong>
+                                </li>
+                                <li class="list-group-item">
+
+                                    <span class="pull-right">
+                                        @{
+                                            if (String.IsNullOrEmpty(Model.LeaveDetail.ApproveDate))
+                                            {
+                                                <label class="label label-danger">Not Approved Yet</label>
+                                            }
+                                            else
+                                            {
+                                                DateTime RecmondDate = Convert.ToDateTime(Model.LeaveDetail.RecommendDate);
+                                                string Recdate = RecmondDate.ToString("dd-MMM-yyyy");
+                                                <p>@Recdate</p>
+
+                                            }
+                                        }
+                                    </span>
+
+                                    <strong>Recommende On </strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="badge clean">
+                                        @{
+                                            if (Model.LeaveDetail.RecommendStatus == 1)
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                            else
+           if (Model.LeaveDetail.RecommendStatus == 2)
+                                            {
+                                                <label class="label label-success">Approve</label>
+                                            }
+                                            else
+         if (Model.LeaveDetail.RecommendStatus == 3)
+                                            {
+                                                <label class="label label-danger">Rejected</label>
+                                            }
+                                            else
+      if (Model.LeaveDetail.RecommendStatus == 4)
+                                            {
+                                                <label class="label label-danger">Cancelled</label>
+                                            }
+                                            else
+                                            {
+                                                <label class="label label-warning">Pending</label>
+                                            }
+                                        }
+                                    </span>
+                                    <strong>Recommend Status </strong>
+                                </li>
+
+                                <div class="list-group-item">
+                                    <p class="list-group-item-heading"><strong>Recommend Message </strong></p>
+                                    <br>
+                                    <p class="list-group-item-text">@Model.LeaveDetail.RecommendMessage</p>
+                                </div>
+                                <li class="list-group-item">
+                                    <span class="pull-right">@Model.LeaveDetail.ApproverName</span>
+                                    <strong>Approver Name</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <span class="pull-right">
+                                        @{
+                                        if (String.IsNullOrEmpty(Model.LeaveDetail.ApproveDate))
+                                        {
+                                            <label class="label label-danger">Not Approved Yet</label>
+                                        }
+                                        else
+                                        {
+                                            DateTime ApproveDate = Convert.ToDateTime(Model.LeaveDetail.ApproveDate);
+                                            string AppDate = ApproveDate.ToString("dd-MMM-yyyy");
+                                            <p>@AppDate</p>
+
+                                        }
+                                    }
+                                </span>
+                                <strong>Approved On</strong>
+                            </li>
+                            <li class="list-group-item">
+                                <span class="badge clean">
+                                    @{
+                                        if (Model.LeaveDetail.ApproveStatus == "1")
+                                        {
+                                            <label class="label label-warning">Pending</label>
+                                        }
+                                        else
+                                                   if (Model.LeaveDetail.ApproveStatus == "2")
+                                        {
+                                            <label class="label label-success">Approve</label>
+                                        }
+                                        else
+                                                 if (Model.LeaveDetail.ApproveStatus == "3")
+                                        {
+                                            <label class="label label-danger">Rejected</label>
+                                        }
+                                        else
+                                              if (Model.LeaveDetail.ApproveStatus == "4")
+                                        {
+                                            <label class="label label-danger">Cancelled</label>
+                                        }
+                                        else
+                                        {
+                                            <label class="label label-warning">Pending</label>
+                                        }
+                                    }
+                                </span>
+
+                                <strong>Approve Status </strong>
+                            </li>
+
+                            <div class="list-group-item">
+                                <p class="list-group-item-heading"><strong>Approver Message</strong></p>
+                                <br>
+                                <p class="list-group-item-text">@Model.LeaveDetail.ApproveMessage</p>
+                            </div>
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                                <i class="fa fa-times" aria-hidden="true"></i> Oops! It seems you are not authorised for this action.
+                                            </div>
+                                        }

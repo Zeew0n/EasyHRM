@@ -1,0 +1,132 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.LeaveRuleAddViewModel
+@{
+    ViewBag.Title = "Leave Assign Individual";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                   Update Individual Leave Balance 
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+@Html.Partial("_partialpageUserProfile")
+<div class="col-md-8 col-lg-9">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="pull-right">
+            </div>
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Leave Assign </strong>
+        </div>
+        <div class="panel-body basic">
+
+           @if (Model.LeaveAssign != null)
+           {
+                <form action="/leave/assign/@Model.Empdetail.Code" method="post">                    
+                    <div class="box-body">
+                        <div class="form-group ">
+
+                            <label>@Model.LeaveRuleName</label>
+                            <span class="error-label">@Html.ValidationMessageFor(x => x.LeaveRuleName)</span>
+                        </div>
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th>Rule type</th>
+                                    <th>Days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                              
+                                    @foreach(var row in Model.LeaveAssign )
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input type="hidden" value="@row.AssignedId" name="LeaveAssign[@i].AssignedId" />
+                                                <input type="hidden" value="@row.LeaveTypeId" name="LeaveAssign[@i].LeaveTypeId" />
+                                                @(i+1)
+                                            </td>
+                                            <td> <label>@row.LeaveTypename</label></td>
+
+                                            <td><input value="@row.TotalAssignDay"  class="form-control" name="LeaveAssign[@i].TotalAssignDay" /></td>
+                                        </tr>
+                                        i = i + 1;
+                                    }
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer">
+                        <input type="submit" class="btn btn-success" value="Update Leave Balance" />
+                    </div>
+                </form>
+
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    <strong>oops!</strong> Seems Leave rules already updated
+                </div>
+            }
+          
+
+
+
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js"></script>
+    <script src="~/Scripts/jquery.dialogBox.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $('#target').on('submit', function () {
+            var res = confirm("Are you sure to transfer?");
+            if (!res) {
+                return false;
+            }
+        });
+
+        $('.date').on('click', function () {
+                $('.date').datepicker();
+            });
+
+
+    </script>
+}

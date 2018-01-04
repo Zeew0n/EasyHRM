@@ -1,0 +1,167 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollSalaryTableDTO>
+@{
+    string fsId = Convert.ToString(ViewBag.fsId);
+    string officeId = Convert.ToString(ViewBag.officeId);
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><a href="/PayrollGenerate/GeneratePayroll" class="btn btn-success"><i class="fa fa-plus"></i> Generate New Month Salary </a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Payroll sheet
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+
+                    @using (Html.BeginForm())
+            {
+                        @Html.AntiForgeryToken()
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <select class="form-control custom-select" name="officeId" style="width:250px;">
+                                    <option value="0">Please Choose Office/Branch</option>
+                                    @if (ViewBag.OfficeList != null)
+                                    {
+                                        foreach (var row in ViewBag.OfficeList)
+                                        {
+                                            <option value="@row.OfficeId" @( officeId == row.OfficeId.ToString() ? "selected" : "")> @row.OfficeName</option>
+                                        }
+                                    }
+
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <select class="form-control" name="fyId" style="width:250px;">
+                                    <option value="0">Please Choose Fiscal Year</option>
+                                    @if (ViewBag.FiscalsDropdown != null)
+                                    {
+                                        foreach (var row in ViewBag.FiscalsDropdown)
+                                        {
+                                            <option value="@row.Value" @( fsId == row.Value.ToString() ? "selected" : "")> @row.Text</option>
+                                        }
+                                    }
+
+                                </select>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <input type="submit" value="Search" class="btn btn-success" />
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box box-top-border">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PayrollMonthDescription.MonthNameNepali)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatorId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Office.OfficeName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalaryConfirmed)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>
+                    @Html.DisplayFor(modelItem => item.PayrollMonthDescription.MonthNameNepali)
+                </th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.EmpName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Office.OfficeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SalaryConfirmed)
+                </td>
+                <td>
+                    @if (!item.SalaryConfirmed)
+                    {
+                        <a href="/PayrollGenerate/ConfirmSalary/@item.Id" onclick="return ConfirmSalary()">Confirm Salary</a>
+                        <text>|</text>
+                        <a href="/PayrollGenerate/GeneratePayroll" onclick="return RegenerateSalary()">Regenerate Salary</a>
+                        <text>|</text>
+                    }
+                    <a href="/PayrollSalarySheet/SalarySheetDetail/@item.Id" target="_blank">Details</a>
+
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+@section Scripts{
+    <script>
+        function ConfirmSalary() {
+            if (confirm("Are you sure you want to confirm the salary? \n Once you confrim you will not be able to regnerate salary."))
+                return true;
+            else
+                return false;
+        }
+        function RegenerateSalary() {
+
+            if (confirm("Are you sure you want to regeneratet this month salary"))
+                return true;
+            else
+                return false;
+        }
+    </script>
+
+    <script src="~/Scripts/moment.min.js"></script>
+
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".custom-select").customselect();
+        });
+    </script>
+}
+
+

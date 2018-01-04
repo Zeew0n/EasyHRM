@@ -1,0 +1,136 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollSalaryMasterSheetDTO
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        @*<li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/PayrollAllowancesCreate"><i class="fa fa-bars"></i> View Employee List</a></span><a href="#"></a></li>*@
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Individual salary sheet
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="col-md-12">
+    <div class="well box">
+        <div class="box-body">
+            <div id="divToPrint">
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                       <p style="font-weight:bold">AGRICULTURE DEVELOPMENT BANK LIMITED</p>
+                        <p>Ramshah path,Singha darbar,kathmandu,Nepal</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-responsive" style="border: none;">
+                            <tr>
+                                <td rowspan="4" style="border: none;">
+                                    <img src="/img/emp_photos/profile.jpg" alt="Beehrm User " class="img-responsive img-circle" style="width:120px;height:120px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; border: none;">@Html.DisplayNameFor(model => model.EmployeeCode) :</th>
+                                <td style="text-align: left; border: none;">@Html.DisplayFor(model => model.EmployeeCode)</td>
+                                <th style="text-align: left; border: none;">@Html.DisplayNameFor(model => model.Employee.EmpName): </th>
+                                <td style="border: none;">@Html.DisplayFor(model => model.Employee.EmpName) </td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; border: none;">@Html.DisplayNameFor(model => model.PayrollSalaryTable.Office.OfficeName): </th>
+                                <td style="border: none;">@Html.DisplayFor(model => model.PayrollSalaryTable.Office.OfficeName)</td>
+                                <th style="text-align: left; border: none;">@Html.DisplayNameFor(model => model.Department.DeptName) : </th>
+                                <td style="border: none;">@Html.DisplayFor(model => model.Department.DeptName)</td>
+                            </tr>
+                            <tr>
+                                <th style="text-align: left; border: none;">@Html.DisplayNameFor(model => model.Designation.DsgName) : </th>
+                                <td style="border: none;">@Html.DisplayFor(model => model.Designation.DsgName)</td>
+                                <th style="text-align: left; border: none;">Attendance : </th>
+                                <td style="border: none;">Ignored</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="well-box">
+        <div class="box-body">
+            <table class="table">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.RankSalary)</th>
+                    <td>@Html.DisplayFor(model => model.RankSalary)</td>
+                    <th>@Html.DisplayNameFor(model => model.CurrentGrade)</th>
+                    <td>@Html.DisplayFor(model => model.CurrentGrade)</td>
+                    <th>@Html.DisplayNameFor(model => model.RankPerGradeAmount)</th>
+                    <td>@Html.DisplayFor(model => model.RankPerGradeAmount)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.BankAllowance)</th>
+                    <td>@Html.DisplayFor(model => model.BankAllowance)</td>
+                    <th>@Html.DisplayNameFor(model => model.RankSpecialAllowance)</th>
+                    <td>@Html.DisplayFor(model => model.RankSpecialAllowance)</td>
+                    <th>@Html.DisplayNameFor(model => model.RankInchargeShipAllowance)</th>
+                    <td>@Html.DisplayFor(model => model.RankInchargeShipAllowance)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.RankOtherAllowances)</th>
+                    <td>@Html.DisplayFor(model => model.RankOtherAllowances)</td>
+                    <th>@Html.DisplayNameFor(model => model.TotalBasicSalary)</th>
+                    <td>@Html.DisplayFor(model => model.TotalBasicSalary)</td>
+                    <th>@Html.DisplayNameFor(model => model.TaxAmount)</th>
+                    <td>@Html.DisplayFor(model => model.TaxAmount)</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.WorkingDays)</th>
+                    <td>@Html.DisplayFor(model => model.WorkingDays)</td>
+                    <th>@Html.DisplayNameFor(model => model.WorkedDays)</th>
+                    <td>@Html.DisplayFor(model => model.WorkedDays)</td>
+                </tr>
+            </table>
+        </div>
+        </div>
+    <div style="font-weight:strong;">Savings</div>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            @*<th>Allowance type</th>
+            <th>Earning/Deduction</th>*@
+            <th>Percentage/Amount</th>
+            <th>Value</th>
+            <th>CalculatedValue</th>
+        </tr>
+        @foreach(var str in Model.PayrollSalaryDetailSheets)
+        {
+           <tr> 
+               <td>@str.AllowanceName</td>
+               @*<td>@str.AllowanceType</td>
+               <td>@str.EarningDeduction</td>*@
+               <td>@str.PercentageAmount</td>
+               <td>@str.Value</td>
+               <td>@str.CalculatedValue</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="3">Net salary</td>
+            <td>@Html.DisplayFor(model => model.SalaryAfterTaxDeduction)</td>
+        </tr>
+
+</table>

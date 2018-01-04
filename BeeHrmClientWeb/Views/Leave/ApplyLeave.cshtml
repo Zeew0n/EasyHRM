@@ -1,0 +1,388 @@
+﻿@model BeeHRM.ApplicationService.ViewModel.LeaveApplicationAddViewModel
+@using BeeHRM.ApplicationService.ViewModel
+@{
+    ViewBag.Title = "Leave Application Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/admin/leaveapplication/list"><i class="fa fa-bars"></i> View Leave Applications List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    ADD LEAVE APPLICATION
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <span  class="error-label">
+                @Html.ValidationSummary()
+            </span>
+                <div class="col-md-6">
+                   
+                    <form method="POST" action="/admin/leaveapplication/create" accept-charset="UTF-8">
+                        @Html.AntiForgeryToken()
+                        <div class="box-body">
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="IsHalfDayLeave" id="chkHalfDay" type="checkbox" value="true">Is half day leave ?
+                                        <input type="hidden" name="IsHalfDayLeave" value="false" />
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group ">
+                                <label for="leave_type">Employee(*)</label>
+                                <select class="form-control custom-select" id="sltEmployee" name="LeaveEmpCode">
+                                    <option value="" selected="selected">Choose Employee </option>
+                                    @foreach (var item in Model.Employees)
+                                    {
+                                        <option value="@item.EmpCode">@item.EmpName (@item.EmpCode)</option>
+                                    }
+                                </select>
+                                <span id="sltRecommenderError" class="error-label">@Html.ValidationMessageFor(x => x.LeaveRecommenderId)</span>
+                            </div>
+                            <div class="form-group ">
+                                <label for="subject">Subject(*)</label>
+                                <input class="form-control" placeholder="Enter leave application subject" name="LeaveSubject" type="text" id="leaveSubject">
+                                <span id="leaveSubjectError" class="error-label">@Html.ValidationMessageFor(x => x.LeaveSubject)</span>
+                            </div>
+                            <div class="form-group ">
+                                <label for="leave_type">Choose Leave type(*)</label>
+                                <select class="form-control" id="sltLeaveType" name="LeaveTypeId">
+                                    <option value="" selected="selected">Choose Leave type</option>
+
+                                </select>
+                                <span id="leaveTypeError" class="error-label">@Html.ValidationMessageFor(x => x.LeaveTypeId)</span>
+                            </div>
+
+
+                            <div class="form-group ">
+                                <label for="leave_type">Approver(*)</label>
+                                <select class="form-control custom-select" id="sltApprover" name="LeaveApproverEmpCode">
+                                    <option value="" selected="selected">Choose Approver</option>
+                                </select>
+                                <span id="sltApproverError" class="error-label">@Html.ValidationMessageFor(x => x.LeaveApproverId)</span>
+                            </div>
+                            <div class="form-group " id="halfDayDiv" style="display:none">
+                                <label for="leave_days_part">First/Second Half ?</label>
+                                <select class="form-control" id="sltHalfDayLeaveValue" name="LeaveDaysPart">
+                                    <option value="">Select Part</option>
+                                    <option value="F">First Half</option>
+                                    <option value="S">Second Half</option>
+                                </select>
+                                <span id="halfDayLeaveValueError" class="error-label"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="yearStartDate">Start Date(*)</label>
+                                <div class='input-group date' id='datetimepicker1'>
+                                    <input type='text' class="form-control" placeholder="Enter Year Start Date" name="LeaveStartDate" id="leaveStartDate" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <span id="startDateError" class="error-label">@*@Html.ValidationMessageFor(x => x.YearStartDate)*@</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="yearStartDate">End Date(*)</label>
+                                <div class='input-group date' id='datetimepicker2'>
+                                    <input type='text' class="form-control" placeholder="Enter Year Start Date" name="LeaveEndDate" id="leaveEndDate" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <span id="endDateError" class="error-label">@*@Html.ValidationMessageFor(x => x.YearStartDate)*@</span>
+                            </div>
+                            <div class="form-group ">
+                                <label for="desc">Description(*)</label>
+                                <textarea class="form-control" placeholder="Enter leave application description" name="LeaveDetails" cols="50" rows="10" id="desc"></textarea>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <input type="submit" name="action:LeaveTypeCreate" value="Save" id="btnSubmit" class="btn btn-success">
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <table class="table table-bordered table-striped" id="loading">
+                        <tr>
+                            <th>Leave Types</th>
+                            <th>Entitlement</th>
+                            <th>Leave Taken</th>
+                            <th>Balance</th>
+
+                        </tr>
+                        <tbody id="leavebalance"></tbody>
+                    </table>
+                </div>
+</div>
+    </div>
+</div>
+
+@section styles{
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+}
+@section scripts{
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var statData = $.parseJSON(@Html.Raw(Json.Encode(Model.SerializedStatData)));
+            $("#sltEmployee").customselect();
+            $("#sltEmployee").change(function () {
+                $('#leavebalance').html('<img src="/img/Please Wait.gif">');
+
+                var id = $(this).val();
+                $.ajax({
+                    url: "/admin/leave/leeavebalance/",
+                    data: { id: id, year: null },
+                    success: function (data) {
+                        $("#leavebalance").empty();
+
+                        var result = '';
+                        var mySelect = $('#sltLeaveType');
+
+                        mySelect.empty();
+                        $("#sltLeaveType").append(
+                               $('<option></option>').val("").html("Choose Leave Type")
+                           );
+                        for (var i = 0; i < data.length; i++) {
+                            result += ('<tr><td>' + data[i].LeaveTypeName + '</td><td>' + data[i].LeaveDays +
+                                '</td><td>' + data[i].TotalLeaveTakenDays + '</td><td>' + data[i].TotalRemainingDays + '</td></tr>'
+                                + '');
+
+                            mySelect.append(
+                               $('<option></option>').val(data[i].LeaveTypeId).html(data[i].LeaveTypeName)
+                           );
+
+                        }
+                        $("#leavebalance").append(result);
+                    }
+
+                });
+
+
+                $.ajax({
+                    url: '/admin/leave/approver/' + id,
+                    method: 'post',
+                    DataType: 'json',
+                    success: function (data) {
+                        var mySelectApprover = $('#sltApprover');
+                        $('#sltApprover').empty();
+                        $('#sltApprover').append(
+                               $('<option></option>').val("").html("Select Approver")
+                           );
+
+                        $(data).each(function (index, item) {
+                            mySelectApprover.append($('<option/>').val(item.EmpCode).html(item.EmpName));
+                            console.log(item);
+                        });
+
+
+                    }
+
+
+
+                });
+
+
+            });
+
+            var isChkChecked = false;
+            $("#leaveStartDate").attr("disabled", "disabled");
+            $("#leaveEndDate").attr("disabled", "disabled");
+            $('#datetimepicker1').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+            $('#datetimepicker2').datetimepicker({
+                format: 'MM/DD/YYYY'
+            });
+
+
+            $("#chkHalfDay").change(function () {
+                if ($(this).is(":checked")) {
+                    $("#halfDayDiv").css('display', 'block');
+                    isChkChecked = true;
+                    $("#leaveEndDate").attr("disabled", "disabled");
+                    resetForm();
+                }
+                else {
+                    $("#halfDayDiv").css('display', 'none');
+                    isChkChecked = false;
+                    resetForm();
+                }
+            });
+
+            $('#sltLeaveType').on('change', function (e) {
+                $("#leaveStartDate").val('');
+                $("#startDateError").html("");
+                $("#leaveEndDate").attr("disabled", "disabled");
+                var optionSelected = $("option:selected", this);
+                var valueSelected = this.value;
+                if (valueSelected == 0) {
+                    $("#leaveStartDate").attr("disabled", "disabled");
+                    $("#leaveEndDate").attr("disabled", "disabled");
+                }
+                else {
+                    $("#leaveTypeError").html("");
+                    $("#leaveStartDate").removeAttr("disabled");
+                }
+            });
+        
+            $("#sltApprover").on('change', function (e) {
+                var selectedValue = this.value;
+                if (selectedValue != null) {
+                    $("#sltApproverError").html("");
+                }
+            });
+
+            $("#leaveStartDate").focusout(function ()
+            {
+                var rawStartDate = $("#leaveStartDate").val();
+                $("#leaveEndDate").removeAttr("disabled");
+                var startDate = new Date(Date.parse(rawStartDate, "MM/dd/yyyy"));
+                var yearStart = new Date(Date.parse(activeYear.YearStartDate));
+                var yearEnd = new Date(Date.parse(activeYear.YearEndDate));
+                if (isChkChecked == false) {
+                    if (startDate >= yearStart && startDate <= yearEnd) {
+                        var leaveTypeId = $('#sltLeaveType').val();
+                        var leave = _.find(statData, function (item) {
+                            return item.LeaveTypeId == leaveTypeId;
+                        });
+                        var todayDate = new Date($.now());
+                        var diffDays = getDifferenceDays(startDate, todayDate);
+                        if (Number(leave.LeaveApplyBeforeDays) == 0) {
+                            $("#leaveEndDate").removeAttr("disabled");
+                        }
+
+                        else {
+                            $("#startDateError").html("");
+                            $("#leaveEndDate").removeAttr("disabled");
+                        }
+                    }
+                    else {
+                        $("#leaveStartDate").val("");
+                        $("#startDateError").html("The StartDate is not in range with the Current Year.");
+                        $("#leaveStartDate").focus();
+                    }
+                }
+                else {
+                    $("#leaveEndDate").val($("#leaveStartDate").val());
+                }
+            });
+
+            $("#leaveEndDate").focusout(function () {
+                var rawStartDate = $("#leaveStartDate").val();
+                var startDate = new Date(Date.parse(rawStartDate, "MM/dd/yyyy"));
+                var rawEndDate = $("#leaveEndDate").val();
+                var endDate = new Date(Date.parse(rawEndDate, "MM/dd/yyyy"));
+                var yearStart = new Date(Date.parse(activeYear[0].YearStartDate));
+                var yearEnd = new Date(Date.parse(activeYear[0].YearEndDate));
+                if (endDate >= yearStart && endDate <= yearEnd) {
+                    if (endDate >= startDate) {
+                        $("#endDateError").html("");
+                    }
+                    else {
+                        $("#endDateError").html("The End Date Cannot be smaller than the Start Date.");
+                    }
+                }
+                else {
+                    $("#leaveEndDate").val("");
+                    $("#endDateError").html("The EndDate is not in range with the Current Year.");
+                }
+            });
+
+            $("#leaveSubject").focusout(function () {
+                if ($("#leaveSubject").val() != "") {
+                    $("#leaveSubjectError").html("");
+                }
+            });
+
+            function getDifferenceDays(startDate, EndDate) {
+                return Math.ceil((startDate - EndDate) / (1000 * 60 * 60 * 24));
+            }
+
+            function resetForm() {
+                $("#leaveStartDate").val("");
+                $("#leaveEndDate").val("");
+                $("#startDateError").html("");
+                $("#endDateYear").html("");
+                $("#sltRecommender").val("");
+                $("#sltApprover").val("");
+                $("#sltLeaveType").val("");
+            }
+
+            $("#btnSubmit").click(function () {
+
+                if ($("#chkHalfDay").is(":checked")) {
+                    if ($("#sltHalfDayLeaveValue").val() == "") {
+                        $("#halfDayLeaveValueError").html("The value cannot be empty if Half Day is checked.");
+                        return false;
+                    }
+                }
+                var rawStartDate = $("#leaveStartDate").val();
+                var startDate = new Date(Date.parse(rawStartDate, "MM/dd/yyyy"));
+                var rawEndDate = $("#leaveEndDate").val();
+                var endDate = new Date(Date.parse(rawEndDate, "MM/dd/yyyy"));
+                var leaveTypeId = $('#sltLeaveType').val();
+                var leave = _.find(statData, function (item) {
+                    return item.LeaveTypeId == leaveTypeId;
+                });
+                var daysApplied = (Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)));
+                console.log(daysApplied);
+                if (daysApplied > leave.TotalRemainingDays) {
+                    alert("The number of days you have applied is greater than your remaining days.");
+                    $("#leaveStartDate").focus();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

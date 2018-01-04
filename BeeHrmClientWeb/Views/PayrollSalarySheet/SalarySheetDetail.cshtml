@@ -1,0 +1,158 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollSalaryMasterSheetDTO>
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @TempData["Success"]
+    </div>
+}
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/PayrollSalarySheet/Index" class="btn btn-success"><i class="fa fa-bars"></i> Payroll sheet</a></span><a href="#"></a></li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    SalarySheetDetail
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+    <div style="overflow:scroll;">
+        <table class="table">
+            <tr>
+                <th>
+                    SNO.
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EmployeeCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Employee.EmpName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Designation.DsgName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GradeSalary)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RankSalary)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RankAndGradeSalary)
+                </th>
+                <th>
+                    PF total
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GrossSalary)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BankAllowance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RankSpecialAllowance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RankInchargeShipAllowance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RankOtherAllowances)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SalaryWithRankAllowance)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CitAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TaxAmount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SalaryAfterTaxDeduction)
+                </th>
+                <th></th>
+            </tr>
+            @{int i = 1;}
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @i
+                        @{i = i + 1;}
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmployeeCode)
+                    </td>
+                    <td>
+                        <a href="/PayrollSalarySheet/SalaryReceipt/@item.Id">@Html.DisplayFor(modelItem => item.Employee.EmpName)</a>
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Designation.DsgName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GradeSalary)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RankSalary)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RankAndGradeSalary)
+                    </td>
+                    <td>
+                        @{ string PfTotal = (item.PfSelf + item.PfCompany).ToString("0.00");}<text>@PfTotal</text>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GrossSalary)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BankAllowance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RankSpecialAllowance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RankInchargeShipAllowance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RankOtherAllowances)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SalaryWithRankAllowance)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CitAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TaxAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SalaryAfterTaxDeduction)
+                    </td>
+                    <td>
+                        @Html.ActionLink(" Details ", "SalaryReceipt", new { id = item.Id })
+                    </td>
+                </tr>
+                            }
+        </table>
+    </div>
+</div>

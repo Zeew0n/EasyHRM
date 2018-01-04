@@ -1,0 +1,89 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.LeaveRuleDTO>
+@{
+    ViewBag.Title = "LeaveRules";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/leaverule/create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New Leaverule</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Leaverules list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#tblLeaveRules').DataTable();
+        $('.deleteLeaveRule').click(function () {
+            var conf = confirm("Are you sure to delete this leaveRule?");
+            if (!conf) {
+                return false;
+            }
+        });
+    </script>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="tblLeaveRules">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.LeaveRuleName</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/leaverule/edit/@item.LeaveRuleId" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                                        <a href="/leaverule/delete/@item.LeaveRuleId" class="btn btn-danger deleteLeaveRule"><i class="fa fa-trash-o"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

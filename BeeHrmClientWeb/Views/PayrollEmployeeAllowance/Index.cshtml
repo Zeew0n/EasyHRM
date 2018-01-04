@@ -1,0 +1,87 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.PayrollAllowanceMasterDTO>
+
+@{
+    ViewBag.Title = "PayrollAllowances";
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+               
+                <h2 class="font-light m-b-xs">
+                    Payroll allowances
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+<div class="box box-top-border">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AllowanceName)
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+
+
+            <th>
+                Same For All Employee
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            if (item.IsActive)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AllowanceName)
+                    </td>
+                    <td>
+                        @if (item.EarningDeduction == "E")
+                        {
+                            <span class="fa fa-plus"> Earning</span>
+                        }
+                        else {
+                            <span class="fa fa-minus"> Deduction</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SameForAllEmployee)
+                    </td>
+                    <td>
+
+                        @Html.ActionLink("Assign For Employees", "AssignEmployees", new { id = item.AllowanceMasterId })
+
+
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+</div>

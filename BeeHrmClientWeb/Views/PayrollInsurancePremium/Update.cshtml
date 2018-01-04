@@ -1,0 +1,166 @@
+﻿@model BeeHRM.ApplicationService.DTOs.PayrollInsurancePremiumDTO
+
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var EmpCode = "";
+    if (ViewBag.EmpCode != null)
+    {
+        EmpCode = ViewBag.EmpCode.ToString();
+    }
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/PayrollInsurancePremium/Index/" class="btn btn-success"><i class="fa fa-bars"></i> View Insurance Premium List</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    Update Insurance Premium Information
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-times" aria-hidden="true"></i> @ViewBag.Error
+    </div>
+}
+
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <span class="error-label">
+                @Html.ValidationSummary()
+            </span>
+            <div class="col-md-6">
+                @*@Html.ValidationSummary(false, "", new { @class = "text-danger" })*@
+                @using (Html.BeginForm("Update", "PayrollInsurancePremium", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="box-body">
+                        <label>Employee</label>
+                        <div class="form-group">
+                            <select name="EmpCode" class="form-control custom-select" id="branchlist" required="required">
+                                <option value=""> ----Select Employee----</option>
+                                @foreach (var row in ViewBag.ddlEmployeeList)
+                                {
+                                    if (row.Value != null)
+                                    {
+                                        <option @(EmpCode == row.Value.ToString() ? "selected" : "") value="@row.Value"> @row.Text</option>
+                                    }
+
+                                }
+                            </select>
+                        </div>
+                        <label>Insurance Company</label>
+                        <div class="form-group">
+                            @Html.DropDownListFor(model => model.InsuranceCompanyId, Model.InsuranceCompanySelectlist, "-- Select Insurance Company --", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.InsuranceCompanyId, "", new { @class = "text-danger" })
+                        </div>
+                        @Html.LabelFor(model => model.InsuredAmount)
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.InsuredAmount, new { htmlAttributes = new { @class = "form-control", @placeholder = "Insured Amount" } })
+                            @Html.ValidationMessageFor(model => model.InsuredAmount, "", new { @class = "text-danger" })
+                        </div>
+
+                        @Html.LabelFor(model => model.PremiumAmount)
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.PremiumAmount, new { htmlAttributes = new { @class = "form-control", @placeholder = "Premium Amount" } })
+                            @Html.ValidationMessageFor(model => model.PremiumAmount, "", new { @class = "text-danger" })
+                        </div>
+                        @Html.LabelFor(model => model.AmountType)
+                        <div class="form-group">
+                            @Html.DropDownListFor(model => model.AmountType, Model.AmountTypeSelectList, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AmountType, "", new { @class = "text-danger" })
+                        </div>
+                        @Html.LabelFor(model => model.StartDate)
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.StartDateNP, new { htmlAttributes = new { @class = "form-control date", @placeholder = "Insurance Start Date" } })
+                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                        </div>
+                        @Html.LabelFor(model => model.EndDate)
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.EndDateNP, new { htmlAttributes = new { @class = "form-control date", @placeholder = "Insurance End Date" } })
+                            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                        </div>
+
+                        @Html.LabelFor(model => model.InsurancePolicyNumber)
+                        <div class="form-group">
+                            @Html.EditorFor(model => model.InsurancePolicyNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Document Description" } })
+                            @Html.ValidationMessageFor(model => model.InsurancePolicyNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="col-md-10">
+                            <input type="submit" value="Save" id="btnSubmit" class="btn btn-success" />
+                            @Html.ActionLink("Cancel", "Index", "PayrollInsurancePremium", new { @class = "btn btn-success" })
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section styles{
+    <link href="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.css" rel="stylesheet" />
+    <link href="~/Content/Custom Select/src/jquery-customselect.css" rel="stylesheet" />
+
+}
+
+@section scripts{
+    <script src="~/Public/lib/nepali.datepicker.v2.2/nepali.datepicker.v2.2.min.js"></script>
+    <script src="~/Scripts/moment.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/Custom Select/src/jquery-customselect.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.date').nepaliDatePicker({
+                npdMonth: true,
+                npdYear: true,
+                npdYearCount: 10 // Options | Number of years to show
+            });
+            $(".custom-select").customselect();
+
+        });
+    </script>
+}

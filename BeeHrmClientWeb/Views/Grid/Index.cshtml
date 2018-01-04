@@ -1,0 +1,13 @@
+﻿
+@(Html.Kendo().Grid<BeeHRM.Repository.Skill>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+        columns.Bound(c => c.SkillName);
+      })
+      .Scrollable()
+      .DataSource(dataSource => dataSource
+          .Ajax()
+          .Read(read => read.Action("Skills_Read", "Grid"))
+      )
+)

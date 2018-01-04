@@ -1,0 +1,130 @@
+﻿@model IEnumerable<BeeHRM.ApplicationService.DTOs.LeaveYearDTO>
+@{
+    ViewBag.Title = "LeaveRules";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <div id="hbreadcrumb" class="pull-right">
+                    <ol class="hbreadcrumb breadcrumb">
+                        <li class="active">
+                            <span>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="/leaveyear/create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add New Leaveyear</a>
+                            </span><a href="#"></a>
+                        </li>
+                    </ol>
+                </div>
+                <h2 class="font-light m-b-xs">
+                    LeaveYears list
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+    <link rel="stylesheet" type="text/css" href="/content/DataTables/datatables.min.css" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="/content/DataTables/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#tblLeaveYear').DataTable();
+        $('.deleteLeaveYear').click(function () {
+            var conf = confirm("Are you sure to delete this leave Year?");
+            if (!conf) {
+                return false;
+            }
+        });
+    </script>
+}
+
+<div class="box box-top-border">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover text-center table-bordered" id="tblLeaveYear">
+                    <thead>
+                        <tr>
+                            <th>Year Name</th>
+                            <th>Year Start Date</th>
+                            <th>Year End Date</th>
+                            <th>Is Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.YearName</td>
+                                <td>
+                                    
+                                    <span>
+                                    @{var startdate = !String.IsNullOrEmpty(item.YearStartDate.ToString()) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(item.YearStartDate)).ToString().Replace('/', '-') : null;
+                                    }
+                                    @if (@startdate != null)
+                                    {
+                                        <p>@startdate (@(Convert.ToString(item.YearStartDate) == "" ? "" : Convert.ToDateTime(item.YearStartDate).ToString("yyyy-MMM-dd")))</p>
+                                    }
+                                    else {
+                                        <p></p>
+                                    }
+                                    @*@(item.YearStartDate == null ? "" : Convert.ToDateTime(item.YearStartDate).ToString("MMM d, yyyy")) @( item.YearStartDateNp == null ? "" : item.YearStartDateNp.ToString() )*@</span>
+                               
+                            </td>
+                            <td>                               
+                                    <span>
+                                @{var enddate = !String.IsNullOrEmpty(item.YearEndDate.ToString()) ? BeeHrmClientWeb.Utilities.NepEngDate.EngToNep(Convert.ToDateTime(item.YearEndDate)).ToString().Replace('/', '-') : null;
+                                }
+                                @if (@enddate != null)
+                                {
+                                    <p>@enddate (@(Convert.ToString(item.YearEndDate) == "" ? "" : Convert.ToDateTime(item.YearEndDate).ToString("yyyy-MMM-dd")))</p>
+                                }
+                                else {
+                                    <p></p>
+                                }
+                                @*@(item.YearEndDate == null ? "" : Convert.ToDateTime(item.YearEndDate).ToString("MMM d, yyyy")) @(item.YearEndDateNp == null ? "" : item.YearEndDateNp.ToString() )*@</span>
+                                
+                            </td>
+                            <td>
+                                @{if (item.YearCurrent == true)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-remove"></i>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="/leaveyear/edit/@item.YearId" class="btn btn-info"><i class="fa fa-edit"></i></a>
+                                    <a href="/leaveyear/delete/@item.YearId" class="btn btn-danger deleteLeaveYear"><i class="fa fa-trash-o"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

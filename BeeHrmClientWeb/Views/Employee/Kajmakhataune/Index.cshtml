@@ -1,0 +1,117 @@
+﻿@model List<BeeHRM.ApplicationService.DTOs.EmployeeJobHistoryDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section SideBar{
+    <div class="wrapper container-fluid" id="wrapper">
+        <div id="sidebar-wrapper" class="menusBg menusColor">
+            <ul class="sidebar-nav">
+                @foreach (var item in ViewBag.SideBar)
+                {
+                    <li><a href="@item.MduleLink"><i class="@item.ModuleCssClass" aria-hidden="true"></i> @Html.Raw(item.MOduleName)</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+@section styles{
+
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+}
+
+@section PageHeader{
+    <div class="small-header">
+        <div class="hpanel">
+            <div class="panel-body">
+                <h2 class="font-light m-b-xs">
+                   Kaaz History List
+                </h2>
+            </div>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <i class="fa fa-check" aria-hidden="true"></i> @ViewBag.Success
+    </div>
+}
+<div class="col-md-12 col-lg-12">
+    <div class="panel panel-default">
+        <div class="pull-right">
+            <a href="/Kaj/KajMaKhataune/@ViewBag.EmpCode" class="btn btn-primary">काजमा खटाउनुहोस</a>
+        </div>
+        <div class="panel-heading">
+           
+            <i class="fa fa-fw fa-thumb-tack"></i> <strong>Kaaz history List </strong>
+        </div>
+        <div class="panel-body basic">
+            @*<h3> हालको कर्मचारी विवरण  </h3>*@
+            <div class="media-body">
+                <table class="table">
+                    <tr>
+                        <th>
+                            Office
+                        </th>
+                        <th>
+                         Designation
+                        </th>
+                        <th>
+                            Job Type
+                        </th>
+                        <th>
+                            Service Event
+                        </th>
+                        <th>
+                            Start Date
+                        </th>
+                        <th>
+                            End Date
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OfficeName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DesignationName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.JobTypeName)
+                            </td>
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.ServiceEventName)
+                                (@Html.DisplayFor(modelItem => item.ServiceEventSubName))
+
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.KajStartDateNP) (@Html.DisplayFor(modelItem => item.KajStartDate))
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.KajEndDateNP) (@Html.DisplayFor(modelItem => item.KajEndDate))
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "KajMaKhateuneEdit", new { id = item.HistoryId }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.HistoryId }) @*|
+                                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                            </td>
+                        </tr>
+                                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
